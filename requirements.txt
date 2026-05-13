@@ -1,0 +1,3 @@
+langflow
+setuptools
+pip>=24.0
