@@ -1,0 +1,64 @@
+{
+  "data": {
+    "nodes": [
+      {
+        "id": "ChatInput-1",
+        "type": "genericNode",
+        "data": {
+          "node": {
+            "display_name": "Chat Input",
+            "template": { "input_value": { "value": "" } }
+          },
+          "type": "ChatInput"
+        },
+        "position": { "x": 100, "y": 300 }
+      },
+      {
+        "id": "Prompt-1",
+        "type": "genericNode",
+        "data": {
+          "node": {
+            "display_name": "Prompt",
+            "template": {
+              "template": { "value": "You are Bharat AI, a polite assistant for Indian users. Support English and Hindi. \n\nHistory: {memory}\nUser: {user_input}" },
+              "user_input": { "value": "{user_input}" }
+            }
+          },
+          "type": "Prompt"
+        },
+        "position": { "x": 100, "y": 100 }
+      },
+      {
+        "id": "Groq-1",
+        "type": "genericNode",
+        "data": {
+          "node": {
+            "display_name": "Groq (High-Speed)",
+            "template": {
+              "model_name": { "value": "llama-3.3-70b-versatile" },
+              "api_key": { "value": "" },
+              "stream": { "value": true }
+            }
+          },
+          "type": "GroqModel"
+        },
+        "position": { "x": 500, "y": 200 }
+      },
+      {
+        "id": "ChatOutput-1",
+        "type": "genericNode",
+        "data": {
+          "node": { "display_name": "Chat Output" },
+          "type": "ChatOutput"
+        },
+        "position": { "x": 900, "y": 200 }
+      }
+    ],
+    "edges": [
+      { "source": "ChatInput-1", "target": "Groq-1", "sourceHandle": "message", "targetHandle": "input_value" },
+      { "source": "Prompt-1", "target": "Groq-1", "sourceHandle": "prompt", "targetHandle": "system_message" },
+      { "source": "Groq-1", "target": "ChatOutput-1", "sourceHandle": "text_output", "targetHandle": "input_value" }
+    ]
+  },
+  "name": "Bharat AI Agent V2"
+}

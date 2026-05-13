@@ -1,0 +1,103 @@
+{
+  "name": "Flow 3: Project Execution & Delivery",
+  "description": "L12 Architecture: From Proposal to Deployment (Agents 16-20)",
+  "data": {
+    "nodes": [
+      {
+        "id": "ChatInput-1",
+        "type": "ChatInput",
+        "position": { "x": -200, "y": 100 },
+        "data": {
+          "node": {
+            "template": {
+              "input_value": { "value": "Project: School Website + App + SEO. Approved Budget: ₹15,000." }
+            }
+          }
+        }
+      },
+      {
+        "id": "HT-ProjectPlanner-17",
+        "type": "genericNode",
+        "position": { "x": 100, "y": 100 },
+        "data": {
+          "type": "CustomComponent",
+          "node": {
+            "display_name": "HT 17: Project Planner Agent",
+            "template": {
+              "groq_api_key": { "display_name": "Groq API Key", "required": true, "type": "str", "password": true, "value": "" },
+              "project_details": { "display_name": "Approved Proposal/Scope", "type": "str", "value": "" }
+            }
+          }
+        }
+      },
+      {
+        "id": "HT-AutomationBuilder-18",
+        "type": "genericNode",
+        "position": { "x": 500, "y": 100 },
+        "data": {
+          "type": "CustomComponent",
+          "node": {
+            "display_name": "HT 18: Automation Builder Agent",
+            "template": {
+              "groq_api_key": { "display_name": "Groq API Key", "required": true, "type": "str", "password": true, "value": "" },
+              "plan_data": { "display_name": "Project Plan", "type": "str", "value": "" }
+            }
+          }
+        }
+      },
+      {
+        "id": "HT-DevAssistant-19",
+        "type": "genericNode",
+        "position": { "x": 900, "y": 100 },
+        "data": {
+          "type": "CustomComponent",
+          "node": {
+            "display_name": "HT 19: Dev Assistant Agent",
+            "template": {
+              "groq_api_key": { "display_name": "Groq API Key", "required": true, "type": "str", "password": true, "value": "" },
+              "tech_stack": { "display_name": "Automation Logic", "type": "str", "value": "" }
+            }
+          }
+        }
+      },
+      {
+        "id": "ChatOutput-1",
+        "type": "ChatOutput",
+        "position": { "x": 500, "y": 400 },
+        "data": {
+          "node": {
+            "template": {
+              "input_value": { "value": "" }
+            }
+          }
+        }
+      }
+    ],
+    "edges": [
+      {
+        "source": "ChatInput-1",
+        "target": "HT-ProjectPlanner-17",
+        "sourceHandle": "message",
+        "targetHandle": "project_details"
+      },
+      {
+        "source": "HT-ProjectPlanner-17",
+        "target": "HT-AutomationBuilder-18",
+        "sourceHandle": "output",
+        "targetHandle": "plan_data"
+      },
+      {
+        "source": "HT-AutomationBuilder-18",
+        "target": "HT-DevAssistant-19",
+        "sourceHandle": "output",
+        "targetHandle": "tech_stack"
+      },
+      {
+        "source": "HT-DevAssistant-19",
+        "target": "ChatOutput-1",
+        "sourceHandle": "output",
+        "targetHandle": "input_value"
+      }
+    ]
+  }
+}

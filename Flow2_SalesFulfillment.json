@@ -1,0 +1,124 @@
+{
+  "name": "Flow 2: Strategic Sales & Fulfillment",
+  "description": "L12 Architecture: Automated Sales Cycle - Analysis to Proposal (Agents 6-16)",
+  "data": {
+    "nodes": [
+      {
+        "id": "ChatInput-1",
+        "type": "ChatInput",
+        "position": { "x": -200, "y": 100 },
+        "data": {
+          "node": {
+            "template": {
+              "input_value": { "value": "Lead: XYZ School, Website: xyzschool.com, Current Status: No AI Tools" }
+            }
+          }
+        }
+      },
+      {
+        "id": "HT-Analyzer-6",
+        "type": "genericNode",
+        "position": { "x": 100, "y": 100 },
+        "data": {
+          "type": "CustomComponent",
+          "node": {
+            "display_name": "HT 6: Requirement Analyzer Agent",
+            "template": {
+              "groq_api_key": { "display_name": "Groq API Key", "required": true, "type": "str", "password": true, "value": "" },
+              "lead_data": { "display_name": "Lead Information", "type": "str", "value": "" }
+            }
+          }
+        }
+      },
+      {
+        "id": "HT-SalesPitch-7",
+        "type": "genericNode",
+        "position": { "x": 500, "y": 100 },
+        "data": {
+          "type": "CustomComponent",
+          "node": {
+            "display_name": "HT 7: Sales Pitch Agent",
+            "template": {
+              "groq_api_key": { "display_name": "Groq API Key", "required": true, "type": "str", "password": true, "value": "" },
+              "analysis_results": { "display_name": "Requirement Analysis", "type": "str", "value": "" }
+            }
+          }
+        }
+      },
+      {
+        "id": "HT-DealClosing-9",
+        "type": "genericNode",
+        "position": { "x": 900, "y": 100 },
+        "data": {
+          "type": "CustomComponent",
+          "node": {
+            "display_name": "HT 9: Deal Closing Agent (Sale Closer)",
+            "template": {
+              "groq_api_key": { "display_name": "Groq API Key", "required": true, "type": "str", "password": true, "value": "" },
+              "pitch_details": { "display_name": "Sales Pitch Data", "type": "str", "value": "" }
+            }
+          }
+        }
+      },
+      {
+        "id": "HT-Proposal-16",
+        "type": "genericNode",
+        "position": { "x": 100, "y": 400 },
+        "data": {
+          "type": "CustomComponent",
+          "node": {
+            "display_name": "HT 16: Proposal Generator Agent",
+            "template": {
+              "groq_api_key": { "display_name": "Groq API Key", "required": true, "type": "str", "password": true, "value": "" },
+              "closing_terms": { "display_name": "Closing Terms & Price", "type": "str", "value": "" }
+            }
+          }
+        }
+      },
+      {
+        "id": "ChatOutput-1",
+        "type": "ChatOutput",
+        "position": { "x": 500, "y": 400 },
+        "data": {
+          "node": {
+            "template": {
+              "input_value": { "value": "" }
+            }
+          }
+        }
+      }
+    ],
+    "edges": [
+      {
+        "source": "ChatInput-1",
+        "target": "HT-Analyzer-6",
+        "sourceHandle": "message",
+        "targetHandle": "lead_data"
+      },
+      {
+        "source": "HT-Analyzer-6",
+        "target": "HT-SalesPitch-7",
+        "sourceHandle": "output",
+        "targetHandle": "analysis_results"
+      },
+      {
+        "source": "HT-SalesPitch-7",
+        "target": "HT-DealClosing-9",
+        "sourceHandle": "output",
+        "targetHandle": "pitch_details"
+      },
+      {
+        "source": "HT-DealClosing-9",
+        "target": "HT-Proposal-16",
+        "sourceHandle": "output",
+        "targetHandle": "closing_terms"
+      },
+      {
+        "source": "HT-Proposal-16",
+        "target": "ChatOutput-1",
+        "sourceHandle": "output",
+        "targetHandle": "input_value"
+      }
+    ]
+  }
+}

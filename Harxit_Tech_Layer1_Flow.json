@@ -1,0 +1,38 @@
+{
+  "active_index": 0,
+  "nodes": [
+    {
+      "id": "HT-NicheFinder-1",
+      "data": {
+        "type": "NicheFinderAgent",
+        "node": {
+          "display_name": "HT 2: Niche Finder Agent",
+          "description": "Identifies high-demand business niches using Groq AI.",
+          "template": {
+            "groq_api_key": { "value": "PASTE_YOUR_GROQ_KEY_HERE" },
+            "market_context": { "value": "Agra, Uttar Pradesh" }
+          }
+        }
+      },
+      "position": { "x": 100, "y": 100 }
+    },
+    {
+      "id": "HT-LeadScraper-1",
+      "data": {
+        "type": "LeadScraperAgent",
+        "node": {
+          "display_name": "HT 1: Lead Scraper Agent",
+          "description": "Extracts business leads using ScrapeGraph.",
+          "template": {
+            "api_key": { "value": "PASTE_SCRAPEGRAPH_KEY_HERE" },
+            "location": { "value": "Agra" },
+            "business_type": { "value": "Schools" }
+          }
+        }
+      },
+      "position": { "x": 500, "y": 100 }
+    }
+  ],
+  "edges": [],
+  "name": "Harxit Tech - Layer 1 Flow"
+}

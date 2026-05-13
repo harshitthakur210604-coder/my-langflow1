@@ -1,0 +1,73 @@
+{
+  "name": "Harxit Tech - Layer 1 (Lead Gen)",
+  "description": "Automated Lead Generation system for Harxit Tech.",
+  "data": {
+    "nodes": [
+      {
+        "id": "HT-NicheFinder-1",
+        "type": "genericNode",
+        "position": { "x": 100, "y": 200 },
+        "data": {
+          "type": "CustomComponent",
+          "node": {
+            "display_name": "HT 2: Niche Finder Agent",
+            "description": "Identifies high-demand business niches using Groq AI.",
+            "template": {
+              "groq_api_key": {
+                "display_name": "Groq API Key",
+                "required": true,
+                "type": "str",
+                "password": true,
+                "value": ""
+              },
+              "market_context": {
+                "display_name": "Market Context",
+                "required": false,
+                "type": "str",
+                "value": "Agra, Uttar Pradesh"
+              },
+              "code": {
+                "value": "from lfx.custom.custom_component.component import Component\nfrom lfx.io import MessageTextInput, Output, SecretStrInput, DropdownInput\nfrom lfx.schema.message import Message\nfrom langchain_groq import ChatGroq\nfrom pydantic.v1 import SecretStr\n\nclass NicheFinderAgent(Component):\n    display_name: str = \"HT 2: Niche Finder Agent\"\n    description: str = \"Identifies high-demand business niches using Groq AI.\"\n    name = \"NicheFinderAgent\"\n    icon = \"Target\"\n\n    inputs = [\n        SecretStrInput(name=\"groq_api_key\", display_name=\"Groq API Key\", required=True),\n        DropdownInput(name=\"model_name\", display_name=\"Model\", options=[\"llama-3.3-70b-versatile\", \"llama-3.1-8b-instant\", \"mixtral-8x7b-32768\"], value=\"llama-3.3-70b-versatile\"),\n        MessageTextInput(name=\"market_context\", display_name=\"Market Context\", info=\"Current market or general focus (e.g., Uttar Pradesh, Small Businesses).\", value=\"General Indian Market\"),\n    ]\n\n    outputs = [Output(display_name=\"Niche Suggestions\", name=\"niche_output\", method=\"find_niche\")]\n\n    def find_niche(self) -> Message:\n        llm = ChatGroq(api_key=SecretStr(self.groq_api_key).get_secret_value(), model=self.model_name)\n        prompt = (f\"As a business growth expert for Harxit Tech, analyze the {self.market_context} market. \"\n                  \"Identify 5 high-demand business niches that need digital transformation (Websites, SEO, CRM, Apps). \"\n                  \"For each niche, explain WHY it is hot right now and what service Harxit Tech should pitch. \"\n                  \"Provide the response in a structured list format.\")\n        response = llm.invoke(prompt)\n        return Message(text=response.content)"
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": "HT-LeadScraper-1",
+        "type": "genericNode",
+        "position": { "x": 600, "y": 200 },
+        "data": {
+          "type": "CustomComponent",
+          "node": {
+            "display_name": "HT 1: Lead Scraper Agent",
+            "description": "Extracts business leads using ScrapeGraph search.",
+            "template": {
+              "api_key": {
+                "display_name": "ScrapeGraph API Key",
+                "required": true,
+                "type": "str",
+                "password": true,
+                "value": ""
+              },
+              "location": {
+                "display_name": "Location",
+                "type": "str",
+                "value": "Agra"
+              },
+              "business_type": {
+                "display_name": "Business Type",
+                "type": "str",
+                "value": "Schools"
+              },
+              "code": {
+                "value": "from lfx.custom.custom_component.component import Component\nfrom lfx.io import MessageTextInput, Output, SecretStrInput\nfrom lfx.schema.data import Data\n\nclass LeadScraperAgent(Component):\n    display_name: str = \"HT 1: Lead Scraper Agent\"\n    description: str = \"Extracts business leads (Name, Phone, Email) using ScrapeGraph search.\"\n    name = \"LeadScraperAgent\"\n    icon = \"Search\"\n\n    inputs = [\n        SecretStrInput(name=\"api_key\", display_name=\"ScrapeGraph API Key\", required=True, password=True),\n        MessageTextInput(name=\"location\", display_name=\"Location\", info=\"Target city or area (e.g., Agra, Delhi).\"),\n        MessageTextInput(name=\"business_type\", display_name=\"Business Type\", info=\"Type of business (e.g., School, Hospital, Gym).\"),\n    ]\n\n    outputs = [Output(display_name=\"Leads Data\", name=\"leads\", method=\"scrape_leads\")]\n\n    def scrape_leads(self) -> Data:\n        try:\n            from scrapegraph_py import Client\n        except ImportError as e:\n            raise ImportError(\"Could not import scrapegraph-py package. Please install it with `pip install scrapegraph-py`.\") from e\n        search_prompt = f\"Find contact details (Business Name, Phone Number, Email, Website) for {self.business_type} in {self.location}. Return as a list of JSON objects.\"\n        sgai_client = Client(api_key=self.api_key)\n        try:\n            response = sgai_client.searchscraper(user_prompt=search_prompt)\n            sgai_client.close()\n            return Data(data=response)\n        except Exception:\n            sgai_client.close()\n            raise"
+              }
+            }
+          }
+        }
+      }
+    ],
+    "edges": []
+  }
+}

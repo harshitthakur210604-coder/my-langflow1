@@ -1,0 +1,146 @@
+{
+  "name": "Flow 5: Harxit Tech Operation Mastery",
+  "description": "L14 Architecture: Post-Deal Lifecycle & Operational Excellence (Agents 31-35)",
+  "data": {
+    "nodes": [
+      {
+        "id": "ChatInput-1",
+        "type": "ChatInput",
+        "position": { "x": -200, "y": 100 },
+        "data": {
+          "node": {
+            "template": {
+              "input_value": { "value": "Client: ABC School, Scope: New ERP System with AI" }
+            }
+          }
+        }
+      },
+      {
+        "id": "HT-Onboarding-31",
+        "type": "genericNode",
+        "position": { "x": 100, "y": 100 },
+        "data": {
+          "type": "CustomComponent",
+          "node": {
+            "display_name": "HT 31: Project Onboarding Agent",
+            "template": {
+              "groq_api_key": { "display_name": "Groq API Key", "required": true, "type": "str", "password": true, "value": "" },
+              "client_details": { "display_name": "Client Name & Service", "type": "str", "value": "" },
+              "project_scope": { "display_name": "Project Scope", "type": "str", "value": "" }
+            }
+          }
+        }
+      },
+      {
+        "id": "HT-QA-32",
+        "type": "genericNode",
+        "position": { "x": 500, "y": 100 },
+        "data": {
+          "type": "CustomComponent",
+          "node": {
+            "display_name": "HT 32: QA Agent",
+            "template": {
+              "groq_api_key": { "display_name": "Groq API Key", "required": true, "type": "str", "password": true, "value": "" },
+              "project_output": { "display_name": "Final Project Content/URL", "type": "str", "value": "" }
+            }
+          }
+        }
+      },
+      {
+        "id": "HT-Billing-33",
+        "type": "genericNode",
+        "position": { "x": 900, "y": 100 },
+        "data": {
+          "type": "CustomComponent",
+          "node": {
+            "display_name": "HT 33: Billing & Finance Agent",
+            "template": {
+              "groq_api_key": { "display_name": "Groq API Key", "required": true, "type": "str", "password": true, "value": "" },
+              "service_cost": { "display_name": "Total Project Cost", "type": "str", "value": "" }
+            }
+          }
+        }
+      },
+      {
+        "id": "HT-Success-34",
+        "type": "genericNode",
+        "position": { "x": 100, "y": 400 },
+        "data": {
+          "type": "CustomComponent",
+          "node": {
+            "display_name": "HT 34: Client Success Agent",
+            "template": {
+              "groq_api_key": { "display_name": "Groq API Key", "required": true, "type": "str", "password": true, "value": "" },
+              "success_data": { "display_name": "Project Achievements (e.g. 2x leads, 50% growth)", "type": "str", "value": "" }
+            }
+          }
+        }
+      },
+      {
+        "id": "HT-Retention-35",
+        "type": "genericNode",
+        "position": { "x": 500, "y": 400 },
+        "data": {
+          "type": "CustomComponent",
+          "node": {
+            "display_name": "HT 35: Retention Agent",
+            "template": {
+              "groq_api_key": { "display_name": "Groq API Key", "required": true, "type": "str", "password": true, "value": "" },
+              "client_feedback": { "display_name": "Client Satisfaction Level", "type": "str", "value": "" }
+            }
+          }
+        }
+      },
+      {
+        "id": "ChatOutput-1",
+        "type": "ChatOutput",
+        "position": { "x": 900, "y": 400 },
+        "data": {
+          "node": {
+            "template": {
+              "input_value": { "value": "" }
+            }
+          }
+        }
+      }
+    ],
+    "edges": [
+      {
+        "source": "ChatInput-1",
+        "target": "HT-Onboarding-31",
+        "sourceHandle": "message",
+        "targetHandle": "client_details"
+      },
+      {
+        "source": "HT-Onboarding-31",
+        "target": "HT-QA-32",
+        "sourceHandle": "output",
+        "targetHandle": "project_output"
+      },
+      {
+        "source": "HT-QA-32",
+        "target": "HT-Billing-33",
+        "sourceHandle": "output",
+        "targetHandle": "service_cost"
+      },
+      {
+        "source": "HT-Billing-33",
+        "target": "HT-Success-34",
+        "sourceHandle": "output",
+        "targetHandle": "success_data"
+      },
+      {
+        "source": "HT-Success-34",
+        "target": "HT-Retention-35",
+        "sourceHandle": "output",
+        "targetHandle": "client_feedback"
+      },
+      {
+        "source": "HT-Retention-35",
+        "target": "ChatOutput-1",
+        "sourceHandle": "output",
+        "targetHandle": "input_value"
+      }
+    ]
+  }
+}

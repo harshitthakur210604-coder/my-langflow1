@@ -1,0 +1,99 @@
+{
+  "name": "Flow 4: Harxit Tech Growth & Scaling Engine",
+  "description": "L13 Architecture: Success, Scaling, and Brand Expansion (Agents 21-30)",
+  "data": {
+    "nodes": [
+      {
+        "id": "HT-Support-21",
+        "type": "genericNode",
+        "position": { "x": 100, "y": 100 },
+        "data": {
+          "type": "CustomComponent",
+          "node": {
+            "display_name": "HT 21: Client Support Agent",
+            "template": {
+              "groq_api_key": { "display_name": "Groq API Key", "required": true, "type": "str", "password": true, "value": "" },
+              "client_issue": { "display_name": "Client Issue", "type": "str", "value": "" }
+            }
+          }
+        }
+      },
+      {
+        "id": "HT-Upsell-23",
+        "type": "genericNode",
+        "position": { "x": 500, "y": 100 },
+        "data": {
+          "type": "CustomComponent",
+          "node": {
+            "display_name": "HT 23: Upsell Agent",
+            "template": {
+              "groq_api_key": { "display_name": "Groq API Key", "required": true, "type": "str", "password": true, "value": "" },
+              "current_service": { "display_name": "Current Service", "type": "str", "value": "" }
+            }
+          }
+        }
+      },
+      {
+        "id": "HT-Analytics-24",
+        "type": "genericNode",
+        "position": { "x": 900, "y": 100 },
+        "data": {
+          "type": "CustomComponent",
+          "node": {
+            "display_name": "HT 24: Analytics Agent",
+            "template": {
+              "groq_api_key": { "display_name": "Groq API Key", "required": true, "type": "str", "password": true, "value": "" },
+              "raw_data": { "display_name": "Raw Business Data", "type": "str", "value": "" }
+            }
+          }
+        }
+      },
+      {
+        "id": "HT-Content-26",
+        "type": "genericNode",
+        "position": { "x": 100, "y": 400 },
+        "data": {
+          "type": "CustomComponent",
+          "node": {
+            "display_name": "HT 26: Content Creation Agent",
+            "template": {
+              "groq_api_key": { "display_name": "Groq API Key", "required": true, "type": "str", "password": true, "value": "" },
+              "topic": { "display_name": "Content Topic", "type": "str", "value": "" }
+            }
+          }
+        }
+      },
+      {
+        "id": "HT-Ads-27",
+        "type": "genericNode",
+        "position": { "x": 500, "y": 400 },
+        "data": {
+          "type": "CustomComponent",
+          "node": {
+            "display_name": "HT 27: Ads Agent",
+            "template": {
+              "groq_api_key": { "display_name": "Groq API Key", "required": true, "type": "str", "password": true, "value": "" },
+              "campaign_goal": { "display_name": "Campaign Goal", "type": "str", "value": "" }
+            }
+          }
+        }
+      },
+      {
+        "id": "HT-Expansion-30",
+        "type": "genericNode",
+        "position": { "x": 900, "y": 400 },
+        "data": {
+          "type": "CustomComponent",
+          "node": {
+            "display_name": "HT 30: Expansion Strategy Agent",
+            "template": {
+              "groq_api_key": { "display_name": "Groq API Key", "required": true, "type": "str", "password": true, "value": "" },
+              "current_market": { "display_name": "Current Market Status", "type": "str", "value": "" }
+            }
+          }
+        }
+      }
+    ],
+    "edges": []
+  }
+}

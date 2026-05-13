@@ -1,0 +1,85 @@
+{
+  "name": "Bharat AI Guru: Admission Eligibility System",
+  "description": "Integrated flow for generating admission tests and analyzing results.",
+  "data": {
+    "nodes": [
+      {
+        "id": "Input-Node",
+        "type": "genericNode",
+        "data": {
+          "type": "ChatInput",
+          "node": {
+            "display_name": "Student Request",
+            "template": {
+              "input_value": { "value": "" }
+            }
+          }
+        }
+      },
+      {
+        "id": "Router-Node",
+        "type": "genericNode",
+        "data": {
+          "type": "CustomComponent",
+          "node": {
+            "display_name": "Admission Flow Router",
+            "template": {
+              "input_data": { "source": "Input-Node.outputs.message" },
+              "code": { "path": "custom_components/admission_router.py" }
+            }
+          }
+        }
+      },
+      {
+        "id": "Generator-Node",
+        "type": "genericNode",
+        "data": {
+          "type": "CustomComponent",
+          "node": {
+            "display_name": "Admission Test Generator",
+            "template": {
+              "groq_api_key": { "value": "YOUR_GROQ_API_KEY" },
+              "student_name": { "source": "Router-Node.outputs.gen_out" },
+              "code": { "path": "custom_components/admission_test_generator.py" }
+            }
+          }
+        }
+      },
+      {
+        "id": "Analyzer-Node",
+        "type": "genericNode",
+        "data": {
+          "type": "CustomComponent",
+          "node": {
+            "display_name": "Admission Result Analyzer",
+            "template": {
+              "groq_api_key": { "value": "YOUR_GROQ_API_KEY" },
+              "test_data": { "source": "Router-Node.outputs.ana_out" },
+              "code": { "path": "custom_components/admission_result_analyzer.py" }
+            }
+          }
+        }
+      },
+      {
+        "id": "Output-Node",
+        "type": "genericNode",
+        "data": {
+          "type": "ChatOutput",
+          "node": {
+            "display_name": "Final Response",
+            "template": {
+              "input_value": { "source": ["Generator-Node.outputs.questions_json", "Analyzer-Node.outputs.analytics_report"] }
+            }
+          }
+        }
+      }
+    ],
+    "edges": [
+      { "source": "Input-Node", "target": "Router-Node" },
+      { "source": "Router-Node", "target": "Generator-Node", "sourceHandle": "gen_out" },
+      { "source": "Router-Node", "target": "Analyzer-Node", "sourceHandle": "ana_out" },
+      { "source": "Generator-Node", "target": "Output-Node" },
+      { "source": "Analyzer-Node", "target": "Output-Node" }
+    ]
+  }
+}

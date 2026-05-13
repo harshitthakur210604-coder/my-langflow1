@@ -1,0 +1,145 @@
+{
+  "name": "Flow 6: Ecosystem Mastery",
+  "description": "L15 Architecture: Passive Income, White-Labeling, and Global Scaling (Agents 36-40)",
+  "data": {
+    "nodes": [
+      {
+        "id": "ChatInput-1",
+        "type": "ChatInput",
+        "position": { "x": -200, "y": 100 },
+        "data": {
+          "node": {
+            "template": {
+              "input_value": { "value": "Target Market: Global SaaS for EdTech, Model: White-label ERP" }
+            }
+          }
+        }
+      },
+      {
+        "id": "HT-WhiteLabel-36",
+        "type": "genericNode",
+        "position": { "x": 100, "y": 100 },
+        "data": {
+          "type": "CustomComponent",
+          "node": {
+            "display_name": "HT 36: White-Label Partner Agent",
+            "template": {
+              "groq_api_key": { "display_name": "Groq API Key", "required": true, "type": "str", "password": true, "value": "" },
+              "agency_details": { "display_name": "Target Agency Info", "type": "str", "value": "" }
+            }
+          }
+        }
+      },
+      {
+        "id": "HT-SaaS-Gen-37",
+        "type": "genericNode",
+        "position": { "x": 500, "y": 100 },
+        "data": {
+          "type": "CustomComponent",
+          "node": {
+            "display_name": "HT 37: SaaS Idea Generator",
+            "template": {
+              "groq_api_key": { "display_name": "Groq API Key", "required": true, "type": "str", "password": true, "value": "" },
+              "market_niche": { "display_name": "Niche (e.g. EdTech, Finance)", "type": "str", "value": "EdTech" }
+            }
+          }
+        }
+      },
+      {
+        "id": "HT-Global-Entry-38",
+        "type": "genericNode",
+        "position": { "x": 900, "y": 100 },
+        "data": {
+          "type": "CustomComponent",
+          "node": {
+            "display_name": "HT 38: Global Market Entry Agent",
+            "template": {
+              "groq_api_key": { "display_name": "Groq API Key", "required": true, "type": "str", "password": true, "value": "" },
+              "target_country": { "display_name": "Target Market (Dubai, USA, Singapore)", "type": "str", "value": "" }
+            }
+          }
+        }
+      },
+      {
+        "id": "HT-Franchise-39",
+        "type": "genericNode",
+        "position": { "x": 100, "y": 400 },
+        "data": {
+          "type": "CustomComponent",
+          "node": {
+            "display_name": "HT 39: Affiliate & Franchise Manager",
+            "template": {
+              "groq_api_key": { "display_name": "Groq API Key", "required": true, "type": "str", "password": true, "value": "" },
+              "franchise_model": { "display_name": "Model Type", "type": "str", "value": "" }
+            }
+          }
+        }
+      },
+      {
+        "id": "HT-Visionary-40",
+        "type": "genericNode",
+        "position": { "x": 500, "y": 400 },
+        "data": {
+          "type": "CustomComponent",
+          "node": {
+            "display_name": "HT 40: Visionary CEO Agent",
+            "template": {
+              "groq_api_key": { "display_name": "Groq API Key", "required": true, "type": "str", "password": true, "value": "" },
+              "long_term_vision": { "display_name": "5-Year Exit/Goal Strategy", "type": "str", "value": "" }
+            }
+          }
+        }
+      },
+      {
+        "id": "ChatOutput-1",
+        "type": "ChatOutput",
+        "position": { "x": 900, "y": 400 },
+        "data": {
+          "node": {
+            "template": {
+              "input_value": { "value": "" }
+            }
+          }
+        }
+      }
+    ],
+    "edges": [
+      {
+        "source": "ChatInput-1",
+        "target": "HT-WhiteLabel-36",
+        "sourceHandle": "message",
+        "targetHandle": "agency_details"
+      },
+      {
+        "source": "HT-WhiteLabel-36",
+        "target": "HT-SaaS-Gen-37",
+        "sourceHandle": "output",
+        "targetHandle": "market_niche"
+      },
+      {
+        "source": "HT-SaaS-Gen-37",
+        "target": "HT-Global-Entry-38",
+        "sourceHandle": "output",
+        "targetHandle": "target_country"
+      },
+      {
+        "source": "HT-Global-Entry-38",
+        "target": "HT-Franchise-39",
+        "sourceHandle": "output",
+        "targetHandle": "franchise_model"
+      },
+      {
+        "source": "HT-Franchise-39",
+        "target": "HT-Visionary-40",
+        "sourceHandle": "output",
+        "targetHandle": "long_term_vision"
+      },
+      {
+        "source": "HT-Visionary-40",
+        "target": "ChatOutput-1",
+        "sourceHandle": "output",
+        "targetHandle": "input_value"
+      }
+    ]
+  }
+}

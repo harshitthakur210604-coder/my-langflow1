@@ -1,0 +1,61 @@
+{
+  "name": "Flow 1: The Lead Machine",
+  "description": "Niche Finder -> Lead Scraper -> Lead Scoring (Layers 1-2)",
+  "data": {
+    "nodes": [
+      {
+        "id": "HT-NicheFinder-1",
+        "type": "genericNode",
+        "position": { "x": 100, "y": 200 },
+        "data": {
+          "type": "CustomComponent",
+          "node": {
+            "display_name": "HT 2: Niche Finder Agent",
+            "description": "Identifies high-demand business niches using Groq AI.",
+            "template": {
+              "groq_api_key": { "display_name": "Groq API Key", "required": true, "type": "str", "password": true, "value": "" },
+              "market_context": { "display_name": "Market Context", "required": false, "type": "str", "value": "Agra, Uttar Pradesh" },
+              "code": { "value": "import os\nfrom lfx.custom.custom_component.component import Component\nfrom lfx.io import MessageTextInput, Output, SecretStrInput, DropdownInput\nfrom lfx.schema.message import Message\nfrom langchain_groq import ChatGroq\nfrom pydantic.v1 import SecretStr\n\nclass NicheFinderAgent(Component):\n    display_name: str = \"HT 2: Niche Finder Agent\"\n    description: str = \"Identifies high-demand business niches using Groq AI.\"\n    name = \"NicheFinderAgent\"\n    icon = \"Target\"\n\n    inputs = [\n        SecretStrInput(name=\"groq_api_key\", display_name=\"Groq API Key\", required=True),\n        DropdownInput(name=\"model_name\", display_name=\"Model\", options=[\"llama-3.3-70b-versatile\", \"llama-3.1-8b-instant\", \"mixtral-8x7b-32768\"], value=\"llama-3.3-70b-versatile\"),\n        MessageTextInput(name=\"market_context\", display_name=\"Market Context\", info=\"Current market or general focus (e.g., Uttar Pradesh, Small Businesses).\", value=\"General Indian Market\"),\n    ]\n\n    outputs = [Output(display_name=\"Niche Suggestions\", name=\"niche_output\", method=\"find_niche\")]\n\n    def find_niche(self) -> Message:\n        api_key = self.groq_api_key or os.getenv(\"GROQ_API_KEY\")\n        llm = ChatGroq(api_key=SecretStr(api_key).get_secret_value(), model=self.model_name)\n        prompt = (f\"As a business growth expert for Harxit Tech, analyze the {self.market_context} market. \"\n                  \"Identify 5 high-demand business niches that need digital transformation (Websites, SEO, CRM, Apps). \"\n                  \"For each niche, explain WHY it is hot right now and what service Harxit Tech should pitch. \"\n                  \"Provide the response in a structured list format.\")\n        response = llm.invoke(prompt)\n        return Message(text=response.content)" }
+            }
+          }
+        }
+      },
+      {
+        "id": "HT-LeadScraper-1",
+        "type": "genericNode",
+        "position": { "x": 500, "y": 200 },
+        "data": {
+          "type": "CustomComponent",
+          "node": {
+            "display_name": "HT 1: Lead Scraper Agent",
+            "description": "Extracts business leads using ScrapeGraph search.",
+            "template": {
+              "api_key": { "display_name": "ScrapeGraph API Key", "required": true, "type": "str", "password": true, "value": "" },
+              "location": { "display_name": "Location", "type": "str", "value": "Agra" },
+              "business_type": { "display_name": "Business Type", "type": "str", "value": "Schools" },
+              "code": { "value": "import os\nfrom lfx.custom.custom_component.component import Component\nfrom lfx.io import MessageTextInput, Output, SecretStrInput\nfrom lfx.schema.data import Data\n\nclass LeadScraperAgent(Component):\n    display_name: str = \"HT 1: Lead Scraper Agent\"\n    description: str = \"Extracts business leads (Name, Phone, Email) using ScrapeGraph search.\"\n    name = \"LeadScraperAgent\"\n    icon = \"Search\"\n\n    inputs = [\n        SecretStrInput(name=\"api_key\", display_name=\"ScrapeGraph API Key\", required=True, password=True),\n        MessageTextInput(name=\"location\", display_name=\"Location\", info=\"Target city or area (e.g., Agra, Delhi).\"),\n        MessageTextInput(name=\"business_type\", display_name=\"Business Type\", info=\"Type of business (e.g., School, Hospital, Gym).\"),\n    ]\n\n    outputs = [Output(display_name=\"Leads Data\", name=\"leads\", method=\"scrape_leads\")]\n\n    def scrape_leads(self) -> Data:\n        try:\n            from scrapegraph_py import Client\n        except ImportError as e:\n            raise ImportError(\"Could not import scrapegraph-py package. Please install it with `pip install scrapegraph-py`.\") from e\n        search_prompt = (f\"Find contact details (Business Name, Phone Number, Email, Website, FULL ADDRESS) \"\n                         f\"for {self.business_type} strictly located in {self.location}. \"\n                         f\"DO NOT return businesses from other cities or states. \"\n                         f\"Return as a list of JSON objects.\")\n        api_key = self.api_key or os.getenv(\"SCRAPEGRAPH_API_KEY\")\n        sgai_client = Client(api_key=api_key)\n        try:\n            response = sgai_client.searchscraper(user_prompt=search_prompt)\n            sgai_client.close()\n            return Data(data=response)\n        except Exception:\n            sgai_client.close()\n            raise" }
+            }
+          }
+        }
+      },
+      {
+        "id": "HT-LeadScoring-1",
+        "type": "genericNode",
+        "position": { "x": 900, "y": 200 },
+        "data": {
+          "type": "CustomComponent",
+          "node": {
+            "display_name": "HT 4: Smart Lead Scoring Agent",
+            "description": "De-duplicates and categorizes leads from multiple sources as Hot, Warm, or Cold.",
+            "template": {
+              "groq_api_key": { "display_name": "Groq API Key", "required": true, "type": "str", "password": true, "value": "" },
+              "consolidated_leads": { "display_name": "Consolidated Leads", "type": "str", "value": "" },
+              "code": { "value": "import os\nfrom lfx.custom.custom_component.component import Component\nfrom lfx.io import MessageTextInput, Output, SecretStrInput\nfrom lfx.schema.message import Message\nfrom langchain_groq import ChatGroq\nfrom pydantic.v1 import SecretStr\n\nclass SmartLeadScoringAgent(Component):\n    display_name: str = \"HT 4: Smart Lead Scoring Agent\"\n    description: str = \"De-duplicates and categorizes leads as Hot, Warm, or Cold based on business data.\"\n    name = \"SmartLeadScoringAgent\"\n    icon = \"Activity\"\n\n    inputs = [\n        SecretStrInput(name=\"groq_api_key\", display_name=\"Groq API Key\", required=True),\n        MessageTextInput(name=\"consolidated_leads\", display_name=\"Consolidated Leads\", info=\"Combined lead data from Google, Maps, and DuckDuckGo.\"),\n        MessageTextInput(name=\"location\", display_name=\"Target Location\", info=\"The city we are targeting (e.g., Agra).\", value=\"Agra\"),\n    ]\n\n    outputs = [Output(display_name=\"Final Lead Report\", name=\"output\", method=\"score_leads\")]\n\n    def score_leads(self) -> Message:\n        api_key = self.groq_api_key or os.getenv(\"GROQ_API_KEY\")\n        llm = ChatGroq(api_key=SecretStr(api_key).get_secret_value(), model=\"llama-3.3-70b-versatile\")\n        \n        prompt = (f\"As a Business Analyst for Harxit Tech, process this raw lead list: {self.consolidated_leads}\\n\\n\"\n                  f\"TARGET LOCATION: {self.location}\\n\\n\"\n                  \"TASK:\\n\"\n                  \"1. GEOGRAPHIC VERIFICATION: If a lead is NOT in {self.location}, mark it as 'REJECTED'.\\n\"\n                  \"2. DE-DUPLICATE: Merge unique entries per business.\\n\"\n                  \"3. CATEGORIZE:\\n\"\n                  \"   - HOT: No website found OR very poor digital presence in {self.location}.\\n\"\n                  \"   - WARM: Has a website but it looks old or slow.\\n\"\n                  \"   - COLD: Already has a great website.\\n\"\n                  \"4. OUTPUT FORMAT:\\n\"\n                  \"   Provide a clean table: Business Name | Category | Reasoning | Address\\n\"\n                  \"   ONLY list businesses marked as HOT, WARM, or COLD. Skip REJECTED ones.\")\n        response = llm.invoke(prompt)\n        return Message(text=response.content)" }
+            }
+          }
+        }
+      }
+    ],
+    "edges": []
+  }
+}

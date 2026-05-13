@@ -1,0 +1,95 @@
+{
+  "data": {
+    "edges": [
+      {
+        "source": "ChatInput-Bharat",
+        "target": "GroqModel-Bharat",
+        "data": {
+          "sourceHandle": "{\"dataType\":\"ChatInput\",\"id\":\"ChatInput-Bharat\",\"name\":\"message\",\"output_types\":[\"Message\"]}",
+          "targetHandle": "{\"fieldName\":\"input_value\",\"id\":\"GroqModel-Bharat\",\"inputTypes\":[\"Message\"],\"type\":\"str\"}"
+        }
+      },
+      {
+        "source": "Prompt-Bharat",
+        "target": "GroqModel-Bharat",
+        "data": {
+          "sourceHandle": "{\"dataType\":\"Prompt\",\"id\":\"Prompt-Bharat\",\"name\":\"prompt\",\"output_types\":[\"Message\"]}",
+          "targetHandle": "{\"fieldName\":\"system_message\",\"id\":\"GroqModel-Bharat\",\"inputTypes\":[\"Message\"],\"type\":\"str\"}"
+        }
+      },
+      {
+        "source": "GroqModel-Bharat",
+        "target": "ChatOutput-Bharat",
+        "data": {
+          "sourceHandle": "{\"dataType\":\"GroqModel\",\"id\":\"GroqModel-Bharat\",\"name\":\"text_output\",\"output_types\":[\"Message\"]}",
+          "targetHandle": "{\"fieldName\":\"input_value\",\"id\":\"ChatOutput-Bharat\",\"inputTypes\":[\"Message\"],\"type\":\"str\"}"
+        }
+      }
+    ],
+    "nodes": [
+      {
+        "id": "ChatInput-Bharat",
+        "type": "genericNode",
+        "data": {
+          "id": "ChatInput-Bharat",
+          "type": "ChatInput",
+          "node": {
+            "display_name": "Bharat User Input",
+            "template": {
+              "input_value": { "value": "Namaste! Kaise hain aap?" }
+            }
+          }
+        },
+        "position": { "x": 100, "y": 300 }
+      },
+      {
+        "id": "Prompt-Bharat",
+        "type": "genericNode",
+        "data": {
+          "id": "Prompt-Bharat",
+          "type": "Prompt",
+          "node": {
+            "display_name": "Bharat System Prompt",
+            "template": {
+              "template": {
+                "value": "You are 'Bharat AI', a polite assistant for Indian users. Speak in English, Hindi, or Hinglish. Use 'Ji' and 'Aap' to show respect.\n\nContext:\n{memory}"
+              }
+            }
+          }
+        },
+        "position": { "x": 100, "y": 100 }
+      },
+      {
+        "id": "GroqModel-Bharat",
+        "type": "genericNode",
+        "data": {
+          "id": "GroqModel-Bharat",
+          "type": "GroqModel",
+          "node": {
+            "display_name": "Groq (Bharat Brain)",
+            "template": {
+              "model_name": { "value": "llama-3.3-70b-versatile" },
+              "stream": { "value": true }
+            }
+          }
+        },
+        "position": { "x": 500, "y": 300 }
+      },
+      {
+        "id": "ChatOutput-Bharat",
+        "type": "genericNode",
+        "data": {
+          "id": "ChatOutput-Bharat",
+          "type": "ChatOutput",
+          "node": {
+            "display_name": "Bharat AI Output"
+          }
+        },
+        "position": { "x": 900, "y": 300 }
+      }
+    ]
+  },
+  "name": "Bharat AI Agent",
+  "description": "Best Indian AI Starter",
+  "id": "bharat-ai-agent-001"
+}

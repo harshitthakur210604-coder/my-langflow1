@@ -1,0 +1,6 @@
+fastapi
+uvicorn
+requests
+langchain-groq
+python-dotenv
+sqlite3

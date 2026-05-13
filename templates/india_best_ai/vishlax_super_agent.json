@@ -1,0 +1,77 @@
+{
+  "data": {
+    "nodes": [
+      {
+        "id": "Input-1",
+        "type": "genericNode",
+        "data": {
+          "node": {
+            "display_name": "Student Question",
+            "template": { "input_value": { "value": "" } }
+          },
+          "type": "ChatInput"
+        },
+        "position": { "x": 50, "y": 250 }
+      },
+      {
+        "id": "Strict-Prompt",
+        "type": "genericNode",
+        "data": {
+          "node": {
+            "display_name": "Academic Guardrail",
+            "template": {
+              "template": { "value": "SYSTEM: You are a strict Vishlax Teacher. \nRULES:\n- ONLY answer educational questions (NCERT/CBSE).\n- BLOCK all personal/abusive questions with a polite warning.\n- Support 22 Indian languages.\n\nContext: {memory}\nStudent: {user_input}" }
+            }
+          },
+          "type": "Prompt"
+        },
+        "position": { "x": 50, "y": 50 }
+      },
+      {
+        "id": "Groq-Brain",
+        "type": "genericNode",
+        "data": {
+          "node": {
+            "display_name": "Groq (Main Brain)",
+            "template": {
+              "model_name": { "value": "llama-3.3-70b-versatile" },
+              "temperature": { "value": 0.5 }
+            }
+          },
+          "type": "GroqModel"
+        },
+        "position": { "x": 450, "y": 150 }
+      },
+      {
+        "id": "Ollama-Brain",
+        "type": "genericNode",
+        "data": {
+          "node": {
+            "display_name": "Ollama (Local Backup)",
+            "template": {
+              "model": { "value": "llama3" },
+              "base_url": { "value": "http://localhost:11434" }
+            }
+          },
+          "type": "OllamaModel"
+        },
+        "position": { "x": 450, "y": 350 }
+      },
+      {
+        "id": "Output-1",
+        "type": "genericNode",
+        "data": {
+          "node": { "display_name": "Guru Response" },
+          "type": "ChatOutput"
+        },
+        "position": { "x": 850, "y": 250 }
+      }
+    ],
+    "edges": [
+      { "source": "Input-1", "target": "Groq-Brain", "sourceHandle": "message", "targetHandle": "input_value" },
+      { "source": "Strict-Prompt", "target": "Groq-Brain", "sourceHandle": "prompt", "targetHandle": "system_message" },
+      { "source": "Groq-Brain", "target": "Output-1", "sourceHandle": "text_output", "targetHandle": "input_value" }
+    ]
+  },
+  "name": "Vishlax Super Teacher Agent"
+}
