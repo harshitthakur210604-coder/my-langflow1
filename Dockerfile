@@ -18,7 +18,7 @@ COPY . .
 
 # Install Python dependencies
 RUN pip install --upgrade pip
-RUN pip install -r requirements.txt
+RUN pip install -e src/sdk -e src/lfx -e src/backend/base -e .
 
 # Expose the port HarxitFlow (HarxitFlow) runs on
 EXPOSE 7860
