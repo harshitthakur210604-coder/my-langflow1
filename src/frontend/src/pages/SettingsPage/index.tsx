@@ -4,8 +4,8 @@ import SideBarButtonsComponent from "@/components/core/sidebarComponent";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { CustomStoreSidebar } from "@/customization/components/custom-store-sidebar";
 import {
-  ENABLE_DATASTAX_LANGFLOW,
-  ENABLE_LANGFLOW_STORE,
+  ENABLE_DATASTAX_HARXITFLOW,
+  ENABLE_HARXITFLOW_STORE,
   ENABLE_PROFILE_ICONS,
 } from "@/customization/feature-flags";
 import useAuthStore from "@/stores/authStore";
@@ -51,7 +51,7 @@ export default function SettingsPage(): JSX.Element {
       ),
     },
     {
-      title: "Langflow MCP Client",
+      title: "HarxitFlow MCP Client",
       href: "/settings/mcp-client",
       icon: (
         <ForwardedIconComponent
@@ -104,9 +104,9 @@ export default function SettingsPage(): JSX.Element {
   );
 
   // TODO: Remove this on cleanup
-  if (!ENABLE_DATASTAX_LANGFLOW) {
-    const langflowItems = CustomStoreSidebar(true, ENABLE_LANGFLOW_STORE);
-    sidebarNavItems.splice(2, 0, ...langflowItems);
+  if (!ENABLE_DATASTAX_HARXITFLOW) {
+    const harxitflowItems = CustomStoreSidebar(true, ENABLE_HARXITFLOW_STORE);
+    sidebarNavItems.splice(2, 0, ...harxitflowItems);
   }
 
   return (

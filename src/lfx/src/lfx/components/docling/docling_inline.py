@@ -235,7 +235,7 @@ class DoclingInlineComponent(BaseFileComponent):
 
         if importlib.util.find_spec("docling") is None:
             msg = (
-                "Docling is an optional dependency. Install with `uv pip install 'langflow[docling]'` or refer to the "
+                "Docling is an optional dependency. Install with `uv pip install 'harxitflow[docling]'` or refer to the "
                 "documentation on how to install optional dependencies."
             )
             raise ImportError(msg)

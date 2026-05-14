@@ -8,7 +8,7 @@ import pygame
 
 # --- CONFIGURATION ---
 GROQ_API_KEY = "YOUR_GROQ_API_KEY" # Apni key yahan dalein
-LANGFLOW_API_URL = "http://localhost:7860/api/v1/run/YOUR_FLOW_ID" # Langflow run URL
+HARXITFLOW_API_URL = "http://localhost:7860/api/v1/run/YOUR_FLOW_ID" # HarxitFlow run URL
 GROQ_CLIENT = Groq(api_key=GROQ_API_KEY)
 
 def speak(text):
@@ -52,17 +52,17 @@ def listen():
         print(f"Error: {e}")
         return None
 
-def call_langflow(message):
-    """Langflow Flow ko call karta hai"""
+def call_harxitflow(message):
+    """HarxitFlow Flow ko call karta hai"""
     payload = {
         "input_value": message,
         "output_type": "chat",
         "input_type": "chat",
     }
     try:
-        response = requests.post(LANGFLOW_API_URL, json=payload)
+        response = requests.post(HARXITFLOW_API_URL, json=payload)
         result = response.json()
-        # Path might vary based on Langflow version, adjusting to common one
+        # Path might vary based on HarxitFlow version, adjusting to common one
         return result['outputs'][0]['outputs'][0]['results']['message']['text']
     except Exception as e:
         return f"System error: {e}"
@@ -79,8 +79,8 @@ if __name__ == "__main__":
                 
             speak("Samajh gaya, main check kar raha hoon...")
             
-            # 1. Send to Langflow for processing (Instagram, Leads, Website data)
-            response_text = call_langflow(user_input)
+            # 1. Send to HarxitFlow for processing (Instagram, Leads, Website data)
+            response_text = call_harxitflow(user_input)
             
             # 2. Speak the response
             speak(response_text)

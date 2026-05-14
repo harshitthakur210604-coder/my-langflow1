@@ -1,11 +1,11 @@
 """Unit tests for cross-module isinstance functionality.
 
 These tests verify that isinstance checks work correctly when classes are
-re-exported from different modules (e.g., lfx.schema.Message vs langflow.schema.Message).
+re-exported from different modules (e.g., lfx.schema.Message vs harxitflow.schema.Message).
 """
 
-from langflow.schema import Data as LangflowData
-from langflow.schema import Message as LangflowMessage
+from harxitflow.schema import Data as HarxitFlowData
+from harxitflow.schema import Message as HarxitFlowMessage
 from lfx.schema.data import Data as LfxData
 from lfx.schema.message import Message as LfxMessage
 
@@ -13,26 +13,26 @@ from lfx.schema.message import Message as LfxMessage
 class TestDuckTypingData:
     """Tests for duck-typing Data class across module boundaries."""
 
-    def test_lfx_data_isinstance_langflow_data(self):
-        """Test that lfx.Data instance is recognized as langflow.Data."""
+    def test_lfx_data_isinstance_harxitflow_data(self):
+        """Test that lfx.Data instance is recognized as harxitflow.Data."""
         lfx_data = LfxData(data={"key": "value"})
-        assert isinstance(lfx_data, LangflowData)
+        assert isinstance(lfx_data, HarxitFlowData)
 
-    def test_langflow_data_isinstance_lfx_data(self):
-        """Test that langflow.Data instance is recognized as lfx.Data."""
-        langflow_data = LangflowData(data={"key": "value"})
-        assert isinstance(langflow_data, LfxData)
+    def test_harxitflow_data_isinstance_lfx_data(self):
+        """Test that harxitflow.Data instance is recognized as lfx.Data."""
+        harxitflow_data = HarxitFlowData(data={"key": "value"})
+        assert isinstance(harxitflow_data, LfxData)
 
     def test_data_equality_across_modules(self):
         """Test that Data objects from different modules are equal."""
         lfx_data = LfxData(data={"key": "value"})
-        langflow_data = LangflowData(data={"key": "value"})
-        assert lfx_data == langflow_data
+        harxitflow_data = HarxitFlowData(data={"key": "value"})
+        assert lfx_data == harxitflow_data
 
     def test_data_interchangeable_in_functions(self):
         """Test that Data from different modules work interchangeably."""
 
-        def process_data(data: LangflowData) -> str:
+        def process_data(data: HarxitFlowData) -> str:
             return data.get_text()
 
         lfx_data = LfxData(data={"text": "hello"})
@@ -43,35 +43,35 @@ class TestDuckTypingData:
     def test_data_model_dump_compatible(self):
         """Test that model_dump works across module boundaries."""
         lfx_data = LfxData(data={"key": "value"})
-        langflow_data = LangflowData(**lfx_data.model_dump())
-        assert langflow_data.data == {"key": "value"}
+        harxitflow_data = HarxitFlowData(**lfx_data.model_dump())
+        assert harxitflow_data.data == {"key": "value"}
 
 
 class TestDuckTypingMessage:
     """Tests for duck-typing Message class across module boundaries."""
 
-    def test_lfx_message_isinstance_langflow_message(self):
-        """Test that lfx.Message instance is recognized as langflow.Message."""
+    def test_lfx_message_isinstance_harxitflow_message(self):
+        """Test that lfx.Message instance is recognized as harxitflow.Message."""
         lfx_message = LfxMessage(text="hello")
-        assert isinstance(lfx_message, LangflowMessage)
+        assert isinstance(lfx_message, HarxitFlowMessage)
 
-    def test_langflow_message_isinstance_lfx_message(self):
-        """Test that langflow.Message instance is recognized as lfx.Message."""
-        langflow_message = LangflowMessage(text="hello")
-        assert isinstance(langflow_message, LfxMessage)
+    def test_harxitflow_message_isinstance_lfx_message(self):
+        """Test that harxitflow.Message instance is recognized as lfx.Message."""
+        harxitflow_message = HarxitFlowMessage(text="hello")
+        assert isinstance(harxitflow_message, LfxMessage)
 
     def test_message_equality_across_modules(self):
         """Test that Message objects from different modules are equal."""
         lfx_message = LfxMessage(text="hello", sender="user")
-        langflow_message = LangflowMessage(text="hello", sender="user")
+        harxitflow_message = HarxitFlowMessage(text="hello", sender="user")
         # Note: Direct equality might not work due to timestamps
-        assert lfx_message.text == langflow_message.text
-        assert lfx_message.sender == langflow_message.sender
+        assert lfx_message.text == harxitflow_message.text
+        assert lfx_message.sender == harxitflow_message.sender
 
     def test_message_interchangeable_in_functions(self):
         """Test that Message from different modules work interchangeably."""
 
-        def process_message(msg: LangflowMessage) -> str:
+        def process_message(msg: HarxitFlowMessage) -> str:
             return f"Processed: {msg.text}"
 
         lfx_message = LfxMessage(text="hello")
@@ -83,15 +83,15 @@ class TestDuckTypingMessage:
         """Test that model_dump works across module boundaries."""
         lfx_message = LfxMessage(text="hello", sender="user")
         dump = lfx_message.model_dump()
-        langflow_message = LangflowMessage(**dump)
-        assert langflow_message.text == "hello"
-        assert langflow_message.sender == "user"
+        harxitflow_message = HarxitFlowMessage(**dump)
+        assert harxitflow_message.text == "hello"
+        assert harxitflow_message.sender == "user"
 
     def test_message_inherits_data_duck_typing(self):
         """Test that Message inherits duck-typing from Data."""
         lfx_message = LfxMessage(text="hello")
         # Should work as Data too
-        assert isinstance(lfx_message, LangflowData)
+        assert isinstance(lfx_message, HarxitFlowData)
         assert isinstance(lfx_message, LfxData)
 
 
@@ -104,14 +104,14 @@ class TestDuckTypingWithInputs:
 
         lfx_message = LfxMessage(text="hello")
         msg_input = MessageInput(name="test", value=lfx_message)
-        assert isinstance(msg_input.value, (LfxMessage, LangflowMessage))
+        assert isinstance(msg_input.value, (LfxMessage, HarxitFlowMessage))
 
     def test_message_input_converts_cross_module(self):
         """Test that MessageInput handles cross-module Messages."""
         from lfx.inputs.inputs import MessageInput
 
-        langflow_message = LangflowMessage(text="hello")
-        msg_input = MessageInput(name="test", value=langflow_message)
+        harxitflow_message = HarxitFlowMessage(text="hello")
+        msg_input = MessageInput(name="test", value=harxitflow_message)
         # Should recognize it as a Message
         assert msg_input.value.text == "hello"
 
@@ -137,7 +137,7 @@ class TestDuckTypingEdgeCases:
         custom = CustomModel(value="test")
         # Should not be considered a Data
         assert not isinstance(custom, LfxData)
-        assert not isinstance(custom, LangflowData)
+        assert not isinstance(custom, HarxitFlowData)
 
     def test_non_pydantic_model_not_cross_module(self):
         """Test that non-Pydantic objects are not recognized as cross-module compatible."""
@@ -148,7 +148,7 @@ class TestDuckTypingEdgeCases:
 
         fake = FakeData()
         assert not isinstance(fake, LfxData)
-        assert not isinstance(fake, LangflowData)
+        assert not isinstance(fake, HarxitFlowData)
 
     def test_missing_fields_not_cross_module(self):
         """Test that objects missing required fields are not recognized as cross-module compatible."""
@@ -160,7 +160,7 @@ class TestDuckTypingEdgeCases:
         partial = PartialData(text_key="text")
         # Should not be considered a full Data (missing data field)
         assert not isinstance(partial, LfxData)
-        assert not isinstance(partial, LangflowData)
+        assert not isinstance(partial, HarxitFlowData)
 
 
 class TestDuckTypingInputMixin:
@@ -197,9 +197,9 @@ class TestDuckTypingInputMixin:
         lfx_msg = LfxMessage(text="hello")
         input1 = MessageInput(name="test1", value=lfx_msg)
 
-        # Create with langflow Message
-        langflow_msg = LangflowMessage(text="world")
-        input2 = MessageInput(name="test2", value=langflow_msg)
+        # Create with harxitflow Message
+        harxitflow_msg = HarxitFlowMessage(text="world")
+        input2 = MessageInput(name="test2", value=harxitflow_msg)
 
         # Both should work
         assert input1.value.text == "hello"

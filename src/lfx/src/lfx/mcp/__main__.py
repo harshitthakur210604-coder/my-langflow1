@@ -1,4 +1,4 @@
-"""Entry point for the Langflow MCP server.
+"""Entry point for the HarxitFlow MCP server.
 
 Usage:
     python -m lfx.mcp
@@ -6,8 +6,8 @@ Usage:
     lfx-mcp
 
 Environment variables:
-    LANGFLOW_SERVER_URL: Langflow server URL (default: http://localhost:7860)
-    LANGFLOW_API_KEY: API key for authentication (skips login)
+    HARXITFLOW_SERVER_URL: HarxitFlow server URL (default: http://localhost:7860)
+    HARXITFLOW_API_KEY: API key for authentication (skips login)
 """
 
 from lfx.mcp.server import mcp

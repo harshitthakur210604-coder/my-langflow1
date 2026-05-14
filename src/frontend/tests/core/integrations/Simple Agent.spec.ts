@@ -30,7 +30,7 @@ withEventDeliveryModes(
     await page
       .getByTestId("input-chat-playground")
       .last()
-      .fill("Hello, tell me about Langflow.");
+      .fill("Hello, tell me about HarxitFlow.");
 
     await page.getByTestId("button-send").last().click();
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env pwsh
 
-Write-Host "Starting Langflow build and run process..." -ForegroundColor Green
+Write-Host "Starting HarxitFlow build and run process..." -ForegroundColor Green
 
 # Check if .env file exists and set env file parameter
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Definition
@@ -12,7 +12,7 @@ if (Test-Path $envPath) {
     $useEnvFile = $true
 } else {
     Write-Host ".env file not found at: $envPath" -ForegroundColor Yellow
-    Write-Host "Langflow will use default configuration" -ForegroundColor Yellow
+    Write-Host "HarxitFlow will use default configuration" -ForegroundColor Yellow
 }
 
 # Step 1: Install frontend dependencies
@@ -58,7 +58,7 @@ try {
         throw "Neither build nor dist directory found in src\frontend"
     }
 
-    $targetDir = "src\backend\base\langflow\frontend"
+    $targetDir = "src\backend\base\harxitflow\frontend"
     Write-Host "Copying from $buildDir to $targetDir"
 
     # Create target directory if it doesn't exist
@@ -82,23 +82,23 @@ try {
     exit 1
 }
 
-# Step 4: Run Langflow
-Write-Host "`nStep 4: Running Langflow..." -ForegroundColor Yellow
+# Step 4: Run HarxitFlow
+Write-Host "`nStep 4: Running HarxitFlow..." -ForegroundColor Yellow
 Write-Host "`nAttention: Wait until uvicorn is running before opening the browser" -ForegroundColor Red
 try {
     # Change to project root directory for uv
     Set-Location $projectRoot
     if ($useEnvFile) {
         Write-Host "Using env file: .env" -ForegroundColor Cyan
-        & uv run --env-file ".env" langflow run
+        & uv run --env-file ".env" harxitflow run
     } else {
-        & uv run langflow run
+        & uv run harxitflow run
     }
 } catch {
-    Write-Host "Error running langflow: $_" -ForegroundColor Red
+    Write-Host "Error running harxitflow: $_" -ForegroundColor Red
     Read-Host "Press Enter to exit"
     exit 1
 }
 
-Write-Host "`nLangflow build and run process completed!" -ForegroundColor Green
+Write-Host "`nHarxitFlow build and run process completed!" -ForegroundColor Green
 Read-Host "Press Enter to exit"

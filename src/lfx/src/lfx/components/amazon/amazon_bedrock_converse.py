@@ -1,6 +1,6 @@
-from langflow.field_typing import LanguageModel
-from langflow.inputs.inputs import BoolInput, FloatInput, IntInput, MessageTextInput, SecretStrInput
-from langflow.io import DictInput, DropdownInput
+from harxitflow.field_typing import LanguageModel
+from harxitflow.inputs.inputs import BoolInput, FloatInput, IntInput, MessageTextInput, SecretStrInput
+from harxitflow.io import DictInput, DropdownInput
 
 from lfx.base.models.aws_constants import AWS_REGIONS, AWS_MODEL_IDs
 from lfx.base.models.model import LCModelComponent

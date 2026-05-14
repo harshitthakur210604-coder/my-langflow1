@@ -1,14 +1,14 @@
-"""Tests for LangflowClient.post_event -- best-effort event emission."""
+"""Tests for HarxitFlowClient.post_event -- best-effort event emission."""
 
 from unittest.mock import AsyncMock, patch
 
 import pytest
-from lfx.mcp.client import LangflowClient
+from lfx.mcp.client import HarxitFlowClient
 
 
 @pytest.fixture
 def client():
-    return LangflowClient(server_url="http://localhost:7860", api_key="test-key")  # pragma: allowlist secret
+    return HarxitFlowClient(server_url="http://localhost:7860", api_key="test-key")  # pragma: allowlist secret
 
 
 class TestPostEvent:

@@ -1,17 +1,17 @@
-# LFX - Langflow Executor
+# LFX - HarxitFlow Executor
 
-The Langflow Executor (LFX) is a command-line tool that serves and runs flows statelessly from flow JSON files with minimal dependencies.
+The HarxitFlow Executor (LFX) is a command-line tool that serves and runs flows statelessly from flow JSON files with minimal dependencies.
 
-Running a flow with LFX is similar to running flows with the `--backend-only` environment variable enabled, but even more lightweight because the Langflow package and all of its dependencies don't need to be installed.
+Running a flow with LFX is similar to running flows with the `--backend-only` environment variable enabled, but even more lightweight because the HarxitFlow package and all of its dependencies don't need to be installed.
 
-LFX uses a no-op database interface called [`NoopSession`](https://github.com/langflow-ai/langflow/blob/main/src/lfx/src/lfx/services/session.py) for all operations that require persistent state.
-There is no `langflow.db` database file when using LFX.
-You can run flows with the API, but any stateful operations that depend on the Langflow database, like saving flows, storing messages, or managing users **will not** persist data.
-Operations that depend on `langflow.db` will not work as they do in the full Langflow application.
+LFX uses a no-op database interface called [`NoopSession`](https://github.com/harxitflow-ai/harxitflow/blob/main/src/lfx/src/lfx/services/session.py) for all operations that require persistent state.
+There is no `harxitflow.db` database file when using LFX.
+You can run flows with the API, but any stateful operations that depend on the HarxitFlow database, like saving flows, storing messages, or managing users **will not** persist data.
+Operations that depend on `harxitflow.db` will not work as they do in the full HarxitFlow application.
 
 LFX includes two commands for executing flows:
 
-- **`lfx serve`**: Starts a FastAPI server hosting a Langflow API endpoint with your flow available at `/flows/{flow_id}/run`. The flow graph is stored in memory at all times, so there is less overhead for loading the graph from a database.
+- **`lfx serve`**: Starts a FastAPI server hosting a HarxitFlow API endpoint with your flow available at `/flows/{flow_id}/run`. The flow graph is stored in memory at all times, so there is less overhead for loading the graph from a database.
 - **`lfx run`**: Executes a flow locally and returns the results to `stdout`.
 
 ## Prerequisites
@@ -21,28 +21,28 @@ LFX includes two commands for executing flows:
 - Create or download a flow JSON file. For example, download the Simple Agent flow from the repository:
 
   ```bash
-  curl -o simple-agent-flow.json "https://raw.githubusercontent.com/langflow-ai/langflow/main/src/backend/base/langflow/initial_setup/starter_projects/Simple%20Agent.json"
+  curl -o simple-agent-flow.json "https://raw.githubusercontent.com/harxitflow-ai/harxitflow/main/src/backend/base/harxitflow/initial_setup/starter_projects/Simple%20Agent.json"
   ```
 
 - Create an [OpenAI API key](https://platform.openai.com/api-keys).
-- Create a Langflow API key. For LFX, you can generate a secure token locally (see [Serve the simple agent starter flow with `lfx serve`](#serve-the-simple-agent-starter-flow-with-lfx-serve)), or create one through the Langflow server UI or CLI.
+- Create a HarxitFlow API key. For LFX, you can generate a secure token locally (see [Serve the simple agent starter flow with `lfx serve`](#serve-the-simple-agent-starter-flow-with-lfx-serve)), or create one through the HarxitFlow server UI or CLI.
 
 ## Install LFX
 
-LFX can be installed in multiple ways. If you have installed Langflow OSS version >=1.6, `lfx` is already included.
+LFX can be installed in multiple ways. If you have installed HarxitFlow OSS version >=1.6, `lfx` is already included.
 
 ### Clone repository
 
-1. Clone the Langflow repository:
+1. Clone the HarxitFlow repository:
 
    ```bash
-   git clone https://github.com/langflow-ai/langflow
+   git clone https://github.com/harxitflow-ai/harxitflow
    ```
 
-2. Change directory to `langflow/src/lfx`:
+2. Change directory to `harxitflow/src/lfx`:
 
    ```bash
-   cd langflow/src/lfx
+   cd harxitflow/src/lfx
    ```
 
    From this directory, you can run `lfx` commands using `uv run lfx` as shown in [lfx serve](#serve-the-simple-agent-starter-flow-with-lfx-serve) or [lfx run](#run-the-simple-agent-flow-with-lfx-run).
@@ -74,10 +74,10 @@ LFX can be installed in multiple ways. If you have installed Langflow OSS versio
 
 Run LFX without installing it locally using `uvx`.
 
-1. Create a Langflow API key (see [Serve](#serve-the-simple-agent-starter-flow-with-lfx-serve)), and set `LANGFLOW_API_KEY` in the same terminal session as `lfx`:
+1. Create a HarxitFlow API key (see [Serve](#serve-the-simple-agent-starter-flow-with-lfx-serve)), and set `HARXITFLOW_API_KEY` in the same terminal session as `lfx`:
 
    ```bash
-   export LANGFLOW_API_KEY="sk..."
+   export HARXITFLOW_API_KEY="sk..."
    ```
 
 2. Run `lfx serve` using `uvx`:
@@ -90,30 +90,30 @@ Run LFX without installing it locally using `uvx`.
 
 ## Serve the simple agent starter flow with `lfx serve`
 
-To serve a flow as a REST API endpoint, set a `LANGFLOW_API_KEY` and run the flow JSON.
+To serve a flow as a REST API endpoint, set a `HARXITFLOW_API_KEY` and run the flow JSON.
 
 The API key is required for security because `lfx serve` can create a publicly accessible FastAPI server.
 
 This example uses the **Agent** component's built-in OpenAI model, which requires an OpenAI API key. If you want to use a different provider, edit the model provider, model name, and credentials accordingly.
 
-1. Generate a Langflow API key.
+1. Generate a HarxitFlow API key.
 
-   For LFX, you can generate a secure token locally to use as your `LANGFLOW_API_KEY`:
+   For LFX, you can generate a secure token locally to use as your `HARXITFLOW_API_KEY`:
 
    ```bash
    uv run python -c "import secrets; print(secrets.token_urlsafe(32))"
    ```
 
-   This is different from creating a Langflow API key through the Langflow server UI or CLI, which stores the key in the Langflow database. For LFX, you only need a secure token string to authenticate requests to your LFX server.
+   This is different from creating a HarxitFlow API key through the HarxitFlow server UI or CLI, which stores the key in the HarxitFlow database. For LFX, you only need a secure token string to authenticate requests to your LFX server.
 
 2. Set up your environment variables using one of the following options.
 
    **Option: .env file**
 
-   Create a `.env` file and populate it with your flow's variables. The `LANGFLOW_API_KEY` is required. This example assumes the flow requires an OpenAI API key.
+   Create a `.env` file and populate it with your flow's variables. The `HARXITFLOW_API_KEY` is required. This example assumes the flow requires an OpenAI API key.
 
    ```bash
-   LANGFLOW_API_KEY="sk..."
+   HARXITFLOW_API_KEY="sk..."
    OPENAI_API_KEY="sk-..."
    ```
 
@@ -122,13 +122,13 @@ This example uses the **Agent** component's built-in OpenAI model, which require
    Export your variables in the same terminal session where you'll start the server. You must declare your variables before the server starts for the server to pick them up.
 
    ```bash
-   export LANGFLOW_API_KEY="sk..."
+   export HARXITFLOW_API_KEY="sk..."
    export OPENAI_API_KEY="sk-..."
    ```
 
 3. Install dependencies.
 
-   If you already have Langflow installed, or if you're running from source at `src/lfx`, LFX is included with Langflow and all dependencies are already available. You don't need to install additional dependencies.
+   If you already have HarxitFlow installed, or if you're running from source at `src/lfx`, LFX is included with HarxitFlow and all dependencies are already available. You don't need to install additional dependencies.
 
    If you install the standalone `lfx` package from [PyPI](https://pypi.org/project/lfx/) or run LFX with `uvx`, you need to manually install the dependencies required by the components in your flow.
 
@@ -199,10 +199,10 @@ This example uses the **Agent** component's built-in OpenAI model, which require
     ╰──────────────────────────────────────────────────────────────────────╯
    ```
 
-6. To send a test request to the server, open a new terminal and export your `flow_id` and Langflow API key values as variables:
+6. To send a test request to the server, open a new terminal and export your `flow_id` and HarxitFlow API key values as variables:
 
    ```bash
-   export LANGFLOW_API_KEY="sk..."
+   export HARXITFLOW_API_KEY="sk..."
    export FLOW_ID="c1dab29d-3364-58ef-8fef-99311d32ee42"
    ```
 
@@ -211,7 +211,7 @@ This example uses the **Agent** component's built-in OpenAI model, which require
    ```bash
    curl -X POST http://localhost:8000/flows/$FLOW_ID/run \
      -H "Content-Type: application/json" \
-     -H "x-api-key: $LANGFLOW_API_KEY" \
+     -H "x-api-key: $HARXITFLOW_API_KEY" \
      -d '{"input_value": "Hello, world!"}'
    ```
 
@@ -227,13 +227,13 @@ This example uses the **Agent** component's built-in OpenAI model, which require
    }
    ```
 
-Your flow is now running as a lightweight API endpoint, with only the flow's required dependencies and no visual builder installed. Users who call your endpoint don't need to install Langflow or configure their own LLM provider keys.
+Your flow is now running as a lightweight API endpoint, with only the flow's required dependencies and no visual builder installed. Users who call your endpoint don't need to install HarxitFlow or configure their own LLM provider keys.
 
 To make your server publicly accessible, use a tunneling service like ngrok or deploy to a public cloud provider.
 
 ### LFX response schema
 
-The LFX server's response schema is different from the Langflow API `/run` endpoint's schema. Requests to the LFX server's `/flows/{flow_id}/run` endpoint return the following fields:
+The LFX server's response schema is different from the HarxitFlow API `/run` endpoint's schema. Requests to the LFX server's `/flows/{flow_id}/run` endpoint return the following fields:
 
 ```json
 {
@@ -262,7 +262,7 @@ To view the LFX server's API docs and schema, see the `/docs` endpoint at `http:
 
 ## Run the simple agent flow with `lfx run`
 
-The `lfx run` command runs a flow from a JSON file without serving it, and the output is sent to `stdout`. Input to `lfx run` can be a path to the JSON file, inline JSON passed with `--input-value`, or read from `stdin`. No Langflow API key is required.
+The `lfx run` command runs a flow from a JSON file without serving it, and the output is sent to `stdout`. Input to `lfx run` can be a path to the JSON file, inline JSON passed with `--input-value`, or read from `stdin`. No HarxitFlow API key is required.
 
 This example uses the **Agent** component's built-in OpenAI model, which requires an OpenAI API key. If you want to use a different provider, edit the model provider, model name, and credentials accordingly.
 
@@ -274,7 +274,7 @@ This example uses the **Agent** component's built-in OpenAI model, which require
 
 2. Install dependencies.
 
-   If you already have Langflow installed, or if you're running from source at `src/lfx`, LFX is included with Langflow and all dependencies are already available. You don't need to install additional dependencies.
+   If you already have HarxitFlow installed, or if you're running from source at `src/lfx`, LFX is included with HarxitFlow and all dependencies are already available. You don't need to install additional dependencies.
 
    If you install the standalone `lfx` package from [PyPI](https://pypi.org/project/lfx/) or run LFX with `uvx`, you need to manually install the dependencies required by the components in your flow.
 
@@ -373,7 +373,7 @@ For a complete example of creating an agent flow programmatically using LFX comp
 Create a file called `simple_agent.py`:
 
 ```python
-"""A simple agent flow example for Langflow.
+"""A simple agent flow example for HarxitFlow.
 
 Usage:
     uv run lfx run simple_agent.py "How are you?"
@@ -391,7 +391,7 @@ async def get_graph() -> Graph:
     """Create and return the graph with async component initialization."""
     log_config = LogConfig(
         log_level="INFO",
-        log_file=Path("langflow.log"),
+        log_file=Path("harxitflow.log"),
     )
 
     chat_input = cp.ChatInput()
@@ -432,7 +432,7 @@ make format
 
 ## Pluggable services
 
-LFX supports a pluggable service architecture that lets you customize and extend its behavior. You can replace built-in services (storage, telemetry, tracing, etc.) with your own implementations or use Langflow's full-featured services.
+LFX supports a pluggable service architecture that lets you customize and extend its behavior. You can replace built-in services (storage, telemetry, tracing, etc.) with your own implementations or use HarxitFlow's full-featured services.
 
 For more information, see [PLUGGABLE_SERVICES.md](./PLUGGABLE_SERVICES.md).
 
@@ -470,8 +470,8 @@ Both settings are optional. When unset or empty, all categories from the compone
 
 | Variable | Description |
 |----------|-------------|
-| `LANGFLOW_COMPONENT_CATEGORY_ALLOWLIST` | Comma-separated list of component category names to **include**. If empty (default), all categories are included. If set, only the listed categories are available. |
-| `LANGFLOW_COMPONENT_CATEGORY_BLOCKLIST` | Comma-separated list of component category names to **exclude**. If empty (default), no categories are excluded. Applied after the allowlist. |
+| `HARXITFLOW_COMPONENT_CATEGORY_ALLOWLIST` | Comma-separated list of component category names to **include**. If empty (default), all categories are included. If set, only the listed categories are available. |
+| `HARXITFLOW_COMPONENT_CATEGORY_BLOCKLIST` | Comma-separated list of component category names to **exclude**. If empty (default), no categories are excluded. Applied after the allowlist. |
 
 Category names are case-insensitive.
 
@@ -490,21 +490,21 @@ Provider-specific and other categories (e.g. `openai`, `anthropic`, `google`, `l
 Allowlist only — restrict to specific categories:
 
    ```bash
-   export LANGFLOW_COMPONENT_CATEGORY_ALLOWLIST="openai,anthropic,google,processing,input_output"
+   export HARXITFLOW_COMPONENT_CATEGORY_ALLOWLIST="openai,anthropic,google,processing,input_output"
    uv run lfx serve my_flow.json
    ```
 
 Blocklist only — load all categories except the ones you exclude:
 
    ```bash
-   export LANGFLOW_COMPONENT_CATEGORY_BLOCKLIST="prototypes,langchain_utilities"
+   export HARXITFLOW_COMPONENT_CATEGORY_BLOCKLIST="prototypes,langchain_utilities"
    uv run lfx run my_flow.json "Hello"
    ```
 
 Virtual `core` keyword — use `core` in the allowlist or blocklist to refer to all core categories at once (e.g. allow only core categories, or exclude all core from a broader set):
 
    ```bash
-   export LANGFLOW_COMPONENT_CATEGORY_ALLOWLIST="core"
+   export HARXITFLOW_COMPONENT_CATEGORY_ALLOWLIST="core"
    uv run lfx serve my_flow.json
    ```
 

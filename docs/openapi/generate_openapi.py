@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Generate the Langflow OpenAPI specification.
+"""Generate the HarxitFlow OpenAPI specification.
 
-This script imports the Langflow FastAPI application and writes its OpenAPI
+This script imports the HarxitFlow FastAPI application and writes its OpenAPI
 schema to a JSON file in this directory.
 
 Usage (from repository root):
@@ -17,7 +17,7 @@ import json
 from pathlib import Path
 from typing import Any
 
-from langflow.main import create_app
+from harxitflow.main import create_app
 
 
 def _clean_descriptions(spec: dict[str, Any]) -> None:
@@ -94,7 +94,7 @@ def generate_openapi(output_path: Path) -> None:
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Generate Langflow OpenAPI specification.")
+    parser = argparse.ArgumentParser(description="Generate HarxitFlow OpenAPI specification.")
     parser.add_argument(
         "--output",
         "-o",

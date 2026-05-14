@@ -1,4 +1,4 @@
-"""Core run functionality for executing Langflow graphs."""
+"""Core run functionality for executing HarxitFlow graphs."""
 
 import json
 import re
@@ -72,9 +72,9 @@ async def run_flow(
     session_id: str | None = None,
     event_manager: "EventManager | None" = None,
 ) -> dict:
-    """Execute a Langflow graph script or JSON flow and return the result.
+    """Execute a HarxitFlow graph script or JSON flow and return the result.
 
-    This function analyzes and executes either a Python script containing a Langflow graph,
+    This function analyzes and executes either a Python script containing a HarxitFlow graph,
     a JSON flow file, inline JSON, or JSON from stdin, returning the result as a dict.
 
     Args:

@@ -1,7 +1,7 @@
 import * as dotenv from "dotenv";
 import path from "path";
 import { expect, test } from "../../fixtures";
-import { addFlowToTestOnEmptyLangflow } from "../../utils/add-flow-to-test-on-empty-langflow";
+import { addFlowToTestOnEmptyHarxitFlow } from "../../utils/add-flow-to-test-on-empty-harxitflow";
 import { adjustScreenView } from "../../utils/adjust-screen-view";
 import { awaitBootstrapTest } from "../../utils/await-bootstrap-test";
 import { initialGPTsetup } from "../../utils/initialGPTsetup";
@@ -22,12 +22,12 @@ test(
 
     await awaitBootstrapTest(page);
 
-    const firstRunLangflow = await page
+    const firstRunHarxitFlow = await page
       .getByTestId("empty-project-description")
       .count();
 
-    if (firstRunLangflow > 0) {
-      await addFlowToTestOnEmptyLangflow(page);
+    if (firstRunHarxitFlow > 0) {
+      await addFlowToTestOnEmptyHarxitFlow(page);
     }
 
     await page.getByTestId("side_nav_options_all-templates").click();

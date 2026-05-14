@@ -27,11 +27,11 @@ test.skip(
 
     await page
       .getByTestId("inputlist_str_urls_0")
-      .fill("https://docs.langflow.org/");
+      .fill("https://docs.harxitflow.org/");
 
     await page
       .getByTestId("inputlist_str_urls_1")
-      .fill("https://www.langflow.org/");
+      .fill("https://www.harxitflow.org/");
     await adjustScreenView(page);
 
     await page.getByTestId("default_slider_display_value").click();

@@ -1,7 +1,7 @@
-from langflow.custom import Component
+from harxitflow.custom import Component
 
 # Import all input types
-from langflow.io import (
+from harxitflow.io import (
     BoolInput,
     DataFrameInput,
     DataInput,
@@ -26,8 +26,8 @@ from pydantic import BaseModel
 
 class AllInputsComponent(Component):
     display_name = "All Inputs Component"
-    description = "A component with all input types available in Langflow."
-    documentation: str = "http://docs.langflow.org/components/all_inputs"
+    description = "A component with all input types available in HarxitFlow."
+    documentation: str = "http://docs.harxitflow.org/components/all_inputs"
     icon = "code"
     name = "AllInputsComponent"
 
@@ -158,7 +158,7 @@ def test_component_inputs_toolkit():
 def test_table_input_preserves_list_dict():
     """Test that TableInput with tool_mode=True preserves all dicts in a list.
 
-    Regression test for: https://github.com/langflow-ai/langflow/issues/12062
+    Regression test for: https://github.com/harxitflow-ai/harxitflow/issues/12062
     """
     component = AllInputsComponent()
 

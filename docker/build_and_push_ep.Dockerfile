@@ -59,7 +59,7 @@ WORKDIR /tmp/src/frontend
 RUN --mount=type=cache,target=/root/.npm \
     npm ci \
     && ESBUILD_BINARY_PATH="" NODE_OPTIONS="--max-old-space-size=4096" JOBS=1 npm run build \
-    && cp -r build /app/src/backend/langflow/frontend \
+    && cp -r build /app/src/backend/harxitflow/frontend \
     && rm -rf /tmp/src/frontend
 
 WORKDIR /app
@@ -96,17 +96,17 @@ RUN useradd user -u 1000 -g 0 --no-create-home --home-dir /app/data
 COPY --from=builder --chown=1000 /app/.venv /app/.venv
 ENV PATH="/app/.venv/bin:$PATH"
 
-LABEL org.opencontainers.image.title=langflow
-LABEL org.opencontainers.image.authors=['Langflow']
+LABEL org.opencontainers.image.title=harxitflow
+LABEL org.opencontainers.image.authors=['HarxitFlow']
 LABEL org.opencontainers.image.licenses=MIT
-LABEL org.opencontainers.image.url=https://github.com/langflow-ai/langflow
-LABEL org.opencontainers.image.source=https://github.com/langflow-ai/langflow
+LABEL org.opencontainers.image.url=https://github.com/harxitflow-ai/harxitflow
+LABEL org.opencontainers.image.source=https://github.com/harxitflow-ai/harxitflow
 
 WORKDIR /app
 
-ENV LANGFLOW_HOST=0.0.0.0
-ENV LANGFLOW_PORT=7860
-ENV LANGFLOW_EVENT_DELIVERY=polling
+ENV HARXITFLOW_HOST=0.0.0.0
+ENV HARXITFLOW_PORT=7860
+ENV HARXITFLOW_EVENT_DELIVERY=polling
 
 USER 1000
-CMD ["python", "-m", "langflow", "run", "--host", "0.0.0.0", "--backend-only"]
+CMD ["python", "-m", "harxitflow", "run", "--host", "0.0.0.0", "--backend-only"]

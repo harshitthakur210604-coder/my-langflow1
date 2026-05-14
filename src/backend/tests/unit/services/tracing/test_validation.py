@@ -1,11 +1,11 @@
-"""Unit tests for langflow.services.tracing.validation.
+"""Unit tests for harxitflow.services.tracing.validation.
 
 Covers sanitize_query_string: happy path, edge cases, adversarial inputs.
 """
 
 from __future__ import annotations
 
-from langflow.services.tracing.validation import sanitize_query_string
+from harxitflow.services.tracing.validation import sanitize_query_string
 
 
 class TestSanitizeQueryString:

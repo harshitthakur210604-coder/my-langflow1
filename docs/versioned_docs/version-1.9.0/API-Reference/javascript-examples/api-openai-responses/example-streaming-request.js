@@ -1,9 +1,9 @@
-const url = `${process.env.LANGFLOW_SERVER_URL ?? ""}/api/v1/responses`;
+const url = `${process.env.HARXITFLOW_SERVER_URL ?? ""}/api/v1/responses`;
 
 const options = {
   method: 'POST',
   headers: {
-    "x-api-key": `${process.env.LANGFLOW_API_KEY ?? ""}`,
+    "x-api-key": `${process.env.HARXITFLOW_API_KEY ?? ""}`,
     "Content-Type": `application/json`,
   },
   body: JSON.stringify({

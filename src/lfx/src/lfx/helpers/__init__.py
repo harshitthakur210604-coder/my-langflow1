@@ -1,17 +1,17 @@
 """Helpers module for the lfx package.
 
-This module automatically chooses between the full langflow implementation
+This module automatically chooses between the full harxitflow implementation
 (when available) and the lfx implementation (when standalone).
 """
 
-from lfx.utils.langflow_utils import has_langflow_memory
+from lfx.utils.harxitflow_utils import has_harxitflow_memory
 
 # Import the appropriate implementation
-if has_langflow_memory():
+if has_harxitflow_memory():
     try:
-        # Import full langflow implementation
+        # Import full harxitflow implementation
         # Base Model
-        from langflow.helpers.base_model import (
+        from harxitflow.helpers.base_model import (
             BaseModel,
             SchemaField,
             build_model_from_schema,
@@ -19,12 +19,12 @@ if has_langflow_memory():
         )
 
         # Custom
-        from langflow.helpers.custom import (
+        from harxitflow.helpers.custom import (
             format_type,
         )
 
         # Data
-        from langflow.helpers.data import (
+        from harxitflow.helpers.data import (
             clean_string,
             data_to_text,
             data_to_text_list,
@@ -33,7 +33,7 @@ if has_langflow_memory():
         )
 
         # Flow
-        from langflow.helpers.flow import (
+        from harxitflow.helpers.flow import (
             build_schema_from_inputs,
             get_arg_names,
             get_flow_by_id_or_name,
@@ -45,7 +45,7 @@ if has_langflow_memory():
             run_flow,
         )
     except ImportError:
-        # Fallback to lfx implementation if langflow import fails
+        # Fallback to lfx implementation if harxitflow import fails
         # Base Model
         from lfx.helpers.base_model import (
             BaseModel,

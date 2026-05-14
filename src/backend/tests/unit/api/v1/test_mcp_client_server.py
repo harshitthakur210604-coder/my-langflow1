@@ -1,23 +1,23 @@
 """Integration tests for lfx.mcp.server MCP tools.
 
-Uses the client_fixture (real Langflow app via ASGITransport) — no mocking.
-Tests the full roundtrip: MCP tool -> LangflowClient -> Langflow API -> DB.
+Uses the client_fixture (real HarxitFlow app via ASGITransport) — no mocking.
+Tests the full roundtrip: MCP tool -> HarxitFlowClient -> HarxitFlow API -> DB.
 """
 
 import pytest
 from httpx import AsyncClient
 from lfx.mcp import server as mcp_server_module
-from lfx.mcp.client import LangflowClient
+from lfx.mcp.client import HarxitFlowClient
 
 
 @pytest.fixture
 async def mcp_client(client: AsyncClient, logged_in_headers):
-    """Wire up a LangflowClient that uses the test's AsyncClient transport."""
+    """Wire up a HarxitFlowClient that uses the test's AsyncClient transport."""
     # Extract the token from logged_in_headers
     auth_header = logged_in_headers["Authorization"]
     access_token = auth_header.removeprefix("Bearer ")
 
-    lf_client = LangflowClient(server_url="http://testserver", access_token=access_token)
+    lf_client = HarxitFlowClient(server_url="http://testserver", access_token=access_token)
     # Inject the test's AsyncClient so requests go through ASGITransport
     lf_client._http = client
 
@@ -625,7 +625,7 @@ class TestRunFlow:
         assert "outputs" in result
 
     async def test_stream_post_yields_events(self, mcp_client, created_api_key):
-        """Verify stream_post yields SSE events from Langflow's streaming endpoint."""
+        """Verify stream_post yields SSE events from HarxitFlow's streaming endpoint."""
         mcp_client.api_key = created_api_key.api_key
         created = await mcp_server_module.create_flow("StreamTest")
         c1 = await mcp_server_module.add_component(created["id"], "ChatInput")

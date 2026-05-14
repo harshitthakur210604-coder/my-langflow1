@@ -114,7 +114,7 @@ def multi_serve_app(mock_graphs, mock_metas, monkeypatch):
     from lfx.services.deps import get_settings_service
 
     # Set required environment variable
-    monkeypatch.setenv("LANGFLOW_API_KEY", "test-api-key")
+    monkeypatch.setenv("HARXITFLOW_API_KEY", "test-api-key")
     monkeypatch.setattr(get_settings_service().settings, "allow_custom_components", True)
 
     with patch("lfx.cli.serve_app.execute_graph_with_capture") as mock_execute:
@@ -148,7 +148,7 @@ def multi_serve_app(mock_graphs, mock_metas, monkeypatch):
 def mock_api_key(monkeypatch):
     """Mock API key for authentication."""
     # Set the required environment variable
-    monkeypatch.setenv("LANGFLOW_API_KEY", "test-api-key")
+    monkeypatch.setenv("HARXITFLOW_API_KEY", "test-api-key")
 
     with patch("lfx.cli.serve_app.verify_api_key") as mock_verify:
         mock_verify.return_value = True
@@ -428,7 +428,7 @@ class TestMultiServeStreaming:
         monkeypatch,
     ):
         """Test that /stream returns an error stream when validation blocks the flow."""
-        monkeypatch.setenv("LANGFLOW_API_KEY", "test-api-key")
+        monkeypatch.setenv("HARXITFLOW_API_KEY", "test-api-key")
         mock_graphs["flow1"].raw_graph_data = _blocked_raw_graph()
 
         app = create_multi_serve_app(

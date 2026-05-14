@@ -37,7 +37,7 @@ async def register_student(student: StudentRegistration):
         raise HTTPException(status_code=400, detail="Invalid Class")
 
     # Yahan hum student ko database mein save karenge
-    # Aur uske baad Langflow ko ye batayenge ki naya bacha aa gaya hai
+    # Aur uske baad HarxitFlow ko ye batayenge ki naya bacha aa gaya hai
     
     return {
         "status": "success",
@@ -49,11 +49,11 @@ async def register_student(student: StudentRegistration):
         }
     }
 
-# 4. Langflow Connector (Brain Link)
+# 4. HarxitFlow Connector (Brain Link)
 @app.get("/get_guru_instructions/{student_id}")
 async def get_guru_instructions(student_class: str, board: str, language: str):
     """
-    Ye function Langflow ko dynamic prompt bhejega
+    Ye function HarxitFlow ko dynamic prompt bhejega
     """
     prompt = (
         f"You are a master teacher. Teach a student from {board} in {language} language. "

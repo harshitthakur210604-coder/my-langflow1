@@ -1,7 +1,7 @@
 import { expect, test } from "../../fixtures";
 import { adjustScreenView } from "../../utils/adjust-screen-view";
 import { awaitBootstrapTest } from "../../utils/await-bootstrap-test";
-import { loginLangflow } from "../../utils/login-langflow";
+import { loginHarxitFlow } from "../../utils/login-harxitflow";
 import {
   closeAdvancedOptions,
   disableInspectPanel,
@@ -38,7 +38,7 @@ test(
       });
     });
 
-    await loginLangflow(page);
+    await loginHarxitFlow(page);
 
     await awaitBootstrapTest(page, { skipGoto: true });
 

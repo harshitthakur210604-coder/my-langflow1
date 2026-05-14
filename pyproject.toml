@@ -1,23 +1,23 @@
 [project]
-name = "langflow"
+name = "harxitflow"
 version = "1.9.1"
 description = "A Python package with a built-in web application"
-requires-python = ">=3.10,<3.14"
+requires-python = ">=3.10,<3.16"
 license = "MIT"
 keywords = ["nlp", "langchain", "openai", "gpt", "gui"]
 readme = "README.md"
 maintainers = [
-    { name = "Carlos Coelho", email = "carlos@langflow.org" },
+    { name = "Carlos Coelho", email = "carlos@harxitflow.org" },
     { name = "Cristhian Zanforlin", email = "cristhian.lousa@gmail.com" },
-    { name = "Gabriel Almeida", email = "gabriel@langflow.org" },
+    { name = "Gabriel Almeida", email = "gabriel@harxitflow.org" },
     { name = "Lucas Eduoli", email = "lucaseduoli@gmail.com" },
     { name = "Otávio Anovazzi", email = "otavio2204@gmail.com" },
-    { name = "Rodrigo Nader", email = "rodrigo@langflow.org" },
+    { name = "Rodrigo Nader", email = "rodrigo@harxitflow.org" },
     { name = "Italo dos Anjos", email = "italojohnnydosanjos@gmail.com" },
 ]
 # Define your main dependencies here
 dependencies = [
-    "langflow-base[complete]>=0.9.1",
+    "harxitflow-base[complete]>=0.9.1",
 ]
 
 
@@ -65,12 +65,11 @@ dev = [
 name = "pytorch-cpu"
 url = "https://download.pytorch.org/whl/cpu"
 explicit = true
-
 [tool.uv.sources]
-langflow-base = { workspace = true }
-langflow = { workspace = true }
+harxitflow-base = { workspace = true }
+harxitflow = { workspace = true }
 lfx = { workspace = true }
-langflow-sdk = { workspace = true }
+harxitflow-sdk = { workspace = true }
 torch = { index = "pytorch-cpu" }
 torchvision = { index = "pytorch-cpu" }
 
@@ -83,11 +82,15 @@ members = [
 ]
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/backend/langflow"]
+packages = ["src/backend/harxitflow"]
 
 [project.urls]
-Repository = "https://github.com/langflow-ai/langflow"
-Documentation = "https://docs.langflow.org"
+Repository = "https://github.com/harxitflow/harxitflow"
+Documentation = "https://docs.harxitflow.org"
+
+[project.scripts]
+langflow = "harxitflow.harxitflow_launcher:main"
+harxitflow = "harxitflow.harxitflow_launcher:main"
 
 [project.optional-dependencies]
 docling = [
@@ -149,9 +152,6 @@ override-dependencies = [
     "playwright>=1.58.0",  # Latest available on PyPI; ensures updated Chromium with CVE fixes
 ]
 
-[project.scripts]
-langflow = "langflow.langflow_launcher:main"
-
 [tool.codespell]
 skip = '.git,*.pdf,*.svg,*.pdf,*.yaml,*.ipynb,poetry.lock,*.min.js,*.css,package-lock.json,*.trig.,**/node_modules/**,./stuff/*,*.csv'
 # Ignore latin etc
@@ -194,7 +194,7 @@ command_line = """
     --cov --cov-report=term --cov-report=html
     --instafail -ra -n auto -m "not api_key_required"
 """
-source = ["src/backend/base/langflow/"]
+source = ["src/backend/base/harxitflow/"]
 omit = ["*/alembic/*", "tests/*", "*/__init__.py"]
 
 
@@ -212,7 +212,7 @@ directory = "coverage"
 [tool.ruff]
 target-version = "py310"
 exclude = [
-    "src/backend/base/langflow/alembic/*",
+    "src/backend/base/harxitflow/alembic/*",
     "src/frontend/tests/assets/*",
     "src/lfx/src/lfx/_assets/component_index.json",
     "docs/**/API-Reference/python-examples/**",
@@ -266,23 +266,23 @@ external = ["RUF027"]
     "TRY003",  # Long exception messages
     "EM101",   # String literals in exceptions
 ]
-"src/backend/base/langflow/alembic/versions/*" = ["INP001", "D415", "PGH003"]
-"src/backend/base/langflow/custom/__init__.py" = [
+"src/backend/base/harxitflow/alembic/versions/*" = ["INP001", "D415", "PGH003"]
+"src/backend/base/harxitflow/custom/__init__.py" = [
     "I001",  # Import order affects initialization - must import custom module first
 ]
-"src/backend/base/langflow/api/v1/*" = [
+"src/backend/base/harxitflow/api/v1/*" = [
     "TCH",  # FastAPI needs to evaluate types at runtime
 ]
-"src/backend/base/langflow/api/v2/*" = [
+"src/backend/base/harxitflow/api/v2/*" = [
     "TCH",  # FastAPI needs to evaluate types at runtime
 ]
-"src/backend/base/langflow/__main__.py" = [
+"src/backend/base/harxitflow/__main__.py" = [
     "B008",  # Typer CLI requires function calls in defaults
 ]
-"src/backend/base/langflow/services/cache/*" = [
+"src/backend/base/harxitflow/services/cache/*" = [
     "S301",  # Pickle usage is intentional for caching
 ]
-"src/backend/base/langflow/services/tracing/*" = [
+"src/backend/base/harxitflow/services/tracing/*" = [
     "SLF001",  # Third-party library private member access (langwatch, opik)
 ]
 "src/lfx/src/lfx/base/curl/parse.py" = [
@@ -368,13 +368,13 @@ external = ["RUF027"]
     "FBT001", # Bool flags are the standard typer pattern
     "FBT003", # Boolean positional values in typer.Option() calls
 ]
-"src/backend/base/langflow/api/utils/*" = [
+"src/backend/base/harxitflow/api/utils/*" = [
     "TCH",  # Imports are used at runtime (FastAPI deps, SQLAlchemy queries, model constructors)
 ]
-"src/sdk/src/langflow_sdk/_http.py" = [
+"src/sdk/src/harxitflow_sdk/_http.py" = [
     "TCH",  # httpx is used at runtime (response object methods)
 ]
-"src/sdk/src/langflow_sdk/environments.py" = [
+"src/sdk/src/harxitflow_sdk/environments.py" = [
     "TRY003", # Contextual error messages are necessary here
     "EM102",  # f-string messages assigned before raise where possible
 ]
@@ -397,7 +397,7 @@ external = ["RUF027"]
     "SLF001",
     "BLE001",  # allow broad-exception catching in tests
 ]
-"src/backend/base/langflow/tests/*" = [
+"src/backend/base/harxitflow/tests/*" = [
     "D1",
     "PLR2004",
     "S101",
@@ -418,7 +418,7 @@ external = ["RUF027"]
     "T201",    # Print statements (needed for CLI output)
     "S603",    # Subprocess calls (needed for running commands)
     "S607",    # Starting process with partial executable path
-    "S104",    # Binding to all interfaces (needed for Langflow server)
+    "S104",    # Binding to all interfaces (needed for HarxitFlow server)
     "S105",    # Hardcoded passwords (test credentials)
     "FBT001",  # Boolean-typed positional arguments (common in CLI)
     "FBT002",  # Boolean default arguments (common in CLI tools)

@@ -13,8 +13,8 @@ jest.mock("react-cookie", () => ({
 
 // Mock constants
 jest.mock("@/constants/constants", () => ({
-  LANGFLOW_ACCESS_TOKEN: "langflow_access_token",
-  LANGFLOW_API_TOKEN: "langflow_api_token",
+  HARXITFLOW_ACCESS_TOKEN: "harxitflow_access_token",
+  HARXITFLOW_API_TOKEN: "harxitflow_api_token",
 }));
 
 // Mock the darkStore to avoid import.meta issues
@@ -55,9 +55,9 @@ describe("useAuthStore", () => {
     // Set default cookie values
     mockCookies.get.mockImplementation((key) => {
       switch (key) {
-        case "langflow_access_token":
+        case "harxitflow_access_token":
           return null;
-        case "langflow_api_token":
+        case "harxitflow_api_token":
           return null;
         default:
           return null;

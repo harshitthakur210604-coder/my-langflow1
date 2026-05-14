@@ -61,26 +61,26 @@ class CustomSource(EnvSettingsSource):
 
 
 class Settings(BaseSettings):
-    # Define the default LANGFLOW_DIR
+    # Define the default HARXITFLOW_DIR
     config_dir: str | None = None
-    # Define if langflow db should be saved in config dir or
-    # in the langflow directory
+    # Define if harxitflow db should be saved in config dir or
+    # in the harxitflow directory
     save_db_in_config_dir: bool = False
-    """Define if langflow database should be saved in LANGFLOW_CONFIG_DIR or in the langflow directory
+    """Define if harxitflow database should be saved in HARXITFLOW_CONFIG_DIR or in the harxitflow directory
     (i.e. in the package directory)."""
 
-    knowledge_bases_dir: str | None = "~/.langflow/knowledge_bases"
+    knowledge_bases_dir: str | None = "~/.harxitflow/knowledge_bases"
     """The directory to store knowledge bases."""
 
     dev: bool = False
-    """If True, Langflow will run in development mode."""
+    """If True, HarxitFlow will run in development mode."""
     database_url: str | None = None
-    """Database URL for Langflow. If not provided, Langflow will use a SQLite database.
+    """Database URL for HarxitFlow. If not provided, HarxitFlow will use a SQLite database.
     The driver shall be an async one like `sqlite+aiosqlite` (`sqlite` and `postgresql`
     will be automatically converted to the async drivers `sqlite+aiosqlite` and
     `postgresql+psycopg` respectively)."""
     database_connection_retry: bool = False
-    """If True, Langflow will retry to connect to the database if it fails."""
+    """If True, HarxitFlow will retry to connect to the database if it fails."""
     pool_size: int = 20
     """The number of connections to keep open in the connection pool.
     For high load scenarios, this should be increased based on expected concurrent users."""
@@ -92,14 +92,14 @@ class Settings(BaseSettings):
     database."""
     migration_lock_namespace: str | None = None
     """Optional namespace identifier for PostgreSQL advisory lock during migrations.
-    If not provided, a hash of the database URL will be used. Useful when multiple Langflow
+    If not provided, a hash of the database URL will be used. Useful when multiple HarxitFlow
     instances share the same database and need coordinated migration locking."""
 
     root_path: str = ""
     """ASGI root_path for deployments behind a reverse proxy that strips a URL
-    prefix (e.g. '/langflow').  When set, the MCP SSE transport includes this
+    prefix (e.g. '/harxitflow').  When set, the MCP SSE transport includes this
     prefix in the POST-back URL so clients can reach the correct endpoint.
-    Can also be set via the LANGFLOW_ROOT_PATH environment variable."""
+    Can also be set via the HARXITFLOW_ROOT_PATH environment variable."""
 
     @field_validator("root_path", mode="before")
     @classmethod
@@ -125,7 +125,7 @@ class Settings(BaseSettings):
 
     mcp_base_url: str = ""
     """External base URL used to build MCP server URLs in the UI configuration JSON
-    (e.g. 'https://langflow.example.com'). When empty, the frontend falls back to
+    (e.g. 'https://harxitflow.example.com'). When empty, the frontend falls back to
     the browser's window.location.origin."""
 
     mcp_server_timeout: int = 20
@@ -180,7 +180,7 @@ class Settings(BaseSettings):
 
     use_noop_database: bool = False
     """If True, disables all database operations and uses a no-op session.
-    Controlled by LANGFLOW_USE_NOOP_DATABASE env variable."""
+    Controlled by HARXITFLOW_USE_NOOP_DATABASE env variable."""
 
     # cache configuration
     cache_type: Literal["async", "redis", "memory", "disk"] = "async"
@@ -191,9 +191,9 @@ class Settings(BaseSettings):
     """The store can be 'db' or 'kubernetes'."""
 
     prometheus_enabled: bool = False
-    """If set to True, Langflow will expose Prometheus metrics."""
+    """If set to True, HarxitFlow will expose Prometheus metrics."""
     prometheus_port: int = 9090
-    """The port on which Langflow will expose Prometheus metrics. 9090 is the default port."""
+    """The port on which HarxitFlow will expose Prometheus metrics. 9090 is the default port."""
 
     disable_track_apikey_usage: bool = False
     remove_api_keys: bool = False
@@ -201,7 +201,7 @@ class Settings(BaseSettings):
     """List of paths to custom components.
 
     Security: This setting defines an allow-list of custom components
-    permitted to execute, even when LANGFLOW_ALLOW_CUSTOM_COMPONENTS is False.
+    permitted to execute, even when HARXITFLOW_ALLOW_CUSTOM_COMPONENTS is False.
     """
     components_index_path: str | None = None
     """Path or URL to a prebuilt component index JSON file.
@@ -227,14 +227,14 @@ class Settings(BaseSettings):
     sentry_profiles_sample_rate: float | None = 1.0
 
     store: bool | None = True
-    store_url: str | None = "https://api.langflow.store"
-    download_webhook_url: str | None = "https://api.langflow.store/flows/trigger/ec611a61-8460-4438-b187-a4f65e5559d4"
-    like_webhook_url: str | None = "https://api.langflow.store/flows/trigger/64275852-ec00-45c1-984e-3bff814732da"
+    store_url: str | None = "https://api.harxitflow.store"
+    download_webhook_url: str | None = "https://api.harxitflow.store/flows/trigger/ec611a61-8460-4438-b187-a4f65e5559d4"
+    like_webhook_url: str | None = "https://api.harxitflow.store/flows/trigger/64275852-ec00-45c1-984e-3bff814732da"
 
     storage_type: str = "local"
     """Storage type for file storage. Defaults to 'local'. Supports 'local' and 's3'."""
-    object_storage_bucket_name: str | None = "langflow-bucket"
-    """Object storage bucket name for file storage. Defaults to 'langflow-bucket'."""
+    object_storage_bucket_name: str | None = "harxitflow-bucket"
+    """Object storage bucket name for file storage. Defaults to 'harxitflow-bucket'."""
     object_storage_prefix: str | None = "files"
     """Object storage prefix for file storage. Defaults to 'files'."""
     object_storage_tags: dict[str, str] | None = None
@@ -244,7 +244,7 @@ class Settings(BaseSettings):
 
     fallback_to_env_var: bool = True
     """If set to True, Global Variables set in the UI will fallback to a environment variable
-    with the same name in case Langflow fails to retrieve the variable value."""
+    with the same name in case HarxitFlow fails to retrieve the variable value."""
 
     store_environment_variables: bool = True
     """Whether to store environment variables as Global Variables in the database."""
@@ -254,10 +254,10 @@ class Settings(BaseSettings):
     """Timeout for the API calls in seconds."""
     frontend_timeout: int = 0
     """Timeout for the frontend API calls in seconds."""
-    user_agent: str = "langflow"
+    user_agent: str = "harxitflow"
     """User agent for the API calls."""
     backend_only: bool = False
-    """If set to True, Langflow will not serve the frontend."""
+    """If set to True, HarxitFlow will not serve the frontend."""
 
     # CORS Settings
     cors_origins: list[str] | str = "*"
@@ -273,18 +273,18 @@ class Settings(BaseSettings):
 
     # Telemetry
     do_not_track: bool = False
-    """If set to True, Langflow will not track telemetry."""
-    telemetry_base_url: str = "https://langflow.gateway.scarf.sh"
+    """If set to True, HarxitFlow will not track telemetry."""
+    telemetry_base_url: str = "https://harxitflow.gateway.scarf.sh"
     transactions_storage_enabled: bool = True
-    """If set to True, Langflow will track transactions between flows."""
+    """If set to True, HarxitFlow will track transactions between flows."""
     vertex_builds_storage_enabled: bool = True
-    """If set to True, Langflow will keep track of each vertex builds (outputs) in the UI for any flow."""
+    """If set to True, HarxitFlow will keep track of each vertex builds (outputs) in the UI for any flow."""
 
     # Config
     host: str = "localhost"
-    """The host on which Langflow will run."""
+    """The host on which HarxitFlow will run."""
     port: int = 7860
-    """The port on which Langflow will run."""
+    """The port on which HarxitFlow will run."""
     runtime_port: int | None = Field(default=None, exclude=True)
     """TEMPORARY: The port detected at runtime after checking for conflicts.
     This field is system-managed only and will be removed in future versions
@@ -292,9 +292,9 @@ class Settings(BaseSettings):
     workers: int = 1
     """The number of workers to run."""
     log_level: str = "critical"
-    """The log level for Langflow."""
-    log_file: str | None = "logs/langflow.log"
-    """The path to log file for Langflow."""
+    """The log level for HarxitFlow."""
+    log_file: str | None = "logs/harxitflow.log"
+    """The path to log file for HarxitFlow."""
     alembic_log_file: str = "alembic/alembic.log"
     """The path to log file for Alembic for SQLAlchemy."""
     alembic_log_to_stdout: bool = False
@@ -302,11 +302,11 @@ class Settings(BaseSettings):
     frontend_path: str | None = None
     """The path to the frontend directory containing build files. This is for development purposes only.."""
     open_browser: bool = False
-    """If set to True, Langflow will open the browser on startup."""
+    """If set to True, HarxitFlow will open the browser on startup."""
     auto_saving: bool = True
-    """If set to True, Langflow will auto save flows."""
+    """If set to True, HarxitFlow will auto save flows."""
     auto_saving_interval: int = 1000
-    """The interval in ms at which Langflow will auto save flows."""
+    """The interval in ms at which HarxitFlow will auto save flows."""
     health_check_max_retries: int = 5
     """The maximum number of retries for the health check."""
     max_file_size_upload: int = 1024
@@ -342,27 +342,27 @@ class Settings(BaseSettings):
 
     # MCP Server
     mcp_server_enabled: bool = True
-    """If set to False, Langflow will not enable the MCP server."""
+    """If set to False, HarxitFlow will not enable the MCP server."""
     mcp_server_enable_progress_notifications: bool = False
-    """If set to False, Langflow will not send progress notifications in the MCP server."""
+    """If set to False, HarxitFlow will not send progress notifications in the MCP server."""
 
     # Add projects to MCP servers automatically on creation
     add_projects_to_mcp_servers: bool = True
     """If set to True, newly created projects will be added to the user's MCP servers config automatically."""
     # MCP Composer
     mcp_composer_enabled: bool = True
-    """If set to False, Langflow will not start the MCP Composer service."""
+    """If set to False, HarxitFlow will not start the MCP Composer service."""
     mcp_composer_version: str = "==0.1.0.8.10"
     """Version constraint for mcp-composer when using uvx. Uses PEP 440 syntax."""
 
     # Agentic Experience
     agentic_experience: bool = False
-    """If set to True, Langflow will start the agentic MCP server that provides tools for
+    """If set to True, HarxitFlow will start the agentic MCP server that provides tools for
     flow/component operations, template search, and graph visualization."""
 
     # Developer API
     developer_api_enabled: bool = False
-    """If set to True, Langflow will enable developer API endpoints for advanced debugging and introspection."""
+    """If set to True, HarxitFlow will enable developer API endpoints for advanced debugging and introspection."""
 
     # Public Flow Settings
     public_flow_cleanup_interval: int = Field(default=3600, gt=600)
@@ -374,16 +374,16 @@ class Settings(BaseSettings):
     event_delivery: Literal["polling", "streaming", "direct"] = "streaming"
     """How to deliver build events to the frontend. Can be 'polling', 'streaming' or 'direct'."""
     lazy_load_components: bool = False
-    """If set to True, Langflow will only partially load components at startup and fully load them on demand.
+    """If set to True, HarxitFlow will only partially load components at startup and fully load them on demand.
     This significantly reduces startup time but may cause a slight delay when a component is first used."""
 
     # Starter Projects
     create_starter_projects: bool = True
-    """If set to True, Langflow will create starter projects. If False, skips all starter project setup.
+    """If set to True, HarxitFlow will create starter projects. If False, skips all starter project setup.
     Note that this doesn't check if the starter projects are already loaded in the db;
     this is intended to be used to skip all startup project logic."""
     update_starter_projects: bool = True
-    """If set to True, Langflow will update starter projects."""
+    """If set to True, HarxitFlow will update starter projects."""
 
     # Custom Component Security
     allow_custom_components: bool = True
@@ -394,7 +394,7 @@ class Settings(BaseSettings):
     when the cache is not yet loaded (e.g., during startup), all flow execution is blocked
     as a safety measure.
 
-    Note: LANGFLOW_COMPONENTS_PATH can be used to define an allow-list of custom components
+    Note: HARXITFLOW_COMPONENTS_PATH can be used to define an allow-list of custom components
     that will be allowed to execute, even when allow_custom_components is False.
 
     Note: this is a beta feature. For security in a multi-tenant environment,
@@ -402,7 +402,7 @@ class Settings(BaseSettings):
 
     # SSRF Protection
     ssrf_protection_enabled: bool = False
-    """If set to True, Langflow will enable SSRF (Server-Side Request Forgery) protection.
+    """If set to True, HarxitFlow will enable SSRF (Server-Side Request Forgery) protection.
     When enabled, blocks requests to private IP ranges, localhost, and cloud metadata endpoints.
     When False (default), no URL validation is performed, allowing requests to any destination
     including internal services, private networks, and cloud metadata endpoints.
@@ -422,8 +422,8 @@ class Settings(BaseSettings):
     def validate_runtime_port(cls, value):
         """Parse port from Kubernetes service discovery env vars.
 
-        Kubernetes auto-creates env vars like LANGFLOW_RUNTIME_PORT=tcp://<ip>:<port>
-        for services, which collides with the LANGFLOW_ env prefix. Extract the port
+        Kubernetes auto-creates env vars like HARXITFLOW_RUNTIME_PORT=tcp://<ip>:<port>
+        for services, which collides with the HARXITFLOW_ env prefix. Extract the port
         number from URL-like values instead of failing.
         """
         if value is None:
@@ -479,7 +479,7 @@ class Settings(BaseSettings):
     @classmethod
     def set_user_agent(cls, value):
         if not value:
-            value = "Langflow"
+            value = "HarxitFlow"
         import os
 
         os.environ["USER_AGENT"] = value
@@ -526,7 +526,7 @@ class Settings(BaseSettings):
 
         # Add agentic variables if agentic_experience is enabled
         # Check env var directly since we can't access instance attributes in validator
-        if os.getenv("LANGFLOW_AGENTIC_EXPERIENCE", "true").lower() == "true":
+        if os.getenv("HARXITFLOW_AGENTIC_EXPERIENCE", "true").lower() == "true":
             result.extend(AGENTIC_VARIABLES)
 
         return list(set(result))
@@ -540,18 +540,18 @@ class Settings(BaseSettings):
 
     @field_validator("config_dir", mode="before")
     @classmethod
-    def set_langflow_dir(cls, value):
+    def set_harxitflow_dir(cls, value):
         if not value:
             from platformdirs import user_cache_dir
 
             # Define the app name and author
-            app_name = "langflow"
-            app_author = "langflow"
+            app_name = "harxitflow"
+            app_author = "harxitflow"
 
             # Get the cache directory for the application
             cache_dir = user_cache_dir(app_name, app_author)
 
-            # Create a .langflow directory inside the cache directory
+            # Create a .harxitflow directory inside the cache directory
             value = Path(cache_dir)
             value.mkdir(parents=True, exist_ok=True)
 
@@ -574,11 +574,11 @@ class Settings(BaseSettings):
             msg = f"Invalid database_url provided: '{sanitized}'"
             raise ValueError(msg)
 
-        if langflow_database_url := os.getenv("LANGFLOW_DATABASE_URL"):
-            value = langflow_database_url.strip(" \"'")
-            logger.debug("Using LANGFLOW_DATABASE_URL env variable")
+        if harxitflow_database_url := os.getenv("HARXITFLOW_DATABASE_URL"):
+            value = harxitflow_database_url.strip(" \"'")
+            logger.debug("Using HARXITFLOW_DATABASE_URL env variable")
         else:
-            # Originally, we used sqlite:///./langflow.db
+            # Originally, we used sqlite:///./harxitflow.db
             # so we need to migrate to the new format
             # if there is a database in that location
             if not info.data["config_dir"]:
@@ -586,24 +586,24 @@ class Settings(BaseSettings):
                 raise ValueError(msg)
 
             from lfx.utils.version import get_version_info
-            from lfx.utils.version import is_pre_release as langflow_is_pre_release
+            from lfx.utils.version import is_pre_release as harxitflow_is_pre_release
 
             version = get_version_info()["version"]
-            is_pre_release = langflow_is_pre_release(version)
+            is_pre_release = harxitflow_is_pre_release(version)
 
             if info.data["save_db_in_config_dir"]:
                 database_dir = info.data["config_dir"]
             else:
-                # Use langflow package path, not lfx, for backwards compatibility
+                # Use harxitflow package path, not lfx, for backwards compatibility
                 try:
-                    import langflow
+                    import harxitflow
 
-                    database_dir = Path(langflow.__file__).parent.resolve()
+                    database_dir = Path(harxitflow.__file__).parent.resolve()
                 except ImportError:
                     database_dir = Path(__file__).parent.parent.parent.resolve()
 
-            pre_db_file_name = "langflow-pre.db"
-            db_file_name = "langflow.db"
+            pre_db_file_name = "harxitflow-pre.db"
+            db_file_name = "harxitflow.db"
             new_pre_path = f"{database_dir}/{pre_db_file_name}"
             new_path = f"{database_dir}/{db_file_name}"
             final_path = None
@@ -647,22 +647,22 @@ class Settings(BaseSettings):
     def set_components_path(cls, value):
         """Processes and updates the components path list, incorporating environment variable overrides.
 
-        If the `LANGFLOW_COMPONENTS_PATH` environment variable is set and points to an existing path, it is
+        If the `HARXITFLOW_COMPONENTS_PATH` environment variable is set and points to an existing path, it is
         appended to the provided list if not already present. If the input list is empty or missing, it is
         set to an empty list.
         """
-        if os.getenv("LANGFLOW_COMPONENTS_PATH"):
-            logger.debug("Adding LANGFLOW_COMPONENTS_PATH to components_path")
-            langflow_component_path = os.getenv("LANGFLOW_COMPONENTS_PATH")
-            if Path(langflow_component_path).exists() and langflow_component_path not in value:
-                if isinstance(langflow_component_path, list):
-                    for path in langflow_component_path:
+        if os.getenv("HARXITFLOW_COMPONENTS_PATH"):
+            logger.debug("Adding HARXITFLOW_COMPONENTS_PATH to components_path")
+            harxitflow_component_path = os.getenv("HARXITFLOW_COMPONENTS_PATH")
+            if Path(harxitflow_component_path).exists() and harxitflow_component_path not in value:
+                if isinstance(harxitflow_component_path, list):
+                    for path in harxitflow_component_path:
                         if path not in value:
                             value.append(path)
-                    logger.debug(f"Extending {langflow_component_path} to components_path")
-                elif langflow_component_path not in value:
-                    value.append(langflow_component_path)
-                    logger.debug(f"Appending {langflow_component_path} to components_path")
+                    logger.debug(f"Extending {harxitflow_component_path} to components_path")
+                elif harxitflow_component_path not in value:
+                    value.append(harxitflow_component_path)
+                    logger.debug(f"Appending {harxitflow_component_path} to components_path")
 
         if not value:
             value = [BASE_COMPONENTS_PATH]
@@ -673,7 +673,7 @@ class Settings(BaseSettings):
         return value
 
     model_config = SettingsConfigDict(
-        validate_assignment=True, extra="ignore", env_prefix="LANGFLOW_", str_strip_whitespace=True
+        validate_assignment=True, extra="ignore", env_prefix="HARXITFLOW_", str_strip_whitespace=True
     )
 
     async def update_from_yaml(self, file_path: str, *, dev: bool = False) -> None:

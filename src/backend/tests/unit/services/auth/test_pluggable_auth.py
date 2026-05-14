@@ -4,9 +4,9 @@ from types import SimpleNamespace
 from unittest.mock import MagicMock, patch
 
 import pytest
-from langflow.services.auth import utils as auth_utils
-from langflow.services.base import Service
-from langflow.services.schema import ServiceType
+from harxitflow.services.auth import utils as auth_utils
+from harxitflow.services.base import Service
+from harxitflow.services.schema import ServiceType
 from lfx.services.manager import get_service_manager
 from sqlmodel.ext.asyncio.session import AsyncSession
 

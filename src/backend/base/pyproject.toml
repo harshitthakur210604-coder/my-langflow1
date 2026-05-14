@@ -1,18 +1,18 @@
 [project]
-name = "langflow-base"
+name = "harxitflow-base"
 version = "0.9.1"
 description = "A Python package with a built-in web application"
-requires-python = ">=3.10,<3.14"
+requires-python = ">=3.10,<3.16"
 license = "MIT"
 keywords = ["nlp", "langchain", "openai", "gpt", "gui"]
 readme = "README.md"
 maintainers = [
-    { name = "Carlos Coelho", email = "carlos@langflow.org" },
+    { name = "Carlos Coelho", email = "carlos@harxitflow.org" },
     { name = "Cristhian Zanforlin", email = "cristhian.lousa@gmail.com" },
-    { name = "Gabriel Almeida", email = "gabriel@langflow.org" },
+    { name = "Gabriel Almeida", email = "gabriel@harxitflow.org" },
     { name = "Lucas Eduoli", email = "lucaseduoli@gmail.com" },
     { name = "Otávio Anovazzi", email = "otavio2204@gmail.com" },
-    { name = "Rodrigo Nader", email = "rodrigo@langflow.org" },
+    { name = "Rodrigo Nader", email = "rodrigo@harxitflow.org" },
     { name = "Italo dos Anjos", email = "italojohnnydosanjos@gmail.com" },
 ]
 
@@ -132,7 +132,7 @@ dev = [
 
 
 [tool.hatch.build.targets.wheel]
-packages = ["langflow"]
+packages = ["harxitflow"]
 
 
 [tool.pytest.ini_options]
@@ -148,10 +148,10 @@ asyncio_default_fixture_loop_scope = "function"
 
 [tool.codeflash]
 # All paths are relative to this pyproject.toml's directory.
-module-root = "langflow"
+module-root = "harxitflow"
 tests-root = "../tests/unit"
 test-framework = "pytest"
-ignore-paths = ["langflow/components/"]
+ignore-paths = ["harxitflow/components/"]
 formatter-cmds = ["ruff check --exit-zero --fix $file", "ruff format $file"]
 # disable plugins that might interfere with runtime measurement
 pytest-cmd = "pytest -p no:profiling -p no:sugar -p no:xdist -p no:cov -p no:split"
@@ -162,8 +162,8 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project.urls]
-Repository = "https://github.com/langflow-ai/langflow"
-Documentation = "https://docs.langflow.org"
+Repository = "https://github.com/harxitflow/harxitflow"
+Documentation = "https://docs.harxitflow.org"
 # Optional dependencies
 [project.optional-dependencies]
 audio = [
@@ -366,124 +366,124 @@ ibm-watsonx-clients = [
 ]
 
 complete = [
-    "langflow-base[couchbase]",
-    "langflow-base[cassandra]",
-    "langflow-base[clickhouse]",
-    "langflow-base[mongodb]",
-    "langflow-base[supabase]",
-    "langflow-base[redis]",
-    "langflow-base[elasticsearch]",
-    "langflow-base[faiss]",
-    "langflow-base[qdrant]",
-    "langflow-base[weaviate]",
-    "langflow-base[chroma]",
-    "langflow-base[upstash]",
-    "langflow-base[pinecone]",
-    "langflow-base[milvus]",
-    "langflow-base[mongodb-vectors]",
-    "langflow-base[astradb]",
-    "langflow-base[openai]",
-    "langflow-base[anthropic]",
-    "langflow-base[cohere]",
-    "langflow-base[google]",
-    "langflow-base[ollama]",
-    "langflow-base[nvidia]",
-    "langflow-base[mistral]",
-    "langflow-base[sambanova]",
-    "langflow-base[groq]",
-    "langflow-base[langfuse]",
-    "langflow-base[langwatch]",
-    "langflow-base[langsmith]",
-    "langflow-base[arize]",
-    "langflow-base[pypdf]",
-    "langflow-base[docx]",
-    "langflow-base[pytube]",
-    # "langflow-base[crewai]",  # commented out due to httpx version conflict
-    "langflow-base[dspy]",
-    "langflow-base[smolagents]",
-    "langflow-base[beautifulsoup]",
-    "langflow-base[serpapi]",
-    "langflow-base[google-api]",
-    "langflow-base[wikipedia]",
-    "langflow-base[fake-useragent]",
-    "langflow-base[duckduckgo]",
-    "langflow-base[yfinance]",
-    "langflow-base[wolframalpha]",
-    "langflow-base[pyarrow]",
-    "langflow-base[fastavro]",
-    "langflow-base[gitpython]",
-    "langflow-base[nltk]",
-    "langflow-base[lark]",
-    "langflow-base[huggingface]",
-    "langflow-base[metaphor]",
-    "langflow-base[metal]",
-    "langflow-base[markup]",
-    "langflow-base[aws]",
-    "langflow-base[numexpr]",
-    "langflow-base[qianfan]",
-    "langflow-base[pgvector]",
-    "langflow-base[litellm]",
-    "langflow-base[zep]",
-    "langflow-base[youtube]",
-    "langflow-base[markdown]",
-    "langflow-base[kubernetes]",
-    "langflow-base[json-repair]",
-    "langflow-base[composio]",
-    "langflow-base[ragstack]",
-    "langflow-base[opensearch]",
-    "langflow-base[atlassian]",
-    "langflow-base[mem0]",
-    "langflow-base[needle]",
-    "langflow-base[sseclient]",
-    "langflow-base[openinference]",
-    "langflow-base[mcp]",
-    "langflow-base[ag2]",
-    "langflow-base[scrapegraph]",
-    "langflow-base[apify]",
-    "langflow-base[spider]",
+    "harxitflow-base[couchbase]",
+    "harxitflow-base[cassandra]",
+    "harxitflow-base[clickhouse]",
+    "harxitflow-base[mongodb]",
+    "harxitflow-base[supabase]",
+    "harxitflow-base[redis]",
+    "harxitflow-base[elasticsearch]",
+    "harxitflow-base[faiss]",
+    "harxitflow-base[qdrant]",
+    "harxitflow-base[weaviate]",
+    "harxitflow-base[chroma]",
+    "harxitflow-base[upstash]",
+    "harxitflow-base[pinecone]",
+    "harxitflow-base[milvus]",
+    "harxitflow-base[mongodb-vectors]",
+    "harxitflow-base[astradb]",
+    "harxitflow-base[openai]",
+    "harxitflow-base[anthropic]",
+    "harxitflow-base[cohere]",
+    "harxitflow-base[google]",
+    "harxitflow-base[ollama]",
+    "harxitflow-base[nvidia]",
+    "harxitflow-base[mistral]",
+    "harxitflow-base[sambanova]",
+    "harxitflow-base[groq]",
+    "harxitflow-base[langfuse]",
+    "harxitflow-base[langwatch]",
+    "harxitflow-base[langsmith]",
+    "harxitflow-base[arize]",
+    "harxitflow-base[pypdf]",
+    "harxitflow-base[docx]",
+    "harxitflow-base[pytube]",
+    # "harxitflow-base[crewai]",  # commented out due to httpx version conflict
+    "harxitflow-base[dspy]",
+    "harxitflow-base[smolagents]",
+    "harxitflow-base[beautifulsoup]",
+    "harxitflow-base[serpapi]",
+    "harxitflow-base[google-api]",
+    "harxitflow-base[wikipedia]",
+    "harxitflow-base[fake-useragent]",
+    "harxitflow-base[duckduckgo]",
+    "harxitflow-base[yfinance]",
+    "harxitflow-base[wolframalpha]",
+    "harxitflow-base[pyarrow]",
+    "harxitflow-base[fastavro]",
+    "harxitflow-base[gitpython]",
+    "harxitflow-base[nltk]",
+    "harxitflow-base[lark]",
+    "harxitflow-base[huggingface]",
+    "harxitflow-base[metaphor]",
+    "harxitflow-base[metal]",
+    "harxitflow-base[markup]",
+    "harxitflow-base[aws]",
+    "harxitflow-base[numexpr]",
+    "harxitflow-base[qianfan]",
+    "harxitflow-base[pgvector]",
+    "harxitflow-base[litellm]",
+    "harxitflow-base[zep]",
+    "harxitflow-base[youtube]",
+    "harxitflow-base[markdown]",
+    "harxitflow-base[kubernetes]",
+    "harxitflow-base[json-repair]",
+    "harxitflow-base[composio]",
+    "harxitflow-base[ragstack]",
+    "harxitflow-base[opensearch]",
+    "harxitflow-base[atlassian]",
+    "harxitflow-base[mem0]",
+    "harxitflow-base[needle]",
+    "harxitflow-base[sseclient]",
+    "harxitflow-base[openinference]",
+    "harxitflow-base[mcp]",
+    "harxitflow-base[ag2]",
+    "harxitflow-base[scrapegraph]",
+    "harxitflow-base[apify]",
+    "harxitflow-base[spider]",
     # ALTK
-    "langflow-base[altk]",
+    "harxitflow-base[altk]",
     # Toolguard
-    "langflow-base[toolguard]",
+    "harxitflow-base[toolguard]",
     # Additional LangChain integrations
-    "langflow-base[langchain-huggingface]",
-    "langflow-base[langchain-unstructured]",
-    "langflow-base[graph-retriever]",
-    "langflow-base[langchain-mcp-adapters]",
+    "harxitflow-base[langchain-huggingface]",
+    "harxitflow-base[langchain-unstructured]",
+    "harxitflow-base[graph-retriever]",
+    "harxitflow-base[langchain-mcp-adapters]",
     # Additional monitoring
-    "langflow-base[opik]",
-    "langflow-base[traceloop]",
-    "langflow-base[openlayer]",
+    "harxitflow-base[opik]",
+    "harxitflow-base[traceloop]",
+    "harxitflow-base[openlayer]",
     # Document processing / OCR
-    "langflow-base[docling]",
-    "langflow-base[easyocr]",
+    "harxitflow-base[docling]",
+    "harxitflow-base[easyocr]",
     # Additional tools
-    "langflow-base[cleanlab]",
-    "langflow-base[twelvelabs]",
-    "langflow-base[jigsawstack]",
-    "langflow-base[assemblyai]",
+    "harxitflow-base[cleanlab]",
+    "harxitflow-base[twelvelabs]",
+    "harxitflow-base[jigsawstack]",
+    "harxitflow-base[assemblyai]",
     # Data processing
-    "langflow-base[datasets]",
-    "langflow-base[fastparquet]",
+    "harxitflow-base[datasets]",
+    "harxitflow-base[fastparquet]",
     # Vision / ML
-    "langflow-base[vlmrun]",
-    "langflow-base[cuga]",
-    "langflow-base[mlx]",
+    "harxitflow-base[vlmrun]",
+    "harxitflow-base[cuga]",
+    "harxitflow-base[mlx]",
     # MCP
-    "langflow-base[fastmcp]",
+    "harxitflow-base[fastmcp]",
     # AWS extras
-    "langflow-base[aioboto3]",
+    "harxitflow-base[aioboto3]",
     # Astra
-    "langflow-base[astrapy]",
+    "harxitflow-base[astrapy]",
     # Windows-specific
-    "langflow-base[gassist]",
+    "harxitflow-base[gassist]",
     # wxO deployment adapter,
-    "langflow-base[ibm-watsonx-clients]"
+    "harxitflow-base[ibm-watsonx-clients]"
 ]
 
 all = [
-    "langflow-base[complete]",
+    "harxitflow-base[complete]",
 ]
 
 [project.scripts]
-langflow-base = "langflow.langflow_launcher:main"
+harxitflow-base = "harxitflow.harxitflow_launcher:main"

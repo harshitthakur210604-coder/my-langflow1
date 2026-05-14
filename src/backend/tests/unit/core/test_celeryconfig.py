@@ -1,7 +1,7 @@
-"""Unit tests for langflow.core.celeryconfig module."""
+"""Unit tests for harxitflow.core.celeryconfig module."""
 
 # Import the module to test
-from langflow.core import celeryconfig
+from harxitflow.core import celeryconfig
 
 
 class TestCeleryConfigAcceptContent:

@@ -29,12 +29,12 @@ URL_REGEX = re.compile(
 )
 
 USER_AGENT = None
-# Check if langflow is installed using importlib.util.find_spec(name))
-if importlib.util.find_spec("langflow"):
-    langflow_installed = True
+# Check if harxitflow is installed using importlib.util.find_spec(name))
+if importlib.util.find_spec("harxitflow"):
+    harxitflow_installed = True
     USER_AGENT = get_user_agent()
 else:
-    langflow_installed = False
+    harxitflow_installed = False
     USER_AGENT = "lfx"
 
 
@@ -51,7 +51,7 @@ class URLComponent(Component):
 
     display_name = "URL"
     description = "Fetch content from one or more web pages, following links recursively."
-    documentation: str = "https://docs.langflow.org/url"
+    documentation: str = "https://docs.harxitflow.org/url"
     icon = "layout-template"
     name = "URLComponent"
 
@@ -239,7 +239,7 @@ class URLComponent(Component):
 
         # SSRF Protection: Validate URL to prevent access to internal resources
         # Blocks requests to private IPs, localhost, and cloud metadata endpoints
-        # when LANGFLOW_SSRF_PROTECTION_ENABLED=true
+        # when HARXITFLOW_SSRF_PROTECTION_ENABLED=true
         try:
             validate_url_for_ssrf(url, warn_only=False)
         except SSRFProtectionError as e:

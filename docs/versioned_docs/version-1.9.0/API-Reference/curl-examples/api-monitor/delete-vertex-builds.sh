@@ -1,4 +1,4 @@
 curl -X DELETE \
-  "$LANGFLOW_URL/api/v1/monitor/builds?flow_id=$FLOW_ID" \
+  "$HARXITFLOW_URL/api/v1/monitor/builds?flow_id=$FLOW_ID" \
   -H "accept: */*" \
-  -H "x-api-key: $LANGFLOW_API_KEY"
+  -H "x-api-key: $HARXITFLOW_API_KEY"

@@ -1,11 +1,11 @@
-const url = `${process.env.LANGFLOW_URL ?? ""}/api/v1/flows/${process.env.FLOW_ID ?? ""}`;
+const url = `${process.env.HARXITFLOW_URL ?? ""}/api/v1/flows/${process.env.FLOW_ID ?? ""}`;
 
 const options = {
   method: 'PATCH',
   headers: {
     "accept": `application/json`,
     "Content-Type": `application/json`,
-    "x-api-key": `${process.env.LANGFLOW_API_KEY ?? ""}`,
+    "x-api-key": `${process.env.HARXITFLOW_API_KEY ?? ""}`,
   },
   body: JSON.stringify({
   "name": "string",

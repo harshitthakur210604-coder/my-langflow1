@@ -1,5 +1,5 @@
-name: Langflow Release
-run-name: Langflow Release by @${{ github.actor }}
+name: HarxitFlow Release
+run-name: HarxitFlow Release by @${{ github.actor }}
 
 on:
   workflow_dispatch:
@@ -9,12 +9,12 @@ on:
         required: true
         type: string
       release_package_base:
-        description: "Release Langflow Base"
+        description: "Release HarxitFlow Base"
         required: true
         type: boolean
         default: false
       release_package_main:
-        description: "Release Langflow"
+        description: "Release HarxitFlow"
         required: true
         type: boolean
         default: false
@@ -24,17 +24,17 @@ on:
         type: boolean
         default: false
       release_sdk:
-        description: "Release langflow-sdk package (required when releasing LFX)"
+        description: "Release harxitflow-sdk package (required when releasing LFX)"
         required: false
         type: boolean
         default: false
       build_docker_base:
-        description: "Build Docker Image for Langflow Base"
+        description: "Build Docker Image for HarxitFlow Base"
         required: true
         type: boolean
         default: false
       build_docker_main:
-        description: "Build Docker Image for Langflow"
+        description: "Build Docker Image for HarxitFlow"
         required: true
         type: boolean
         default: false
@@ -152,14 +152,14 @@ jobs:
       - name: Validate that build-base is enabled if build-main is enabled
         run: |
           if [ "${{ inputs.release_package_main }}" = "true" ] && [ "${{ inputs.release_package_base }}" = "false" ]; then
-            echo "Error: Cannot release Langflow Main without releasing Langflow Base."
+            echo "Error: Cannot release HarxitFlow Main without releasing HarxitFlow Base."
             echo "Please enable 'release_package_base' or disable 'release_package_main'."
             exit 1
           fi
 
           if [ "${{ inputs.release_lfx }}" = "true" ] && [ "${{ inputs.release_sdk }}" = "false" ]; then
-            echo "Error: Cannot release LFX without releasing langflow-sdk."
-            echo "LFX depends on langflow-sdk. Please enable 'release_sdk' or disable 'release_lfx'."
+            echo "Error: Cannot release LFX without releasing harxitflow-sdk."
+            echo "LFX depends on harxitflow-sdk. Please enable 'release_sdk' or disable 'release_lfx'."
             exit 1
           fi
 
@@ -200,12 +200,12 @@ jobs:
           echo "Base version from pyproject.toml: $version"
 
           if [ ${{inputs.pre_release}} == "true" ]; then
-            last_released_version=$(curl -s "https://pypi.org/pypi/langflow-base/json" | jq -r '.releases | keys | .[]' | grep -E '(a|b|rc|dev|alpha|beta)' | sort -V | tail -n 1)
-            version="$(uv run ./scripts/ci/langflow_pre_release_tag.py "$version" "$last_released_version")"
+            last_released_version=$(curl -s "https://pypi.org/pypi/harxitflow-base/json" | jq -r '.releases | keys | .[]' | grep -E '(a|b|rc|dev|alpha|beta)' | sort -V | tail -n 1)
+            version="$(uv run ./scripts/ci/harxitflow_pre_release_tag.py "$version" "$last_released_version")"
             echo "Latest base pre-release version: $last_released_version"
             echo "Base pre-release version to be released: $version"
           else
-            last_released_version=$(curl -s "https://pypi.org/pypi/langflow-base/json" | jq -r '.releases | keys | .[]' | grep -vE '(a|b|rc|dev|alpha|beta)' | sort -V | tail -n 1)
+            last_released_version=$(curl -s "https://pypi.org/pypi/harxitflow-base/json" | jq -r '.releases | keys | .[]' | grep -vE '(a|b|rc|dev|alpha|beta)' | sort -V | tail -n 1)
             echo "Latest base release version: $last_released_version"
           fi
 
@@ -245,16 +245,16 @@ jobs:
       - name: Determine version
         id: version
         run: |
-          version=$(uv tree | grep 'langflow' | grep -v 'langflow-base' | grep -v 'langflow-sdk' | awk '{print $2}' | sed 's/^v//')
+          version=$(uv tree | grep 'harxitflow' | grep -v 'harxitflow-base' | grep -v 'harxitflow-sdk' | awk '{print $2}' | sed 's/^v//')
           echo "Main version from pyproject.toml: $version"
 
           if [ ${{inputs.pre_release}} == "true" ]; then
-            last_released_version=$(curl -s "https://pypi.org/pypi/langflow/json" | jq -r '.releases | keys | .[]' | grep -E '(a|b|rc|dev|alpha|beta)' | sort -V | tail -n 1)
-            version="$(uv run ./scripts/ci/langflow_pre_release_tag.py "$version" "$last_released_version")"
+            last_released_version=$(curl -s "https://pypi.org/pypi/harxitflow/json" | jq -r '.releases | keys | .[]' | grep -E '(a|b|rc|dev|alpha|beta)' | sort -V | tail -n 1)
+            version="$(uv run ./scripts/ci/harxitflow_pre_release_tag.py "$version" "$last_released_version")"
             echo "Latest main pre-release version: $last_released_version"
             echo "Main pre-release version to be released: $version"
           else
-            last_released_version=$(curl -s "https://pypi.org/pypi/langflow/json" | jq -r '.releases | keys | .[]' | grep -vE '(a|b|rc|dev|alpha|beta)' | sort -V | tail -n 1)
+            last_released_version=$(curl -s "https://pypi.org/pypi/harxitflow/json" | jq -r '.releases | keys | .[]' | grep -vE '(a|b|rc|dev|alpha|beta)' | sort -V | tail -n 1)
             echo "Latest main release version: $last_released_version"
           fi
 
@@ -299,7 +299,7 @@ jobs:
 
           if [ ${{inputs.pre_release}} == "true" ]; then
             last_released_version=$(curl -s "https://pypi.org/pypi/lfx/json" | jq -r '.releases | keys | .[]' | grep -E '(a|b|rc|dev|alpha|beta)' | sort -V | tail -n 1)
-            version="$(uv run ./scripts/ci/langflow_pre_release_tag.py "$version" "$last_released_version")"
+            version="$(uv run ./scripts/ci/harxitflow_pre_release_tag.py "$version" "$last_released_version")"
             echo "Latest LFX pre-release version: $last_released_version"
             echo "LFX pre-release version to be released: $version"
           else
@@ -339,7 +339,7 @@ jobs:
           prune-cache: false
 
       - name: Install SDK dependencies
-        run: uv sync --dev --package langflow-sdk
+        run: uv sync --dev --package harxitflow-sdk
 
       - name: Determine version
         id: version
@@ -351,19 +351,19 @@ jobs:
           ")
           echo "SDK version from pyproject.toml: $version"
 
-          # Check if langflow-sdk exists on PyPI (may be first release)
-          pypi_response=$(curl -s -o /dev/null -w "%{http_code}" "https://pypi.org/pypi/langflow-sdk/json")
+          # Check if harxitflow-sdk exists on PyPI (may be first release)
+          pypi_response=$(curl -s -o /dev/null -w "%{http_code}" "https://pypi.org/pypi/harxitflow-sdk/json")
           if [ "$pypi_response" = "404" ]; then
-            echo "langflow-sdk has never been published to PyPI. This will be the first release."
+            echo "harxitflow-sdk has never been published to PyPI. This will be the first release."
             last_released_version=""
           else
             if [ ${{inputs.pre_release}} == "true" ]; then
-              last_released_version=$(curl -s "https://pypi.org/pypi/langflow-sdk/json" | jq -r '.releases | keys | .[]' | grep -E '(a|b|rc|dev|alpha|beta)' | sort -V | tail -n 1)
-              version="$(uv run ./scripts/ci/langflow_pre_release_tag.py "$version" "$last_released_version")"
+              last_released_version=$(curl -s "https://pypi.org/pypi/harxitflow-sdk/json" | jq -r '.releases | keys | .[]' | grep -E '(a|b|rc|dev|alpha|beta)' | sort -V | tail -n 1)
+              version="$(uv run ./scripts/ci/harxitflow_pre_release_tag.py "$version" "$last_released_version")"
               echo "Latest SDK pre-release version: $last_released_version"
               echo "SDK pre-release version to be released: $version"
             else
-              last_released_version=$(curl -s "https://pypi.org/pypi/langflow-sdk/json" | jq -r '.releases | keys | .[]' | grep -vE '(a|b|rc|dev|alpha|beta)' | sort -V | tail -n 1)
+              last_released_version=$(curl -s "https://pypi.org/pypi/harxitflow-sdk/json" | jq -r '.releases | keys | .[]' | grep -vE '(a|b|rc|dev|alpha|beta)' | sort -V | tail -n 1)
               echo "Latest SDK release version: $last_released_version"
             fi
           fi
@@ -391,7 +391,7 @@ jobs:
     secrets: inherit
 
   build-sdk:
-    name: Build langflow-sdk
+    name: Build harxitflow-sdk
     needs: [determine-sdk-version]
     if: ${{ needs.determine-sdk-version.outputs.skipped == 'false' }}
     runs-on: ubuntu-latest
@@ -445,7 +445,7 @@ jobs:
           uv venv test-env --seed
           uv pip install --python ./test-env/bin/python dist/*.whl
           EXPECTED_VERSION="${{ needs.determine-sdk-version.outputs.version }}"
-          ./test-env/bin/python -c "from importlib.metadata import version; import langflow_sdk; installed_version = version('langflow-sdk'); print(f'langflow-sdk {installed_version} imported successfully'); assert installed_version == '$EXPECTED_VERSION', f'Installed version {installed_version} does not match expected version $EXPECTED_VERSION'"
+          ./test-env/bin/python -c "from importlib.metadata import version; import harxitflow_sdk; installed_version = version('harxitflow-sdk'); print(f'harxitflow-sdk {installed_version} imported successfully'); assert installed_version == '$EXPECTED_VERSION', f'Installed version {installed_version} does not match expected version $EXPECTED_VERSION'"
       - name: Upload Artifact
         uses: actions/upload-artifact@v6
         with:
@@ -494,31 +494,31 @@ jobs:
           # Verify the change
           echo "Updated pyproject.toml version:"
           grep "^version" pyproject.toml
-      - name: Update langflow-sdk dependency for pre-release
+      - name: Update harxitflow-sdk dependency for pre-release
         if: ${{ inputs.pre_release && needs.build-sdk.result == 'success' }}
         run: |
           SDK_VERSION="${{ needs.determine-sdk-version.outputs.version }}"
-          echo "Updating langflow-sdk dependency to allow pre-release version: $SDK_VERSION"
+          echo "Updating harxitflow-sdk dependency to allow pre-release version: $SDK_VERSION"
           cd src/lfx
 
-          # Extract current langflow-sdk constraint from pyproject.toml
-          CURRENT_CONSTRAINT=$(grep -E '^\s*"langflow-sdk' pyproject.toml | head -1)
+          # Extract current harxitflow-sdk constraint from pyproject.toml
+          CURRENT_CONSTRAINT=$(grep -E '^\s*"harxitflow-sdk' pyproject.toml | head -1)
           echo "Current constraint: $CURRENT_CONSTRAINT"
 
           # Create new constraint using the next major derived from SDK_VERSION
           SDK_BASE_VERSION=$(echo "$SDK_VERSION" | sed 's/[^0-9.].*$//')
           SDK_MAJOR=$(echo "$SDK_BASE_VERSION" | cut -d. -f1)
           NEXT_MAJOR=$((SDK_MAJOR + 1))
-          NEW_CONSTRAINT="\"langflow-sdk>=$SDK_VERSION,<$NEXT_MAJOR.dev0\""
+          NEW_CONSTRAINT="\"harxitflow-sdk>=$SDK_VERSION,<$NEXT_MAJOR.dev0\""
 
           echo "New constraint: $NEW_CONSTRAINT"
 
           # Replace the constraint
-          sed -i.bak "s|\"langflow-sdk[^\"]*\"|$NEW_CONSTRAINT|" pyproject.toml
+          sed -i.bak "s|\"harxitflow-sdk[^\"]*\"|$NEW_CONSTRAINT|" pyproject.toml
 
           # Verify the change
-          echo "Updated langflow-sdk dependency:"
-          grep "langflow-sdk" pyproject.toml
+          echo "Updated harxitflow-sdk dependency:"
+          grep "harxitflow-sdk" pyproject.toml
       - name: Build project for distribution
         run: |
           cd src/lfx
@@ -561,7 +561,7 @@ jobs:
           path: src/lfx/dist
 
   build-base:
-    name: Build Langflow Base
+    name: Build HarxitFlow Base
     needs: [build-lfx, build-sdk, determine-base-version, determine-lfx-version]
     if: |
       always() &&
@@ -671,7 +671,7 @@ jobs:
           mkdir src/backend/base/dist
           mv dist/*.whl src/backend/base/dist
           uv pip install src/backend/base/dist/*.whl
-          uv run python -m langflow run --host localhost --port 7860 --backend-only &
+          uv run python -m harxitflow run --host localhost --port 7860 --backend-only &
           SERVER_PID=$!
           # Wait for the server to start
           timeout 120 bash -c 'until curl -f http://localhost:7860/api/v1/auto_login; do sleep 2; done' || (echo "Server did not start in time" && kill $SERVER_PID && exit 1)
@@ -695,7 +695,7 @@ jobs:
           path: src/backend/base/dist
 
   build-main:
-    name: Build Langflow Main
+    name: Build HarxitFlow Main
     needs:
       [
         build-base,
@@ -767,14 +767,14 @@ jobs:
           # Verify the change
           echo "Updated pyproject.toml version:"
           grep "^version" pyproject.toml
-      - name: Update langflow-base dependency for pre-release
+      - name: Update harxitflow-base dependency for pre-release
         if: ${{ inputs.pre_release }}
         run: |
           BASE_VERSION="${{ needs.determine-base-version.outputs.version }}"
           echo "Base version for pre-release: $BASE_VERSION"
 
-          # Extract current langflow-base constraint from pyproject.toml
-          CURRENT_CONSTRAINT=$(grep -E '^\s*"langflow-base' pyproject.toml | head -1)
+          # Extract current harxitflow-base constraint from pyproject.toml
+          CURRENT_CONSTRAINT=$(grep -E '^\s*"harxitflow-base' pyproject.toml | head -1)
           echo "Current constraint: $CURRENT_CONSTRAINT"
 
           # Extract the major.minor version (e.g., "0.8" from "~=0.8.0")
@@ -782,16 +782,16 @@ jobs:
           NEXT_MAJOR=$((${MAJOR_MINOR%.*} + 1))
 
           # Create new constraint: >=BASE_VERSION,<NEXT_MAJOR.dev0 (preserve [complete] extra)
-          NEW_CONSTRAINT="\"langflow-base[complete]>=$BASE_VERSION,<$NEXT_MAJOR.dev0\""
+          NEW_CONSTRAINT="\"harxitflow-base[complete]>=$BASE_VERSION,<$NEXT_MAJOR.dev0\""
 
           echo "New constraint: $NEW_CONSTRAINT"
 
           # Replace the constraint
-          sed -i.bak "s|\"langflow-base[^\"]*\"|$NEW_CONSTRAINT|" pyproject.toml
+          sed -i.bak "s|\"harxitflow-base[^\"]*\"|$NEW_CONSTRAINT|" pyproject.toml
 
           # Verify the change
           echo "Updated dependency:"
-          grep "langflow-base" pyproject.toml
+          grep "harxitflow-base" pyproject.toml
       - name: Build project for pre-release distribution
         if: ${{ inputs.pre_release }}
         run: make build pre=true args="--no-sources --wheel"
@@ -818,7 +818,7 @@ jobs:
       - name: Test CLI
         run: |
           uv pip install dist/*.whl
-          uv run python -m langflow run --host localhost --port 7860 --backend-only &
+          uv run python -m harxitflow run --host localhost --port 7860 --backend-only &
           SERVER_PID=$!
           # Wait for the server to start
           timeout 120 bash -c 'until curl -f http://localhost:7860/health_check; do sleep 2; done' || (echo "Server did not start in time" && kill $SERVER_PID && exit 1)
@@ -857,7 +857,7 @@ jobs:
       pre_release: ${{ inputs.pre_release }}
 
   publish-base:
-    name: Publish Langflow Base to PyPI
+    name: Publish HarxitFlow Base to PyPI
     if: |
       always() &&
       !cancelled() &&
@@ -887,7 +887,7 @@ jobs:
           cd src/backend/base && uv publish dist/*.whl
 
   publish-main:
-    name: Publish Langflow Main to PyPI
+    name: Publish HarxitFlow Main to PyPI
     if: ${{ inputs.release_package_main }}
     needs: [build-main, test-cross-platform, publish-base, ci]
     runs-on: ubuntu-latest
@@ -910,7 +910,7 @@ jobs:
           uv publish dist/*.whl
 
   publish-sdk:
-    name: Publish langflow-sdk to PyPI
+    name: Publish harxitflow-sdk to PyPI
     needs: [build-sdk, test-cross-platform, ci]
     if: |
       always() &&
@@ -973,7 +973,7 @@ jobs:
           cd src/lfx && uv publish dist/*.whl
 
   call_docker_build_base:
-    name: Call Docker Build Workflow for Langflow Base
+    name: Call Docker Build Workflow for HarxitFlow Base
     if: ${{ inputs.build_docker_base }}
     needs: [ci]
     uses: ./.github/workflows/docker-build-v2.yml
@@ -985,7 +985,7 @@ jobs:
     secrets: inherit
 
   call_docker_build_main:
-    name: Call Docker Build Workflow for Langflow
+    name: Call Docker Build Workflow for HarxitFlow
     if: ${{ inputs.build_docker_main }}
     needs: [ci]
     uses: ./.github/workflows/docker-build-v2.yml
@@ -997,7 +997,7 @@ jobs:
     secrets: inherit
 
   call_docker_build_main_backend:
-    name: Call Docker Build Workflow for Langflow Backend
+    name: Call Docker Build Workflow for HarxitFlow Backend
     if: ${{ inputs.build_docker_main && !inputs.dry_run }}
     needs: [call_docker_build_main]
     uses: ./.github/workflows/docker-build-v2.yml
@@ -1009,7 +1009,7 @@ jobs:
     secrets: inherit
 
   call_docker_build_main_frontend:
-    name: Call Docker Build Workflow for Langflow Frontend
+    name: Call Docker Build Workflow for HarxitFlow Frontend
     if: ${{ inputs.build_docker_main && !inputs.dry_run }}
     needs: [call_docker_build_main]
     uses: ./.github/workflows/docker-build-v2.yml
@@ -1021,7 +1021,7 @@ jobs:
     secrets: inherit
 
   call_docker_build_main_ep:
-    name: Call Docker Build Workflow for Langflow with Entrypoint
+    name: Call Docker Build Workflow for HarxitFlow with Entrypoint
     if: ${{ inputs.build_docker_main }}
     needs: [ci]
     uses: ./.github/workflows/docker-build-v2.yml
@@ -1033,7 +1033,7 @@ jobs:
     secrets: inherit
 
   call_docker_build_main_all:
-    name: Call Docker Build Workflow for langflow-all
+    name: Call Docker Build Workflow for harxitflow-all
     if: ${{ inputs.build_docker_main }}
     needs: [ci]
     uses: ./.github/workflows/docker-build-v2.yml

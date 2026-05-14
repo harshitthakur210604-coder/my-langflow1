@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 # Keep this syntax directive! It's used to enable Docker BuildKit
 #
-# Backend-only Langflow image
+# Backend-only HarxitFlow image
 # - No frontend code or assets
 # - No Playwright
 
@@ -31,13 +31,13 @@ COPY ./src/backend ./src/backend
 COPY ./src/lfx ./src/lfx
 COPY ./src/sdk ./src/sdk
 
-# Create venv and install langflow-base with dependencies
+# Create venv and install harxitflow-base with dependencies
 # Using uv pip instead of uv sync to avoid workspace complexities
 RUN uv venv /app/.venv
 ENV PATH="/app/.venv/bin:$PATH"
 ENV VIRTUAL_ENV="/app/.venv"
 
-# Install langflow-base with all extras except dev (which includes Playwright)
+# Install harxitflow-base with all extras except dev (which includes Playwright)
 RUN --mount=type=cache,target=/root/.cache/uv \
     uv pip install ./src/sdk ./src/lfx "./src/backend/base[complete,postgresql]"
 
@@ -83,16 +83,16 @@ ENV PATH="/app/.venv/bin:$PATH"
 # Note: .venv is already owned by 1000:0 via COPY --chown above, so no recursive chown needed
 RUN mkdir -p /app/data && chown -R 1000:0 /app/data && chown 1000:0 /app
 
-LABEL org.opencontainers.image.title=langflow-backend
-LABEL org.opencontainers.image.authors=['Langflow']
+LABEL org.opencontainers.image.title=harxitflow-backend
+LABEL org.opencontainers.image.authors=['HarxitFlow']
 LABEL org.opencontainers.image.licenses=MIT
-LABEL org.opencontainers.image.url=https://github.com/langflow-ai/langflow
-LABEL org.opencontainers.image.source=https://github.com/langflow-ai/langflow
+LABEL org.opencontainers.image.url=https://github.com/harxitflow-ai/harxitflow
+LABEL org.opencontainers.image.source=https://github.com/harxitflow-ai/harxitflow
 
 USER user
 WORKDIR /app
 
-ENV LANGFLOW_HOST=0.0.0.0
-ENV LANGFLOW_PORT=7860
+ENV HARXITFLOW_HOST=0.0.0.0
+ENV HARXITFLOW_PORT=7860
 
-CMD ["python", "-m", "langflow", "run", "--backend-only"]
+CMD ["python", "-m", "harxitflow", "run", "--backend-only"]

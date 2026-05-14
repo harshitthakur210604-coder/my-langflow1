@@ -1,7 +1,7 @@
 from unittest.mock import patch
 
 import pytest
-from langflow.components.tools.python_code_structured_tool import PythonCodeStructuredTool
+from harxitflow.components.tools.python_code_structured_tool import PythonCodeStructuredTool
 
 from tests.base import ComponentTestBaseWithoutClient
 

@@ -52,15 +52,15 @@ export class BackEndCluster extends Construct {
     );
     backendTaskDefinition.addContainer('backendContainer', {
       image: ecs.ContainerImage.fromEcrRepository(props.ecrBackEndRepository, "latest"),
-      containerName:'langflow-back-container',
+      containerName:'harxitflow-back-container',
       logging: ecs.LogDriver.awsLogs({
         streamPrefix: 'my-stream',
         logGroup: props.backendLogGroup,
       }),
       environment:{
-        "LANGFLOW_AUTO_LOGIN" : process.env.LANGFLOW_AUTO_LOGIN ?? 'false',
-        "LANGFLOW_SUPERUSER" : process.env.LANGFLOW_SUPERUSER ?? "admin",
-        "LANGFLOW_SUPERUSER_PASSWORD" : process.env.LANGFLOW_SUPERUSER_PASSWORD ?? "123456"
+        "HARXITFLOW_AUTO_LOGIN" : process.env.HARXITFLOW_AUTO_LOGIN ?? 'false',
+        "HARXITFLOW_SUPERUSER" : process.env.HARXITFLOW_SUPERUSER ?? "admin",
+        "HARXITFLOW_SUPERUSER_PASSWORD" : process.env.HARXITFLOW_SUPERUSER_PASSWORD ?? "123456"
       },
       portMappings: [
           {

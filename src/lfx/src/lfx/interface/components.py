@@ -179,7 +179,7 @@ def _get_cache_path() -> Path:
     """Get the path for the cached component index in the user's cache directory."""
     from platformdirs import user_cache_dir
 
-    cache_dir = Path(user_cache_dir("lfx", "langflow"))
+    cache_dir = Path(user_cache_dir("lfx", "harxitflow"))
     cache_dir.mkdir(parents=True, exist_ok=True)
     return cache_dir / "component_index.json"
 
@@ -203,11 +203,11 @@ def _save_generated_index(modules_dict: dict) -> None:
         # Get version
         from importlib.metadata import version
 
-        langflow_version = version("langflow")
+        harxitflow_version = version("harxitflow")
 
         # Build index structure
         index = {
-            "version": langflow_version,
+            "version": harxitflow_version,
             "metadata": {
                 "num_modules": num_modules,
                 "num_components": num_components,
@@ -257,7 +257,7 @@ async def _send_telemetry(
         filtered_modules = ",".join(target_modules) if target_modules else None
 
         # Import the payload class dynamically to avoid circular imports
-        from langflow.services.telemetry.schema import ComponentIndexPayload
+        from harxitflow.services.telemetry.schema import ComponentIndexPayload
 
         payload = ComponentIndexPayload(
             index_source=index_source,
@@ -347,7 +347,7 @@ async def _load_components_dynamically(
     try:
         import lfx.components as components_pkg
     except ImportError as e:
-        await logger.aerror(f"Failed to import langflow.components package: {e}", exc_info=True)
+        await logger.aerror(f"Failed to import harxitflow.components package: {e}", exc_info=True)
         return modules_dict
 
     # Collect all module names to process
@@ -475,11 +475,11 @@ async def _load_production_mode(
     return modules_dict, index_source
 
 
-async def import_langflow_components(
+async def import_harxitflow_components(
     settings_service: Optional["SettingsService"] = None,
     telemetry_service: Any | None = None,
 ) -> dict[str, dict[str, Any]]:
-    """Asynchronously discovers and loads all built-in Langflow components.
+    """Asynchronously discovers and loads all built-in HarxitFlow components.
 
     Loading Strategy:
     - Production mode: Load from prebuilt index -> cache -> build dynamically (with caching)
@@ -633,7 +633,7 @@ async def get_and_cache_all_types_dict(
 ):
     """Retrieves and caches the complete dictionary of component types and templates.
 
-    Supports both full and partial (lazy) loading. If the cache is empty, loads built-in Langflow
+    Supports both full and partial (lazy) loading. If the cache is empty, loads built-in HarxitFlow
     components and either fully loads all components or loads only their metadata, depending on the
     lazy loading setting. Merges built-in and custom components into the cache and returns the
     resulting dictionary.
@@ -645,7 +645,7 @@ async def get_and_cache_all_types_dict(
     if component_cache.all_types_dict is None:
         await logger.adebug("Building components cache")
 
-        langflow_components = await import_langflow_components(settings_service, telemetry_service)
+        harxitflow_components = await import_harxitflow_components(settings_service, telemetry_service)
         custom_components_dict = await _determine_loading_strategy(settings_service)
 
         # Flatten custom dict if it has a "components" wrapper
@@ -653,7 +653,7 @@ async def get_and_cache_all_types_dict(
 
         # Merge built-in and custom components (no wrapper at cache level)
         component_cache.all_types_dict = {
-            **langflow_components["components"],
+            **harxitflow_components["components"],
             **custom_flat,
         }
         component_count = sum(len(comps) for comps in component_cache.all_types_dict.values())
@@ -887,7 +887,7 @@ async def get_type_dict(component_type: str, settings_service: Optional["Setting
     """Get a specific component type dictionary, loading if needed."""
     if settings_service is None:
         # Import here to avoid circular imports
-        from langflow.services.deps import get_settings_service
+        from harxitflow.services.deps import get_settings_service
 
         settings_service = get_settings_service()
 

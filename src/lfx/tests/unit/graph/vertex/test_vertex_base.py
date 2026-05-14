@@ -294,19 +294,19 @@ def test_vertex_before_callback_event():
     # Assert the event has the correct step_name
     assert event.step_name == vertex.display_name
 
-    # Assert the raw_event contains the langflow metrics
+    # Assert the raw_event contains the harxitflow metrics
     assert event.raw_event is not None
     assert isinstance(event.raw_event, dict)
-    assert "langflow" in event.raw_event
+    assert "harxitflow" in event.raw_event
 
-    # Assert the langflow metrics contain expected fields
-    langflow_metrics = event.raw_event["langflow"]
-    assert isinstance(langflow_metrics, dict)
-    assert "timestamp" in langflow_metrics
-    assert isinstance(langflow_metrics["timestamp"], float)
-    assert "component_id" in langflow_metrics
-    assert langflow_metrics["component_id"] == vertex.id
-    assert langflow_metrics["component_id"] == "test_vertex_id"
+    # Assert the harxitflow metrics contain expected fields
+    harxitflow_metrics = event.raw_event["harxitflow"]
+    assert isinstance(harxitflow_metrics, dict)
+    assert "timestamp" in harxitflow_metrics
+    assert isinstance(harxitflow_metrics["timestamp"], float)
+    assert "component_id" in harxitflow_metrics
+    assert harxitflow_metrics["component_id"] == vertex.id
+    assert harxitflow_metrics["component_id"] == "test_vertex_id"
 
 
 def test_vertex_after_callback_event():
@@ -332,19 +332,19 @@ def test_vertex_after_callback_event():
     # Assert the event has the correct step_name
     assert event.step_name == vertex.display_name
 
-    # Assert the raw_event contains the langflow metrics
+    # Assert the raw_event contains the harxitflow metrics
     assert event.raw_event is not None
     assert isinstance(event.raw_event, dict)
-    assert "langflow" in event.raw_event
+    assert "harxitflow" in event.raw_event
 
-    # Assert the langflow metrics contain expected fields
-    langflow_metrics = event.raw_event["langflow"]
-    assert isinstance(langflow_metrics, dict)
-    assert "timestamp" in langflow_metrics
-    assert isinstance(langflow_metrics["timestamp"], float)
-    assert "component_id" in langflow_metrics
-    assert langflow_metrics["component_id"] == vertex.id
-    assert langflow_metrics["component_id"] == "test_vertex_id"
+    # Assert the harxitflow metrics contain expected fields
+    harxitflow_metrics = event.raw_event["harxitflow"]
+    assert isinstance(harxitflow_metrics, dict)
+    assert "timestamp" in harxitflow_metrics
+    assert isinstance(harxitflow_metrics["timestamp"], float)
+    assert "component_id" in harxitflow_metrics
+    assert harxitflow_metrics["component_id"] == vertex.id
+    assert harxitflow_metrics["component_id"] == "test_vertex_id"
 
 
 def test_vertex_raw_event_metrics():

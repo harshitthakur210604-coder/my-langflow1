@@ -1,4 +1,4 @@
-//Langflow Desktop Base URL
+//HarxitFlow Desktop Base URL
 export const baseURL = "";
 
 export const customDefaultShortcuts = [

@@ -17,15 +17,15 @@ from blockbuster import blockbuster_ctx
 from dotenv import load_dotenv
 from fastapi.testclient import TestClient
 from httpx import ASGITransport, AsyncClient
-from langflow.initial_setup.constants import STARTER_FOLDER_NAME
-from langflow.main import create_app
-from langflow.services.database.models.api_key.model import ApiKey, UnmaskedApiKeyRead
-from langflow.services.database.models.flow.model import Flow, FlowCreate, FlowRead
-from langflow.services.database.models.folder.model import Folder
-from langflow.services.database.models.transactions.model import TransactionTable
-from langflow.services.database.models.user.model import User, UserCreate, UserRead
-from langflow.services.database.models.vertex_builds.crud import delete_vertex_builds_by_flow_id_unchecked
-from langflow.services.deps import get_auth_service, get_db_service, session_scope
+from harxitflow.initial_setup.constants import STARTER_FOLDER_NAME
+from harxitflow.main import create_app
+from harxitflow.services.database.models.api_key.model import ApiKey, UnmaskedApiKeyRead
+from harxitflow.services.database.models.flow.model import Flow, FlowCreate, FlowRead
+from harxitflow.services.database.models.folder.model import Folder
+from harxitflow.services.database.models.transactions.model import TransactionTable
+from harxitflow.services.database.models.user.model import User, UserCreate, UserRead
+from harxitflow.services.database.models.vertex_builds.crud import delete_vertex_builds_by_flow_id_unchecked
+from harxitflow.services.deps import get_auth_service, get_db_service, session_scope
 from lfx.components.input_output import ChatInput
 from lfx.graph import Graph
 from lfx.log.logger import logger
@@ -68,7 +68,7 @@ def blockbuster(request):
             (
                 bb.functions["os.stat"]
                 # TODO: make set_class_code async
-                .can_block_in("langflow/custom/custom_component/component.py", "set_class_code")
+                .can_block_in("harxitflow/custom/custom_component/component.py", "set_class_code")
                 # TODO: follow discussion in https://github.com/encode/httpx/discussions/3456
                 .can_block_in("httpx/_client.py", "_init_transport")
                 .can_block_in("rich/traceback.py", "_render_stack")
@@ -183,7 +183,7 @@ async def delete_transactions_by_flow_id(db: AsyncSession, flow_id: UUID):
 
 
 async def _delete_transactions_and_vertex_builds(session, flows: list[Flow]):
-    from langflow.services.database.models.jobs.model import Job
+    from harxitflow.services.database.models.jobs.model import Job
 
     flow_ids = [flow.id for flow in flows]
     for flow_id in flow_ids:
@@ -268,12 +268,12 @@ def load_flows_dir():
 
 @pytest.fixture(name="distributed_env")
 def _setup_env(monkeypatch):
-    monkeypatch.setenv("LANGFLOW_CACHE_TYPE", "redis")
-    monkeypatch.setenv("LANGFLOW_REDIS_HOST", "result_backend")
-    monkeypatch.setenv("LANGFLOW_REDIS_PORT", "6379")
-    monkeypatch.setenv("LANGFLOW_REDIS_DB", "0")
-    monkeypatch.setenv("LANGFLOW_REDIS_EXPIRE", "3600")
-    monkeypatch.setenv("LANGFLOW_REDIS_PASSWORD", "")
+    monkeypatch.setenv("HARXITFLOW_CACHE_TYPE", "redis")
+    monkeypatch.setenv("HARXITFLOW_REDIS_HOST", "result_backend")
+    monkeypatch.setenv("HARXITFLOW_REDIS_PORT", "6379")
+    monkeypatch.setenv("HARXITFLOW_REDIS_DB", "0")
+    monkeypatch.setenv("HARXITFLOW_REDIS_EXPIRE", "3600")
+    monkeypatch.setenv("HARXITFLOW_REDIS_PASSWORD", "")
     monkeypatch.setenv("FLOWER_UNAUTHENTICATED_API", "True")
     monkeypatch.setenv("BROKER_URL", "redis://result_backend:6379/0")
     monkeypatch.setenv("RESULT_BACKEND", "redis://result_backend:6379/0")
@@ -287,16 +287,16 @@ def distributed_client_fixture(
     distributed_env,  # noqa: ARG001
 ):
     # Here we load the .env from ../deploy/.env
-    from langflow.core import celery_app
+    from harxitflow.core import celery_app
 
     db_dir = tempfile.mkdtemp()
     try:
         db_path = Path(db_dir) / "test.db"
-        monkeypatch.setenv("LANGFLOW_DATABASE_URL", f"sqlite:///{db_path}")
-        monkeypatch.setenv("LANGFLOW_AUTO_LOGIN", "false")
-        # monkeypatch langflow.services.task.manager.USE_CELERY to True
+        monkeypatch.setenv("HARXITFLOW_DATABASE_URL", f"sqlite:///{db_path}")
+        monkeypatch.setenv("HARXITFLOW_AUTO_LOGIN", "false")
+        # monkeypatch harxitflow.services.task.manager.USE_CELERY to True
         # monkeypatch.setattr(manager, "USE_CELERY", True)
-        monkeypatch.setattr(celery_app, "celery_app", celery_app.make_celery("langflow", Config))
+        monkeypatch.setattr(celery_app, "celery_app", celery_app.make_celery("harxitflow", Config))
 
         # def get_session_override():
         #     return session
@@ -404,14 +404,14 @@ def json_loop_test():
 
 @pytest.fixture(autouse=True)
 def deactivate_tracing(monkeypatch):
-    monkeypatch.setenv("LANGFLOW_DEACTIVATE_TRACING", "true")
+    monkeypatch.setenv("HARXITFLOW_DEACTIVATE_TRACING", "true")
     yield
     monkeypatch.undo()
 
 
 @pytest.fixture
 def use_noop_session(monkeypatch):
-    monkeypatch.setenv("LANGFLOW_USE_NOOP_DATABASE", "1")
+    monkeypatch.setenv("HARXITFLOW_USE_NOOP_DATABASE", "1")
     # Optionally patch the Settings object if needed
     # from lfx.services.settings.base import Settings
     # monkeypatch.setattr(Settings, "use_noop_database", True)
@@ -434,14 +434,14 @@ async def client_fixture(
         def init_app():
             db_dir = tempfile.mkdtemp()
             db_path = Path(db_dir) / "test.db"
-            monkeypatch.setenv("LANGFLOW_DATABASE_URL", f"sqlite:///{db_path}")
-            monkeypatch.setenv("LANGFLOW_AUTO_LOGIN", "false")
+            monkeypatch.setenv("HARXITFLOW_DATABASE_URL", f"sqlite:///{db_path}")
+            monkeypatch.setenv("HARXITFLOW_AUTO_LOGIN", "false")
             if "load_flows" in request.keywords:
                 shutil.copyfile(
                     pytest.BASIC_EXAMPLE_PATH, Path(load_flows_dir) / "c54f9130-f2fa-4a3e-b22a-3856d946351b.json"
                 )
-                monkeypatch.setenv("LANGFLOW_LOAD_FLOWS_PATH", load_flows_dir)
-                monkeypatch.setenv("LANGFLOW_AUTO_LOGIN", "true")
+                monkeypatch.setenv("HARXITFLOW_LOAD_FLOWS_PATH", load_flows_dir)
+                monkeypatch.setenv("HARXITFLOW_AUTO_LOGIN", "true")
             # Clear the services cache
             from lfx.services.manager import get_service_manager
 
@@ -469,7 +469,7 @@ async def client_fixture(
 
 @pytest.fixture
 def runner(tmp_path):
-    env = {"LANGFLOW_DATABASE_URL": f"sqlite:///{tmp_path}/test.db"}
+    env = {"HARXITFLOW_DATABASE_URL": f"sqlite:///{tmp_path}/test.db"}
     return CliRunner(env=env)
 
 

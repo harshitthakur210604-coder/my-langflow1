@@ -1,4 +1,4 @@
-"""lfx status -- compare local flow files against a remote Langflow instance.
+"""lfx status -- compare local flow files against a remote HarxitFlow instance.
 
 Shows, for each local flow JSON, whether it is in sync with the remote,
 ahead (locally modified), brand new (not yet pushed), or missing entirely.
@@ -69,12 +69,12 @@ class FlowStatus:
 
 
 def _load_sdk() -> tuple[object, object, object, type]:
-    """Return (normalize_flow, flow_to_json, Client, LangflowNotFoundError) from langflow_sdk."""
+    """Return (normalize_flow, flow_to_json, Client, HarxitFlowNotFoundError) from harxitflow_sdk."""
     sdk = load_sdk("status")
-    from langflow_sdk.exceptions import LangflowNotFoundError
-    from langflow_sdk.serialization import flow_to_json, normalize_flow
+    from harxitflow_sdk.exceptions import HarxitFlowNotFoundError
+    from harxitflow_sdk.serialization import flow_to_json, normalize_flow
 
-    return normalize_flow, flow_to_json, sdk.Client, LangflowNotFoundError
+    return normalize_flow, flow_to_json, sdk.Client, HarxitFlowNotFoundError
 
 
 def _flow_hash(flow_dict: dict, normalize_flow: object, flow_to_json: object) -> str:

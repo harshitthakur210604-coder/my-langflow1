@@ -7,34 +7,34 @@ Copy the files you need into your project's CI configuration.
 
 | File | Trigger | Secrets needed |
 |------|---------|----------------|
-| [`github-actions/langflow-validate.yml`](github-actions/langflow-validate.yml) | PR touching `flows/**/*.json` | None |
-| [`github-actions/langflow-test.yml`](github-actions/langflow-test.yml) | PR touching flows or tests | `LANGFLOW_STAGING_API_KEY` |
-| [`github-actions/langflow-push.yml`](github-actions/langflow-push.yml) | Push to `main` touching flows | `LANGFLOW_PROD_API_KEY` |
+| [`github-actions/harxitflow-validate.yml`](github-actions/harxitflow-validate.yml) | PR touching `flows/**/*.json` | None |
+| [`github-actions/harxitflow-test.yml`](github-actions/harxitflow-test.yml) | PR touching flows or tests | `HARXITFLOW_STAGING_API_KEY` |
+| [`github-actions/harxitflow-push.yml`](github-actions/harxitflow-push.yml) | Push to `main` touching flows | `HARXITFLOW_PROD_API_KEY` |
 
 ### Quick start
 
 ```bash
 mkdir -p .github/workflows
-cp github-actions/langflow-validate.yml \
-   github-actions/langflow-test.yml \
-   github-actions/langflow-push.yml \
+cp github-actions/harxitflow-validate.yml \
+   github-actions/harxitflow-test.yml \
+   github-actions/harxitflow-push.yml \
    .github/workflows/
 ```
 
 Configure these in **Settings → Environments**:
 
-**`staging`** environment (used by `langflow-test.yml`):
+**`staging`** environment (used by `harxitflow-test.yml`):
 | Name | Type | Value |
 |------|------|-------|
-| `LANGFLOW_STAGING_URL` | Variable | `https://staging.langflow.example.com` |
-| `LANGFLOW_STAGING_API_KEY` | Secret | your staging API key |
+| `HARXITFLOW_STAGING_URL` | Variable | `https://staging.harxitflow.example.com` |
+| `HARXITFLOW_STAGING_API_KEY` | Secret | your staging API key |
 
-**`production`** environment (used by `langflow-push.yml`):
+**`production`** environment (used by `harxitflow-push.yml`):
 | Name | Type | Value |
 |------|------|-------|
-| `LANGFLOW_PROD_URL` | Variable | `https://langflow.example.com` |
-| `LANGFLOW_PROD_API_KEY` | Secret | your production API key |
-| `LANGFLOW_PROJECT_NAME` | Variable | `Production Flows` *(optional)* |
+| `HARXITFLOW_PROD_URL` | Variable | `https://harxitflow.example.com` |
+| `HARXITFLOW_PROD_API_KEY` | Secret | your production API key |
+| `HARXITFLOW_PROJECT_NAME` | Variable | `Production Flows` *(optional)* |
 
 Add **Required reviewers** to the `production` environment to gate every deploy
 behind a manual approval step.
@@ -45,31 +45,31 @@ behind a manual approval step.
 
 | File | Description |
 |------|-------------|
-| [`gitlab-ci/langflow.yml`](gitlab-ci/langflow.yml) | Three-stage template: validate → test → deploy |
+| [`gitlab-ci/harxitflow.yml`](gitlab-ci/harxitflow.yml) | Three-stage template: validate → test → deploy |
 
 ### Quick start
 
 ```bash
 mkdir -p .gitlab/ci
-cp gitlab-ci/langflow.yml .gitlab/ci/
+cp gitlab-ci/harxitflow.yml .gitlab/ci/
 ```
 
 Add to your `.gitlab-ci.yml`:
 
 ```yaml
 include:
-  - local: .gitlab/ci/langflow.yml
+  - local: .gitlab/ci/harxitflow.yml
 ```
 
 Configure these in **Settings → CI/CD → Variables**:
 
 | Variable | Protected | Masked | Description |
 |----------|-----------|--------|-------------|
-| `LANGFLOW_STAGING_URL` | ✓ | ✗ | Staging instance URL |
-| `LANGFLOW_STAGING_API_KEY` | ✓ | ✓ | Staging API key |
-| `LANGFLOW_PROD_URL` | ✓ | ✗ | Production instance URL |
-| `LANGFLOW_PROD_API_KEY` | ✓ | ✓ | Production API key |
-| `LANGFLOW_PROJECT_NAME` | ✗ | ✗ | Project folder name *(optional)* |
+| `HARXITFLOW_STAGING_URL` | ✓ | ✗ | Staging instance URL |
+| `HARXITFLOW_STAGING_API_KEY` | ✓ | ✓ | Staging API key |
+| `HARXITFLOW_PROD_URL` | ✓ | ✗ | Production instance URL |
+| `HARXITFLOW_PROD_API_KEY` | ✓ | ✓ | Production API key |
+| `HARXITFLOW_PROJECT_NAME` | ✗ | ✗ | Project folder name *(optional)* |
 
 ---
 
@@ -94,26 +94,26 @@ They are copied to `ci/` by `lfx init`.
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `LANGFLOW_URL` | — | URL of target Langflow instance (Approach A) |
-| `LANGFLOW_API_KEY` | — | API key for target instance (Approach A) |
-| `LANGFLOW_ENV` | — | Environment name from config (Approach B) |
-| `LANGFLOW_ENVIRONMENTS_FILE` | `langflow-environments.toml` | Path to environments config (Approach B) |
+| `HARXITFLOW_URL` | — | URL of target HarxitFlow instance (Approach A) |
+| `HARXITFLOW_API_KEY` | — | API key for target instance (Approach A) |
+| `HARXITFLOW_ENV` | — | Environment name from config (Approach B) |
+| `HARXITFLOW_ENVIRONMENTS_FILE` | `harxitflow-environments.toml` | Path to environments config (Approach B) |
 | `TESTS_DIR` | `tests/` | Directory containing test files |
 | `PYTEST_MARKERS` | `integration` | Markers passed to `pytest -m` |
 | `PYTEST_ARGS` | — | Extra arguments forwarded verbatim to pytest |
-| `SDK_VERSION` | *(latest)* | PEP 508 version specifier for `langflow-sdk` |
+| `SDK_VERSION` | *(latest)* | PEP 508 version specifier for `harxitflow-sdk` |
 
 #### `ci-push.sh`
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `LANGFLOW_URL` | — | URL of target Langflow instance (Approach A) |
-| `LANGFLOW_API_KEY` | — | API key for target instance (Approach A) |
-| `LANGFLOW_ENV` | — | Environment name from config (Approach B) |
-| `LANGFLOW_ENVIRONMENTS_FILE` | `langflow-environments.toml` | Path to environments config (Approach B) |
+| `HARXITFLOW_URL` | — | URL of target HarxitFlow instance (Approach A) |
+| `HARXITFLOW_API_KEY` | — | API key for target instance (Approach A) |
+| `HARXITFLOW_ENV` | — | Environment name from config (Approach B) |
+| `HARXITFLOW_ENVIRONMENTS_FILE` | `harxitflow-environments.toml` | Path to environments config (Approach B) |
 | `FLOWS_DIR` | `flows/` | Directory containing flow JSON files |
-| `LANGFLOW_PROJECT` | — | Project (folder) name on the remote instance |
-| `LANGFLOW_PROJECT_ID` | — | Project UUID (takes precedence over `LANGFLOW_PROJECT`) |
+| `HARXITFLOW_PROJECT` | — | Project (folder) name on the remote instance |
+| `HARXITFLOW_PROJECT_ID` | — | Project UUID (takes precedence over `HARXITFLOW_PROJECT`) |
 | `DRY_RUN` | `false` | Set to `true` to preview without making changes |
 | `LFX_VERSION` | *(latest)* | PEP 508 version specifier for `lfx` |
 
@@ -124,15 +124,15 @@ They are copied to `ci/` by `lfx init`.
 ```
 PR opened
   │
-  ├── langflow-validate  ──── lfx validate flows/ --level 4
+  ├── harxitflow-validate  ──── lfx validate flows/ --level 4
   │                           ↳ blocks merge if any flow is malformed
   │
-  └── langflow-test  ──────── pytest tests/ --langflow-env staging
+  └── harxitflow-test  ──────── pytest tests/ --harxitflow-env staging
                               ↳ skips gracefully if staging is unavailable
 
 Merge to main
   │
-  └── langflow-push  ──────── lfx push --dir flows/ --env production
+  └── harxitflow-push  ──────── lfx push --dir flows/ --env production
                               ↳ upserts every flow by stable ID
                               ↳ idempotent: safe to re-run
 ```
@@ -142,15 +142,15 @@ Merge to main
 Install the testing extra:
 
 ```bash
-pip install "langflow-sdk[testing]"
+pip install "harxitflow-sdk[testing]"
 ```
 
 Create `tests/test_flows.py`:
 
 ```python
 def test_rag_flow(flow_runner):
-    response = flow_runner("rag-endpoint", "What is Langflow?")
-    assert "Langflow" in response.first_text_output()
+    response = flow_runner("rag-endpoint", "What is HarxitFlow?")
+    assert "HarxitFlow" in response.first_text_output()
 
 async def test_async_flow(async_flow_runner):
     response = await async_flow_runner("my-endpoint", "Hello!")
@@ -160,7 +160,7 @@ async def test_async_flow(async_flow_runner):
 Run locally against staging:
 
 ```bash
-LANGFLOW_URL=https://staging.langflow.example.com \
-LANGFLOW_API_KEY=<key> \
+HARXITFLOW_URL=https://staging.harxitflow.example.com \
+HARXITFLOW_API_KEY=<key> \
 pytest tests/ -m integration
 ```

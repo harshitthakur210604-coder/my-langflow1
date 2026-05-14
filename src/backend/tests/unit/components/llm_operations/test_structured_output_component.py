@@ -4,8 +4,8 @@ from unittest.mock import MagicMock, patch
 
 import openai
 import pytest
-from langflow.helpers.base_model import build_model_from_schema
-from langflow.inputs.inputs import TableInput
+from harxitflow.helpers.base_model import build_model_from_schema
+from harxitflow.inputs.inputs import TableInput
 from lfx.components.llm_operations.structured_output import StructuredOutputComponent
 from pydantic import BaseModel
 

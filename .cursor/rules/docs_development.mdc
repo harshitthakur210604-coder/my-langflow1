@@ -1,5 +1,5 @@
 ---
-description: "Guidelines for developing and maintaining Langflow documentation using Docusaurus, including content structure, style, and deployment processes."
+description: "Guidelines for developing and maintaining HarxitFlow documentation using Docusaurus, including content structure, style, and deployment processes."
 globs:
   - "docs/**/*.{md,mdx}"
   - "docs/**/*.{js,jsx,ts,tsx}"
@@ -14,7 +14,7 @@ alwaysApply: false
 # Documentation Development Guidelines
 
 ## Purpose
-Guidelines for developing and maintaining Langflow documentation using Docusaurus, including content structure, style, and deployment processes.
+Guidelines for developing and maintaining HarxitFlow documentation using Docusaurus, including content structure, style, and deployment processes.
 
 ---
 
@@ -45,11 +45,11 @@ docs/
 ├── docs/                    # Main documentation content
 │   ├── agents/              # Agent and MCP guides
 │   ├── get-started/         # Getting started guides
-│   ├── tutorials/           # Langflow tutorials
+│   ├── tutorials/           # HarxitFlow tutorials
 │   ├── components/          # Component documentation
 │   ├── flows/               # Guides to build, run, and test flows
-│   ├── deployment/          # Guides for deploying and hosting a Langflow server
-│   ├── develop/             # Guides for developing apps with Langflow
+│   ├── deployment/          # Guides for deploying and hosting a HarxitFlow server
+│   ├── develop/             # Guides for developing apps with HarxitFlow
 │   ├── support/             # Help and release notes
 │   ├── contributing/        # Contribution guidelines
 │   └── api-reference/       # API documentation
@@ -64,7 +64,7 @@ docs/
 - **Guides:** Step-by-step tutorials (`docs/getting-started/`)
 - **Reference:** API and component reference (`docs/api-reference/`)
 - **How-to:** Problem-solving articles (`docs/components/`)
-- **Concepts:** Explanatory articles about Langflow concepts
+- **Concepts:** Explanatory articles about HarxitFlow concepts
 - **Blog:** Release notes, announcements (`blog/`)
 
 ---
@@ -107,7 +107,7 @@ Use danger for critical warnings.
 ### Code Blocks
 ````markdown
 ```python title="component_example.py"
-from langflow.components.base import Component
+from harxitflow.components.base import Component
 
 class MyComponent(Component):
     display_name = "My Component"
@@ -124,7 +124,7 @@ class MyComponent(Component):
 ![Component Overview](/img/components/overview.png)
 
 <!-- Use descriptive alt text -->
-![Langflow interface showing the flow editor with nodes and connections](/img/flow-editor.png)
+![HarxitFlow interface showing the flow editor with nodes and connections](/img/flow-editor.png)
 ```
 
 ---
@@ -252,14 +252,14 @@ curl -X POST http://localhost:7860/api/v1/endpoint \
 ### Blog Post Template
 ```markdown
 ---
-title: "Release: Langflow v1.1.0"
-description: "New features and improvements in Langflow v1.1.0"
+title: "Release: HarxitFlow v1.1.0"
+description: "New features and improvements in HarxitFlow v1.1.0"
 authors: [author-name]
 date: 2024-01-15
 tags: [release, features]
 ---
 
-# Release: Langflow v1.1.0
+# Release: HarxitFlow v1.1.0
 
 Brief introduction to the release.
 
@@ -292,7 +292,7 @@ Steps to migrate from previous versions.
 ```markdown
 ---
 title: "Announcement: New Integration"
-description: "Langflow now supports integration with XYZ service"
+description: "HarxitFlow now supports integration with XYZ service"
 authors: [author-name]
 date: 2024-01-15
 tags: [announcement, integration]
@@ -336,16 +336,16 @@ module.exports = {
 ### Site Configuration (`docusaurus.config.js`)
 ```javascript
 module.exports = {
-  title: 'Langflow Documentation',
+  title: 'HarxitFlow Documentation',
   tagline: 'Build AI flows visually',
-  url: 'https://docs.langflow.org',
+  url: 'https://docs.harxitflow.org',
   baseUrl: '/',
 
   themeConfig: {
     navbar: {
-      title: 'Langflow',
+      title: 'HarxitFlow',
       logo: {
-        alt: 'Langflow Logo',
+        alt: 'HarxitFlow Logo',
         src: 'img/logo.svg',
       },
       items: [
@@ -407,9 +407,9 @@ npm run serve
 - **Lists:** Use parallel structure
 
 ### Terminology
-- **Langflow:** Always capitalize
-- **Component:** Capitalize when referring to Langflow components
-- **Flow:** Capitalize when referring to Langflow flows
+- **HarxitFlow:** Always capitalize
+- **Component:** Capitalize when referring to HarxitFlow components
+- **Flow:** Capitalize when referring to HarxitFlow flows
 - **API:** Always uppercase
 - **JSON:** Always uppercase
 

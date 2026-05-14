@@ -70,7 +70,7 @@ class TestLangfuseTracerV3Compatibility:
 
     def test_tracer_initialization_does_not_crash(self):
         """Tracer should initialize without crashing (may not be ready without server)."""
-        from langflow.services.tracing.langfuse import LangFuseTracer
+        from harxitflow.services.tracing.langfuse import LangFuseTracer
 
         # Should not raise an exception
         tracer = LangFuseTracer(
@@ -116,7 +116,7 @@ class TestLangfuseTracerFunctionality:
 
     def test_tracer_uses_v3_api_for_initialization(self, mock_langfuse):
         """Verify tracer uses start_span instead of removed trace() method."""
-        from langflow.services.tracing.langfuse import LangFuseTracer
+        from harxitflow.services.tracing.langfuse import LangFuseTracer
 
         tracer = LangFuseTracer(
             trace_name="test-flow - flow-123",
@@ -135,7 +135,7 @@ class TestLangfuseTracerFunctionality:
 
     def test_add_trace_creates_child_span(self, mock_langfuse):
         """Test that add_trace creates a child span using v3 API."""
-        from langflow.services.tracing.langfuse import LangFuseTracer
+        from harxitflow.services.tracing.langfuse import LangFuseTracer
 
         tracer = LangFuseTracer(
             trace_name="test-flow - flow-123",
@@ -159,7 +159,7 @@ class TestLangfuseTracerFunctionality:
 
     def test_end_trace_updates_and_ends_span(self, mock_langfuse):
         """Test that end_trace updates span with output and ends it."""
-        from langflow.services.tracing.langfuse import LangFuseTracer
+        from harxitflow.services.tracing.langfuse import LangFuseTracer
 
         tracer = LangFuseTracer(
             trace_name="test-flow - flow-123",
@@ -178,7 +178,7 @@ class TestLangfuseTracerFunctionality:
 
     def test_end_updates_root_span_and_trace(self, mock_langfuse):
         """Test that end() updates both root span and trace, then ends."""
-        from langflow.services.tracing.langfuse import LangFuseTracer
+        from harxitflow.services.tracing.langfuse import LangFuseTracer
 
         tracer = LangFuseTracer(
             trace_name="test-flow - flow-123",
@@ -202,7 +202,7 @@ class TestLangfuseTracerFunctionality:
 
     def test_get_langchain_callback_uses_trace_context(self, mock_langfuse):
         """Test that get_langchain_callback creates handler with trace context."""
-        from langflow.services.tracing.langfuse import LangFuseTracer
+        from harxitflow.services.tracing.langfuse import LangFuseTracer
 
         tracer = LangFuseTracer(
             trace_name="test-flow - flow-123",
@@ -226,7 +226,7 @@ class TestLangfuseTracerFunctionality:
 
     def test_get_langchain_callback_includes_parent_span_id(self, mock_langfuse):
         """Test that callback handler gets parent span ID for proper nesting."""
-        from langflow.services.tracing.langfuse import LangFuseTracer
+        from harxitflow.services.tracing.langfuse import LangFuseTracer
 
         tracer = LangFuseTracer(
             trace_name="test-flow - flow-123",

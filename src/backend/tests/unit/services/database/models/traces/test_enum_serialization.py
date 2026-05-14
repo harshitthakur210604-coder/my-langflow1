@@ -13,7 +13,7 @@ and keep the PG enum type names aligned with the migration.
 from __future__ import annotations
 
 import pytest
-from langflow.services.database.models.traces.model import (
+from harxitflow.services.database.models.traces.model import (
     SpanKind,
     SpanStatus,
     SpanTable,

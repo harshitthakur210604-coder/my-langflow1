@@ -42,7 +42,7 @@ class ElasticsearchVectorStoreComponent(LCVectorStoreComponent):
         StrInput(
             name="index_name",
             display_name="Index Name",
-            value="langflow",
+            value="harxitflow",
             info="The index name where the vectors will be stored in Elasticsearch cluster.",
         ),
         *LCVectorStoreComponent.inputs,

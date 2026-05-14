@@ -1,4 +1,1 @@
--e src/backend/base
 -e .
-setuptools
-pip>=24.0

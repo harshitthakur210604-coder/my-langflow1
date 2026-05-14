@@ -64,11 +64,11 @@ COPY --from=builder --chown=1000 /app/.venv /app/.venv
 ENV PATH="/app/.venv/bin:$PATH"
 
 LABEL org.opencontainers.image.title=lfx
-LABEL org.opencontainers.image.authors=['Langflow']
+LABEL org.opencontainers.image.authors=['HarxitFlow']
 LABEL org.opencontainers.image.licenses=MIT
-LABEL org.opencontainers.image.url=https://github.com/langflow-ai/langflow
-LABEL org.opencontainers.image.source=https://github.com/langflow-ai/langflow
-LABEL org.opencontainers.image.description="LFX - Langflow Executor CLI Tool"
+LABEL org.opencontainers.image.url=https://github.com/harxitflow-ai/harxitflow
+LABEL org.opencontainers.image.source=https://github.com/harxitflow-ai/harxitflow
+LABEL org.opencontainers.image.description="LFX - HarxitFlow Executor CLI Tool"
 
 USER lfx
 WORKDIR /app/data

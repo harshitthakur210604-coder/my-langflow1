@@ -1,3 +1,3 @@
-FROM langflowai/langflow:latest
+FROM harxitflowai/harxitflow:latest
 
-ENTRYPOINT ["python", "-m", "langflow", "run"]
+ENTRYPOINT ["python", "-m", "harxitflow", "run"]

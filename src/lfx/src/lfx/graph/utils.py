@@ -150,7 +150,7 @@ async def emit_vertex_build_event(
     try:
         from datetime import datetime, timezone
 
-        from langflow.services.event_manager import webhook_event_manager
+        from harxitflow.services.event_manager import webhook_event_manager
 
         flow_id_str = str(flow_id)
         if not webhook_event_manager.has_listeners(flow_id_str):
@@ -200,7 +200,7 @@ async def emit_vertex_build_event(
             },
         )
     except ImportError:
-        pass  # langflow not available (standalone lfx usage)
+        pass  # harxitflow not available (standalone lfx usage)
     except Exception as exc:  # noqa: BLE001
         logger.debug(f"SSE emission failed for vertex {vertex_id}: {exc}")
 
@@ -212,7 +212,7 @@ async def emit_build_start_event(flow_id: str | UUID, vertex_id: str) -> None:
     Errors are silently ignored as SSE emission is not critical.
     """
     try:
-        from langflow.services.event_manager import webhook_event_manager
+        from harxitflow.services.event_manager import webhook_event_manager
 
         flow_id_str = str(flow_id)
         if not webhook_event_manager.has_listeners(flow_id_str):
@@ -221,7 +221,7 @@ async def emit_build_start_event(flow_id: str | UUID, vertex_id: str) -> None:
         webhook_event_manager.record_build_start(flow_id_str, vertex_id)
         await webhook_event_manager.emit(flow_id_str, "build_start", {"id": vertex_id})
     except ImportError:
-        pass  # langflow not available (standalone lfx usage)
+        pass  # harxitflow not available (standalone lfx usage)
     except Exception as exc:  # noqa: BLE001
         logger.debug(f"SSE build_start emission failed for vertex {vertex_id}: {exc}")
 
@@ -249,7 +249,7 @@ async def log_transaction(
 ) -> None:
     """Asynchronously logs a transaction record for a vertex in a flow if transaction storage is enabled.
 
-    Uses the pluggable TransactionService to log transactions. When running within langflow,
+    Uses the pluggable TransactionService to log transactions. When running within harxitflow,
     the concrete TransactionService implementation persists to the database.
     When running standalone (lfx only), transactions are not persisted.
 
@@ -318,16 +318,16 @@ async def log_vertex_build(
     """Asynchronously logs a vertex build record if vertex build storage is enabled.
 
     This is a lightweight implementation that only logs if database service is available.
-    When running within langflow, it will use langflow's database service to persist the build.
+    When running within harxitflow, it will use harxitflow's database service to persist the build.
     When running standalone (lfx only), it will only log debug messages.
     """
     try:
-        # Try to use langflow's services if available (when running within langflow)
+        # Try to use harxitflow's services if available (when running within harxitflow)
         try:
-            from langflow.services.deps import get_db_service as langflow_get_db_service
-            from langflow.services.deps import get_settings_service as langflow_get_settings_service
+            from harxitflow.services.deps import get_db_service as harxitflow_get_db_service
+            from harxitflow.services.deps import get_settings_service as harxitflow_get_settings_service
 
-            settings_service = langflow_get_settings_service()
+            settings_service = harxitflow_get_settings_service()
             if not settings_service:
                 return
             if not getattr(settings_service.settings, "vertex_builds_storage_enabled", False):
@@ -336,10 +336,10 @@ async def log_vertex_build(
             if isinstance(flow_id, str):
                 flow_id = UUID(flow_id)
 
-            from langflow.services.database.models.vertex_builds.crud import (
+            from harxitflow.services.database.models.vertex_builds.crud import (
                 log_vertex_build as crud_log_vertex_build,
             )
-            from langflow.services.database.models.vertex_builds.model import VertexBuildBase
+            from harxitflow.services.database.models.vertex_builds.model import VertexBuildBase
 
             # Convert data to dict if it's a pydantic model
             data_dict = data
@@ -366,7 +366,7 @@ async def log_vertex_build(
                 job_id=job_id,
             )
 
-            db_service = langflow_get_db_service()
+            db_service = harxitflow_get_db_service()
             if db_service is None:
                 return
 
@@ -378,7 +378,7 @@ async def log_vertex_build(
             # The event is emitted separately in graph._execute_tasks() with complete data.
 
         except ImportError:
-            # Fallback for standalone lfx usage (without langflow)
+            # Fallback for standalone lfx usage (without harxitflow)
             settings_service = get_settings_service()
             if not settings_service or not getattr(settings_service.settings, "vertex_builds_storage_enabled", False):
                 return
@@ -386,7 +386,7 @@ async def log_vertex_build(
             if isinstance(flow_id, str):
                 flow_id = UUID(flow_id)
 
-            # Log basic vertex build info - concrete implementation is in langflow
+            # Log basic vertex build info - concrete implementation is in harxitflow
             logger.debug(f"Vertex build logged: vertex={vertex_id}, flow={flow_id}, valid={valid}")
 
     except Exception as exc:  # noqa: BLE001

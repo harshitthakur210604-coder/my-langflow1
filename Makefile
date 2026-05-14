@@ -1,4 +1,4 @@
-.PHONY: all init format_backend format lint build run_backend dev help tests coverage clean_python_cache clean_npm_cache clean_frontend_build clean_all run_clic load_test_setup load_test_setup_basic load_test_list_flows load_test_run load_test_langflow_quick load_test_stress load_test_example load_test_clean load_test_remote_setup load_test_remote_run load_test_help docs docs_build docs_install api_examples_local api_examples_local_syntax
+.PHONY: all init format_backend format lint build run_backend dev help tests coverage clean_python_cache clean_npm_cache clean_frontend_build clean_all run_clic load_test_setup load_test_setup_basic load_test_list_flows load_test_run load_test_harxitflow_quick load_test_stress load_test_example load_test_clean load_test_remote_setup load_test_remote_run load_test_help docs docs_build docs_install api_examples_local api_examples_local_syntax
 
 # Configurations
 VERSION=$(shell grep "^version" pyproject.toml | sed 's/.*\"\(.*\)\"$$/\1/')
@@ -18,7 +18,7 @@ host ?= 0.0.0.0
 port ?= 7860
 env ?= .env
 open_browser ?= true
-path = src/backend/base/langflow/frontend
+path = src/backend/base/harxitflow/frontend
 workers ?= 1
 async ?= true
 lf ?= false
@@ -44,12 +44,12 @@ check_tools:
 help: ## show basic help message with common commands
 	@echo ''
 	@echo "$(GREEN)═══════════════════════════════════════════════════════════════════$(NC)"
-	@echo "$(GREEN)                    LANGFLOW MAKEFILE COMMANDS                     $(NC)"
+	@echo "$(GREEN)                    HARXITFLOW MAKEFILE COMMANDS                     $(NC)"
 	@echo "$(GREEN)═══════════════════════════════════════════════════════════════════$(NC)"
 	@echo ''
 	@echo "$(GREEN)Basic Commands:$(NC)"
 	@echo "  $(GREEN)make init$(NC)                - Initialize project (install all dependencies)"
-	@echo "  $(GREEN)make run_cli$(NC)             - Run Langflow CLI"
+	@echo "  $(GREEN)make run_cli$(NC)             - Run HarxitFlow CLI"
 	@echo "  $(GREEN)make run_clic$(NC)            - Run CLI with fresh frontend build"
 	@echo "  $(GREEN)make format$(NC)              - Format all code (backend + frontend)"
 	@echo "  $(GREEN)make tests$(NC)               - Run all tests"
@@ -103,7 +103,7 @@ clean_python_cache:
 clean_npm_cache:
 	@echo "Cleaning npm cache..."
 	cd src/frontend && npm cache clean --force
-	$(call CLEAR_DIRS,src/frontend/node_modules src/frontend/build src/backend/base/langflow/frontend)
+	$(call CLEAR_DIRS,src/frontend/node_modules src/frontend/build src/backend/base/harxitflow/frontend)
 	rm -f src/frontend/package-lock.json
 	@echo "$(GREEN)NPM cache and frontend directories cleaned.$(NC)"
 
@@ -112,7 +112,7 @@ clean_frontend_build: ## clean frontend build artifacts to ensure fresh build
 	@echo "  - Removing src/frontend/build directory"
 	$(call CLEAR_DIRS,src/frontend/build)
 	@echo "  - Removing built frontend files from backend"
-	$(call CLEAR_DIRS,src/backend/base/langflow/frontend)
+	$(call CLEAR_DIRS,src/backend/base/harxitflow/frontend)
 	@echo "$(GREEN)Frontend build artifacts cleaned - fresh build guaranteed.$(NC)"
 
 clean_all: clean_python_cache clean_npm_cache # clean all caches and temporary directories
@@ -235,7 +235,7 @@ lint: install_backend ## run linters
 
 run_clic: clean_frontend_build install_frontend install_backend build_frontend ## run the CLI with fresh frontend build
 	@echo 'Running the CLI with fresh frontend build'
-	@uv run langflow run \
+	@uv run harxitflow run \
 		--frontend-path $(path) \
 		--log-level $(log_level) \
 		--host $(host) \
@@ -245,7 +245,7 @@ run_clic: clean_frontend_build install_frontend install_backend build_frontend #
 
 run_cli: install_frontend install_backend build_frontend ## run the CLI quickly (without cleaning build cache)
 	@echo 'Running the CLI quickly (reusing existing build cache if available)'
-	@uv run langflow run \
+	@uv run harxitflow run \
 		--frontend-path $(path) \
 		--log-level $(log_level) \
 		--host $(host) \
@@ -271,7 +271,7 @@ setup_devcontainer: ## set up the development container
 	make install_backend
 	make install_frontend
 	make build_frontend
-	uv run langflow --frontend-path src/frontend/build
+	uv run harxitflow --frontend-path src/frontend/build
 
 setup_env: ## set up the environment
 	@sh ./scripts/setup/setup_env.sh
@@ -283,8 +283,8 @@ backend: setup_env install_backend ## run the backend in development mode
 	@-kill -9 $$(lsof -t -i:7860) || true
 ifdef login
 	@echo "Running backend autologin is $(login)";
-	LANGFLOW_AUTO_LOGIN=$(login) uv run uvicorn \
-		--factory langflow.main:create_app \
+	HARXITFLOW_AUTO_LOGIN=$(login) uv run uvicorn \
+		--factory harxitflow.main:create_app \
 		--host 0.0.0.0 \
 		--port $(port) \
 		$(if $(filter-out 1,$(workers)),, --reload) \
@@ -294,7 +294,7 @@ ifdef login
 else
 	@echo "Running backend respecting the $(env) file";
 	uv run uvicorn \
-		--factory langflow.main:create_app \
+		--factory harxitflow.main:create_app \
 		--host 0.0.0.0 \
 		--port $(port) \
 		$(if $(filter-out 1,$(workers)),, --reload) \
@@ -307,7 +307,7 @@ build_and_run: setup_env ## build the project and run it
 	$(call CLEAR_DIRS,dist src/backend/base/dist)
 	make build
 	uv run pip install dist/*.tar.gz
-	uv run langflow run
+	uv run harxitflow run
 
 build_and_install: ## build the project and install it
 	@echo 'Removing dist folder'
@@ -318,29 +318,29 @@ build: setup_env ## build the frontend static files and package the project
 ifdef base
 	make install_frontendci
 	make build_frontend
-	make build_langflow_base args="$(args)"
+	make build_harxitflow_base args="$(args)"
 endif
 
 ifdef main
 	make install_frontendci
 	make build_frontend
-	make build_langflow_base args="$(args)"
-	make build_langflow args="$(args)"
+	make build_harxitflow_base args="$(args)"
+	make build_harxitflow args="$(args)"
 endif
 
 ifdef pre
 	make install_frontendci
 	make build_frontend
-	make build_langflow args="$(args)"
+	make build_harxitflow args="$(args)"
 endif
 
-build_langflow_base:
+build_harxitflow_base:
 	cd src/backend/base && uv build $(args)
 
-build_langflow_backup:
+build_harxitflow_backup:
 	uv lock && uv build
 
-build_langflow:
+build_harxitflow:
 	uv lock --no-upgrade
 	uv build $(args)
 ifdef restore
@@ -360,23 +360,23 @@ dockerfile_build:
 	@command -v $(DOCKER) >/dev/null 2>&1 || { echo "Error: $(DOCKER) is not installed. Please install $(DOCKER), or run 'make docker_build DOCKER=podman' (or DOCKER=docker) if you have an alternative installed."; exit 1; }
 	@$(DOCKER) build --rm \
 		-f ${DOCKERFILE} \
-		-t langflow:${VERSION} .
+		-t harxitflow:${VERSION} .
 
 dockerfile_build_be: dockerfile_build
 	@echo 'BUILDING DOCKER IMAGE BACKEND: ${DOCKERFILE_BACKEND}'
 	@command -v $(DOCKER) >/dev/null 2>&1 || { echo "Error: $(DOCKER) is not installed. Please install $(DOCKER), or run 'make docker_build_backend DOCKER=podman' (or DOCKER=docker) if you have an alternative installed."; exit 1; }
 	@$(DOCKER) build --rm \
-		--build-arg LANGFLOW_IMAGE=langflow:${VERSION} \
+		--build-arg HARXITFLOW_IMAGE=harxitflow:${VERSION} \
 		-f ${DOCKERFILE_BACKEND} \
-		-t langflow_backend:${VERSION} .
+		-t harxitflow_backend:${VERSION} .
 
 dockerfile_build_fe: dockerfile_build
 	@echo 'BUILDING DOCKER IMAGE FRONTEND: ${DOCKERFILE_FRONTEND}'
 	@command -v $(DOCKER) >/dev/null 2>&1 || { echo "Error: $(DOCKER) is not installed. Please install $(DOCKER), or run 'make docker_build_frontend DOCKER=podman' (or DOCKER=docker) if you have an alternative installed."; exit 1; }
 	@$(DOCKER) build --rm \
-		--build-arg LANGFLOW_IMAGE=langflow:${VERSION} \
+		--build-arg HARXITFLOW_IMAGE=harxitflow:${VERSION} \
 		-f ${DOCKERFILE_FRONTEND} \
-		-t langflow_frontend:${VERSION} .
+		-t harxitflow_frontend:${VERSION} .
 
 clear_dockerimage:
 	@echo 'Clearing the docker build'
@@ -400,7 +400,7 @@ dcdev_up:
 lock_base:
 	cd src/backend/base && uv lock
 
-lock_langflow:
+lock_harxitflow:
 	uv lock
 
 lock: ## lock dependencies
@@ -416,14 +416,14 @@ update: ## update dependencies
 publish_base:
 	cd src/backend/base && uv publish
 
-publish_langflow:
+publish_harxitflow:
 	uv publish
 
 publish_base_testpypi:
 	# TODO: update this to use the test-pypi repository
 	cd src/backend/base && uv publish -r test-pypi
 
-publish_langflow_testpypi:
+publish_harxitflow_testpypi:
 	# TODO: update this to use the test-pypi repository
 	uv publish -r test-pypi
 
@@ -434,7 +434,7 @@ ifdef base
 endif
 
 ifdef main
-	make publish_langflow
+	make publish_harxitflow
 endif
 
 publish_testpypi: ## build the frontend static files and package the project and publish it to PyPI
@@ -525,32 +525,32 @@ sdk_clean: ## clean SDK build artifacts
 # example make alembic-revision message="Add user table"
 alembic-revision: ## generate a new migration
 	@echo 'Generating a new Alembic revision'
-	cd src/backend/base/langflow/ && uv run alembic revision --autogenerate -m "$(message)"
+	cd src/backend/base/harxitflow/ && uv run alembic revision --autogenerate -m "$(message)"
 
 
 alembic-upgrade: ## upgrade database to the latest version
 	@echo 'Upgrading database to the latest version'
-	cd src/backend/base/langflow/ && uv run alembic upgrade head
+	cd src/backend/base/harxitflow/ && uv run alembic upgrade head
 
 alembic-downgrade: ## downgrade database by one version
 	@echo 'Downgrading database by one version'
-	cd src/backend/base/langflow/ && uv run alembic downgrade -1
+	cd src/backend/base/harxitflow/ && uv run alembic downgrade -1
 
 alembic-current: ## show current revision
 	@echo 'Showing current Alembic revision'
-	cd src/backend/base/langflow/ && uv run alembic current
+	cd src/backend/base/harxitflow/ && uv run alembic current
 
 alembic-history: ## show migration history
 	@echo 'Showing Alembic migration history'
-	cd src/backend/base/langflow/ && uv run alembic history --verbose
+	cd src/backend/base/harxitflow/ && uv run alembic history --verbose
 
 alembic-check: ## check migration status
 	@echo 'Running alembic check'
-	cd src/backend/base/langflow/ && uv run alembic check
+	cd src/backend/base/harxitflow/ && uv run alembic check
 
 alembic-stamp: ## stamp the database with a specific revision
 	@echo 'Stamping the database with revision $(revision)'
-	cd src/backend/base/langflow/ && uv run alembic stamp $(revision)
+	cd src/backend/base/harxitflow/ && uv run alembic stamp $(revision)
 
 ######################
 # VERSION MANAGEMENT
@@ -564,26 +564,26 @@ patch: ## Update version across all projects. Usage: make patch v=1.5.0
 	fi; \
 	echo "$(GREEN)Updating version to $(v)$(NC)"; \
 	\
-	LANGFLOW_VERSION="$(v)"; \
-	LANGFLOW_BASE_VERSION=$$(echo "$$LANGFLOW_VERSION" | sed -E 's/^[0-9]+\.(.*)$$/0.\1/'); \
+	HARXITFLOW_VERSION="$(v)"; \
+	HARXITFLOW_BASE_VERSION=$$(echo "$$HARXITFLOW_VERSION" | sed -E 's/^[0-9]+\.(.*)$$/0.\1/'); \
 	\
-	echo "$(GREEN)Langflow version: $$LANGFLOW_VERSION$(NC)"; \
-	echo "$(GREEN)Langflow-base version: $$LANGFLOW_BASE_VERSION$(NC)"; \
+	echo "$(GREEN)HarxitFlow version: $$HARXITFLOW_VERSION$(NC)"; \
+	echo "$(GREEN)HarxitFlow-base version: $$HARXITFLOW_BASE_VERSION$(NC)"; \
 	\
 	echo "$(GREEN)Updating main pyproject.toml...$(NC)"; \
-	python -c "import re; fname='pyproject.toml'; txt=open(fname).read(); txt=re.sub(r'^version = \".*\"', 'version = \"$$LANGFLOW_VERSION\"', txt, flags=re.MULTILINE); txt=re.sub(r'\"langflow-base==.*\"', '\"langflow-base==$$LANGFLOW_BASE_VERSION\"', txt); open(fname, 'w').write(txt)"; \
+	python -c "import re; fname='pyproject.toml'; txt=open(fname).read(); txt=re.sub(r'^version = \".*\"', 'version = \"$$HARXITFLOW_VERSION\"', txt, flags=re.MULTILINE); txt=re.sub(r'\"harxitflow-base==.*\"', '\"harxitflow-base==$$HARXITFLOW_BASE_VERSION\"', txt); open(fname, 'w').write(txt)"; \
 	\
-	echo "$(GREEN)Updating langflow-base pyproject.toml...$(NC)"; \
-	python -c "import re; fname='src/backend/base/pyproject.toml'; txt=open(fname).read(); txt=re.sub(r'^version = \".*\"', 'version = \"$$LANGFLOW_BASE_VERSION\"', txt, flags=re.MULTILINE); open(fname, 'w').write(txt)"; \
+	echo "$(GREEN)Updating harxitflow-base pyproject.toml...$(NC)"; \
+	python -c "import re; fname='src/backend/base/pyproject.toml'; txt=open(fname).read(); txt=re.sub(r'^version = \".*\"', 'version = \"$$HARXITFLOW_BASE_VERSION\"', txt, flags=re.MULTILINE); open(fname, 'w').write(txt)"; \
 	\
 	echo "$(GREEN)Updating frontend package.json...$(NC)"; \
-	python -c "import re; fname='src/frontend/package.json'; txt=open(fname).read(); txt=re.sub(r'\"version\": \".*\"', '\"version\": \"$$LANGFLOW_VERSION\"', txt); open(fname, 'w').write(txt)"; \
+	python -c "import re; fname='src/frontend/package.json'; txt=open(fname).read(); txt=re.sub(r'\"version\": \".*\"', '\"version\": \"$$HARXITFLOW_VERSION\"', txt); open(fname, 'w').write(txt)"; \
 	\
 	echo "$(GREEN)Validating version changes...$(NC)"; \
-	if ! grep -q "^version = \"$$LANGFLOW_VERSION\"" pyproject.toml; then echo "$(RED)✗ Main pyproject.toml version validation failed$(NC)"; exit 1; fi; \
-	if ! grep -q "\"langflow-base==$$LANGFLOW_BASE_VERSION\"" pyproject.toml; then echo "$(RED)✗ Main pyproject.toml langflow-base dependency validation failed$(NC)"; exit 1; fi; \
-	if ! grep -q "^version = \"$$LANGFLOW_BASE_VERSION\"" src/backend/base/pyproject.toml; then echo "$(RED)✗ Langflow-base pyproject.toml version validation failed$(NC)"; exit 1; fi; \
-	if ! grep -q "\"version\": \"$$LANGFLOW_VERSION\"" src/frontend/package.json; then echo "$(RED)✗ Frontend package.json version validation failed$(NC)"; exit 1; fi; \
+	if ! grep -q "^version = \"$$HARXITFLOW_VERSION\"" pyproject.toml; then echo "$(RED)✗ Main pyproject.toml version validation failed$(NC)"; exit 1; fi; \
+	if ! grep -q "\"harxitflow-base==$$HARXITFLOW_BASE_VERSION\"" pyproject.toml; then echo "$(RED)✗ Main pyproject.toml harxitflow-base dependency validation failed$(NC)"; exit 1; fi; \
+	if ! grep -q "^version = \"$$HARXITFLOW_BASE_VERSION\"" src/backend/base/pyproject.toml; then echo "$(RED)✗ HarxitFlow-base pyproject.toml version validation failed$(NC)"; exit 1; fi; \
+	if ! grep -q "\"version\": \"$$HARXITFLOW_VERSION\"" src/frontend/package.json; then echo "$(RED)✗ Frontend package.json version validation failed$(NC)"; exit 1; fi; \
 	echo "$(GREEN)✓ All versions updated successfully$(NC)"; \
 	\
 	echo "$(GREEN)Syncing dependencies in parallel...$(NC)"; \
@@ -610,9 +610,9 @@ patch: ## Update version across all projects. Usage: make patch v=1.5.0
 	\
 	echo "$(GREEN)Version update complete!$(NC)"; \
 	echo "$(GREEN)Updated files:$(NC)"; \
-	echo "  - pyproject.toml: $$LANGFLOW_VERSION"; \
-	echo "  - src/backend/base/pyproject.toml: $$LANGFLOW_BASE_VERSION"; \
-	echo "  - src/frontend/package.json: $$LANGFLOW_VERSION"; \
+	echo "  - pyproject.toml: $$HARXITFLOW_VERSION"; \
+	echo "  - src/backend/base/pyproject.toml: $$HARXITFLOW_BASE_VERSION"; \
+	echo "  - src/frontend/package.json: $$HARXITFLOW_VERSION"; \
 	echo "  - uv.lock: dependency lock updated"; \
 	echo "  - src/frontend/package-lock.json: dependency lock updated"; \
 	echo "$(GREEN)Dependencies synced successfully!$(NC)"
@@ -644,7 +644,7 @@ locust: ## run locust load tests (options: locust_users=10 locust_spawn_rate=1 l
 	@echo "Using locustfile: $(locust_file)"
 	@export API_KEY=$(locust_api_key) && \
 	export FLOW_ID=$(locust_flow_id) && \
-	export LANGFLOW_HOST=$(locust_host) && \
+	export HARXITFLOW_HOST=$(locust_host) && \
 	export MIN_WAIT=$(locust_min_wait) && \
 	export MAX_WAIT=$(locust_max_wait) && \
 	export REQUEST_TIMEOUT=$(locust_request_timeout) && \
@@ -716,16 +716,16 @@ load_test_lfx_quick: ## Quick LFX load test (30 users, 60s). Options: html=true,
 
 # Enhanced load testing system with API-based flow loading
 load_test_setup: ## Set up load test environment with starter project flows
-	@echo "$(YELLOW)Setting up Langflow load test environment$(NC)"
-	@cd src/backend/tests/locust && uv run python langflow_setup_test.py --interactive
+	@echo "$(YELLOW)Setting up HarxitFlow load test environment$(NC)"
+	@cd src/backend/tests/locust && uv run python harxitflow_setup_test.py --interactive
 
 load_test_setup_basic: ## Set up load test environment with Basic Prompting flow
 	@echo "$(YELLOW)Setting up load test environment with Basic Prompting flow$(NC)"
-	@cd src/backend/tests/locust && uv run python langflow_setup_test.py --flow "Basic Prompting" --save-credentials load_test_creds.json
+	@cd src/backend/tests/locust && uv run python harxitflow_setup_test.py --flow "Basic Prompting" --save-credentials load_test_creds.json
 
 load_test_list_flows: ## List available starter project flows
 	@echo "$(YELLOW)Listing available starter project flows$(NC)"
-	@cd src/backend/tests/locust && uv run python langflow_setup_test.py --list-flows
+	@cd src/backend/tests/locust && uv run python harxitflow_setup_test.py --list-flows
 
 load_test_run: ## Run load test (automatically sets up if needed). Use FLOW_NAME="Flow Name" to specify flow
 	@echo "$(YELLOW)Running load test with enhanced error logging$(NC)"
@@ -733,37 +733,37 @@ load_test_run: ## Run load test (automatically sets up if needed). Use FLOW_NAME
 		echo "$(BLUE)No credentials found. Running automatic setup...$(NC)"; \
 		if [ -z "$(FLOW_NAME)" ]; then \
 			echo "$(CYAN)Available flows:$(NC)"; \
-			cd src/backend/tests/locust && uv run python langflow_setup_test.py --list-flows; \
+			cd src/backend/tests/locust && uv run python harxitflow_setup_test.py --list-flows; \
 			echo "$(RED)Please specify a flow: make load_test_run FLOW_NAME=\"Basic Prompting\"$(NC)"; \
 			exit 1; \
 		else \
 			echo "$(BLUE)Setting up with flow: $(FLOW_NAME)$(NC)"; \
-			cd src/backend/tests/locust && uv run python langflow_setup_test.py --flow "$(FLOW_NAME)" --save-credentials load_test_creds.json; \
+			cd src/backend/tests/locust && uv run python harxitflow_setup_test.py --flow "$(FLOW_NAME)" --save-credentials load_test_creds.json; \
 		fi \
 	fi
 	@cd src/backend/tests/locust && \
 	export API_KEY=$$(python -c "import json; print(json.load(open('load_test_creds.json'))['api_key'])") && \
 	export FLOW_ID=$$(python -c "import json; print(json.load(open('load_test_creds.json'))['flow_id'])") && \
-	uv run python langflow_run_load_test.py --headless --users 20 --duration 120 --no-start-langflow --html load_test_report.html --csv load_test_results
+	uv run python harxitflow_run_load_test.py --headless --users 20 --duration 120 --no-start-harxitflow --html load_test_report.html --csv load_test_results
 
-load_test_langflow_quick: ## Quick Langflow load test (10 users, 30s) with HTML report (automatically sets up if needed). Use FLOW_NAME="Flow Name" to specify flow
-	@echo "$(YELLOW)Running quick Langflow load test with HTML report$(NC)"
+load_test_harxitflow_quick: ## Quick HarxitFlow load test (10 users, 30s) with HTML report (automatically sets up if needed). Use FLOW_NAME="Flow Name" to specify flow
+	@echo "$(YELLOW)Running quick HarxitFlow load test with HTML report$(NC)"
 	@if [ ! -f "src/backend/tests/locust/load_test_creds.json" ]; then \
 		echo "$(BLUE)No credentials found. Running automatic setup...$(NC)"; \
 		if [ -z "$(FLOW_NAME)" ]; then \
 			echo "$(CYAN)Available flows:$(NC)"; \
-			cd src/backend/tests/locust && uv run python langflow_setup_test.py --list-flows; \
-			echo "$(RED)Please specify a flow: make load_test_langflow_quick FLOW_NAME=\"Basic Prompting\"$(NC)"; \
+			cd src/backend/tests/locust && uv run python harxitflow_setup_test.py --list-flows; \
+			echo "$(RED)Please specify a flow: make load_test_harxitflow_quick FLOW_NAME=\"Basic Prompting\"$(NC)"; \
 			exit 1; \
 		else \
 			echo "$(BLUE)Setting up with flow: $(FLOW_NAME)$(NC)"; \
-			cd src/backend/tests/locust && uv run python langflow_setup_test.py --flow "$(FLOW_NAME)" --save-credentials load_test_creds.json; \
+			cd src/backend/tests/locust && uv run python harxitflow_setup_test.py --flow "$(FLOW_NAME)" --save-credentials load_test_creds.json; \
 		fi \
 	fi
 	@cd src/backend/tests/locust && \
 	export API_KEY=$$(python -c "import json; print(json.load(open('load_test_creds.json'))['api_key'])") && \
 	export FLOW_ID=$$(python -c "import json; print(json.load(open('load_test_creds.json'))['flow_id'])") && \
-	uv run python langflow_run_load_test.py --headless --users 10 --duration 30 --no-start-langflow --html quick_test_report.html
+	uv run python harxitflow_run_load_test.py --headless --users 10 --duration 30 --no-start-harxitflow --html quick_test_report.html
 
 load_test_stress: ## Stress test (100 users, 5 minutes) with comprehensive reporting (automatically sets up if needed). Use FLOW_NAME="Flow Name" to specify flow
 	@echo "$(YELLOW)Running stress test with comprehensive reporting$(NC)"
@@ -771,62 +771,62 @@ load_test_stress: ## Stress test (100 users, 5 minutes) with comprehensive repor
 		echo "$(BLUE)No credentials found. Running automatic setup...$(NC)"; \
 		if [ -z "$(FLOW_NAME)" ]; then \
 			echo "$(CYAN)Available flows:$(NC)"; \
-			cd src/backend/tests/locust && uv run python langflow_setup_test.py --list-flows; \
+			cd src/backend/tests/locust && uv run python harxitflow_setup_test.py --list-flows; \
 			echo "$(RED)Please specify a flow: make load_test_stress FLOW_NAME=\"Basic Prompting\"$(NC)"; \
 			exit 1; \
 		else \
 			echo "$(BLUE)Setting up with flow: $(FLOW_NAME)$(NC)"; \
-			cd src/backend/tests/locust && uv run python langflow_setup_test.py --flow "$(FLOW_NAME)" --save-credentials load_test_creds.json; \
+			cd src/backend/tests/locust && uv run python harxitflow_setup_test.py --flow "$(FLOW_NAME)" --save-credentials load_test_creds.json; \
 		fi \
 	fi
 	@cd src/backend/tests/locust && \
 	export API_KEY=$$(python -c "import json; print(json.load(open('load_test_creds.json'))['api_key'])") && \
 	export FLOW_ID=$$(python -c "import json; print(json.load(open('load_test_creds.json'))['flow_id'])") && \
-	uv run python langflow_run_load_test.py --headless --users 100 --spawn-rate 5 --duration 300 --no-start-langflow --html stress_test_report.html --csv stress_test_results --shape ramp100
+	uv run python harxitflow_run_load_test.py --headless --users 100 --spawn-rate 5 --duration 300 --no-start-harxitflow --html stress_test_report.html --csv stress_test_results --shape ramp100
 
 load_test_example: ## Run complete example workflow (setup + test + reports)
 	@echo "$(YELLOW)Running complete load test example workflow$(NC)"
-	@cd src/backend/tests/locust && uv run python langflow_example_workflow.py --auto
+	@cd src/backend/tests/locust && uv run python harxitflow_example_workflow.py --auto
 
 load_test_clean: ## Clean up load test files and credentials
 	@echo "$(YELLOW)Cleaning up load test files$(NC)"
 	@cd src/backend/tests/locust && rm -f *.json *.html *.csv *.log
 	@echo "$(GREEN)Load test files cleaned$(NC)"
 
-load_test_remote_setup: ## Set up load test for remote instance (requires LANGFLOW_HOST)
-	@if [ -z "$(LANGFLOW_HOST)" ]; then \
-		echo "$(RED)Error: LANGFLOW_HOST environment variable required$(NC)"; \
-		echo "$(YELLOW)Example: export LANGFLOW_HOST=https://your-remote-instance.com$(NC)"; \
+load_test_remote_setup: ## Set up load test for remote instance (requires HARXITFLOW_HOST)
+	@if [ -z "$(HARXITFLOW_HOST)" ]; then \
+		echo "$(RED)Error: HARXITFLOW_HOST environment variable required$(NC)"; \
+		echo "$(YELLOW)Example: export HARXITFLOW_HOST=https://your-remote-instance.com$(NC)"; \
 		exit 1; \
 	fi
-	@echo "$(YELLOW)Setting up load test for remote instance: $(LANGFLOW_HOST)$(NC)"
-	@cd src/backend/tests/locust && uv run python langflow_setup_test.py --host $(LANGFLOW_HOST) --flow "Basic Prompting" --save-credentials remote_test_creds.json
+	@echo "$(YELLOW)Setting up load test for remote instance: $(HARXITFLOW_HOST)$(NC)"
+	@cd src/backend/tests/locust && uv run python harxitflow_setup_test.py --host $(HARXITFLOW_HOST) --flow "Basic Prompting" --save-credentials remote_test_creds.json
 
 load_test_remote_run: ## Run load test against remote instance (requires prior setup)
-	@if [ -z "$(LANGFLOW_HOST)" ]; then \
-		echo "$(RED)Error: LANGFLOW_HOST environment variable required$(NC)"; \
+	@if [ -z "$(HARXITFLOW_HOST)" ]; then \
+		echo "$(RED)Error: HARXITFLOW_HOST environment variable required$(NC)"; \
 		exit 1; \
 	fi
 	@if [ ! -f "src/backend/tests/locust/remote_test_creds.json" ]; then \
 		echo "$(RED)Error: No remote credentials found. Run 'make load_test_remote_setup' first$(NC)"; \
 		exit 1; \
 	fi
-	@echo "$(YELLOW)Running load test against remote instance: $(LANGFLOW_HOST)$(NC)"
+	@echo "$(YELLOW)Running load test against remote instance: $(HARXITFLOW_HOST)$(NC)"
 	@cd src/backend/tests/locust && \
 	export API_KEY=$$(python -c "import json; print(json.load(open('remote_test_creds.json'))['api_key'])") && \
 	export FLOW_ID=$$(python -c "import json; print(json.load(open('remote_test_creds.json'))['flow_id'])") && \
-	uv run python langflow_run_load_test.py --host $(LANGFLOW_HOST) --no-start-langflow --headless --users 10 --spawn-rate 1 --duration 120 --html remote_test_report.html
+	uv run python harxitflow_run_load_test.py --host $(HARXITFLOW_HOST) --no-start-harxitflow --headless --users 10 --spawn-rate 1 --duration 120 --html remote_test_report.html
 
 load_test_help: ## Show detailed load testing help
-	@echo "$(GREEN)Langflow Enhanced Load Testing System$(NC)"
+	@echo "$(GREEN)HarxitFlow Enhanced Load Testing System$(NC)"
 	@echo ""
 	@echo "$(YELLOW)Quick Start (Local):$(NC)"
 	@echo "  1. make load_test_setup_basic    # Set up with Basic Prompting flow"
-	@echo "  2. make load_test_langflow_quick # Run quick Langflow test"
+	@echo "  2. make load_test_harxitflow_quick # Run quick HarxitFlow test"
 	@echo "  3. Open quick_test_report.html  # View results"
 	@echo ""
 	@echo "$(YELLOW)Remote Testing:$(NC)"
-	@echo "  1. export LANGFLOW_HOST=https://your-instance.com"
+	@echo "  1. export HARXITFLOW_HOST=https://your-instance.com"
 	@echo "  2. make load_test_remote_setup   # Set up for remote testing"
 	@echo "  3. make load_test_remote_run     # Run test against remote instance"
 	@echo ""
@@ -835,7 +835,7 @@ load_test_help: ## Show detailed load testing help
 	@echo "  load_test_setup_basic  - Quick setup with Basic Prompting"
 	@echo "  load_test_list_flows   - List available starter flows"
 	@echo "  load_test_run          - Standard load test (25 users, 2 min)"
-	@echo "  load_test_langflow_quick - Quick Langflow test (10 users, 30s)"
+	@echo "  load_test_harxitflow_quick - Quick HarxitFlow test (10 users, 30s)"
 	@echo "  load_test_quick        - Quick complex serve test (30 users, 60s)"
 	@echo "  load_test_stress       - Stress test (100 users, 5 min)"
 	@echo "  load_test_example      - Complete example workflow"
@@ -865,7 +865,7 @@ help_backend: ## show backend-specific commands
 	@echo ''
 	@echo "$(GREEN)Development:$(NC)"
 	@echo "  $(GREEN)make backend$(NC)             - Run backend in development mode"
-	@echo "  $(GREEN)make run_cli$(NC)             - Run Langflow CLI"
+	@echo "  $(GREEN)make run_cli$(NC)             - Run HarxitFlow CLI"
 	@echo "  $(GREEN)make run_clic$(NC)            - Run CLI with fresh frontend build"
 	@echo "  $(GREEN)make run_cli_debug$(NC)       - Run CLI in debug mode"
 	@echo "  $(GREEN)make setup_devcontainer$(NC)  - Set up development container"
@@ -892,8 +892,8 @@ help_backend: ## show backend-specific commands
 	@echo "  $(GREEN)make build$(NC)               - Build the project"
 	@echo "  $(GREEN)make build_and_run$(NC)       - Build and run the project"
 	@echo "  $(GREEN)make build_and_install$(NC)   - Build and install the project"
-	@echo "  $(GREEN)make build_langflow_base$(NC) - Build langflow-base package"
-	@echo "  $(GREEN)make build_langflow$(NC)      - Build langflow package"
+	@echo "  $(GREEN)make build_harxitflow_base$(NC) - Build harxitflow-base package"
+	@echo "  $(GREEN)make build_harxitflow$(NC)      - Build harxitflow package"
 	@echo "  $(GREEN)make lock$(NC)                - Lock dependencies"
 	@echo "  $(GREEN)make update$(NC)              - Update dependencies"
 	@echo "  $(GREEN)make publish$(NC)             - Publish to PyPI"
@@ -1014,13 +1014,13 @@ help_advanced: ## show advanced and miscellaneous commands
 	@echo "$(GREEN)Version Management:$(NC)"
 	@echo "  $(GREEN)make patch v=X.Y.Z$(NC)       - Update version across all projects"
 	@echo "    Example: make patch v=1.5.0"
-	@echo "    This updates: pyproject.toml, langflow-base, frontend package.json"
+	@echo "    This updates: pyproject.toml, harxitflow-base, frontend package.json"
 	@echo ''
 	@echo "$(GREEN)Publishing:$(NC)"
 	@echo "  $(GREEN)make publish$(NC)             - Publish to PyPI (use: make publish base=1 or main=1)"
 	@echo "  $(GREEN)make publish_testpypi$(NC)    - Publish to test PyPI"
-	@echo "  $(GREEN)make publish_base$(NC)        - Publish langflow-base to PyPI"
-	@echo "  $(GREEN)make publish_langflow$(NC)    - Publish langflow to PyPI"
+	@echo "  $(GREEN)make publish_base$(NC)        - Publish harxitflow-base to PyPI"
+	@echo "  $(GREEN)make publish_harxitflow$(NC)    - Publish harxitflow to PyPI"
 	@echo "  $(GREEN)make lfx_publish$(NC)         - Publish LFX package to PyPI"
 	@echo "  $(GREEN)make lfx_publish_testpypi$(NC) - Publish LFX to test PyPI"
 	@echo "  $(GREEN)make sdk_publish$(NC)         - Publish SDK package to PyPI"
@@ -1028,8 +1028,8 @@ help_advanced: ## show advanced and miscellaneous commands
 	@echo ''
 	@echo "$(GREEN)Lock Files:$(NC)"
 	@echo "  $(GREEN)make lock$(NC)                - Lock all dependencies"
-	@echo "  $(GREEN)make lock_base$(NC)           - Lock langflow-base dependencies"
-	@echo "  $(GREEN)make lock_langflow$(NC)       - Lock langflow dependencies"
+	@echo "  $(GREEN)make lock_base$(NC)           - Lock harxitflow-base dependencies"
+	@echo "  $(GREEN)make lock_harxitflow$(NC)       - Lock harxitflow dependencies"
 	@echo ''
 	@echo "$(GREEN)Utilities:$(NC)"
 	@echo "  $(GREEN)make check_tools$(NC)         - Verify required tools are installed"
@@ -1076,7 +1076,7 @@ docs_serve: docs_build ## build and serve documentation locally
 # Note: $(or $(suites),a,b,c) is wrong here — GNU make's `or` returns only the first non-empty token.
 suites ?= curl,python,javascript
 
-api_examples_local: ## run docs API sample files against a local Langflow server
+api_examples_local: ## run docs API sample files against a local HarxitFlow server
 	@echo "$(GREEN)Running docs API examples locally...$(NC)"
 	@SUITES="$(suites)" EXECUTE_MODE=true ./scripts/test-api-examples-local.sh
 

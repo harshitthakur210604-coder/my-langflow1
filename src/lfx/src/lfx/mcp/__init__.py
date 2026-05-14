@@ -1,7 +1,7 @@
-"""Langflow MCP Client — REST API-based MCP server for operating Langflow.
+"""HarxitFlow MCP Client — REST API-based MCP server for operating HarxitFlow.
 
-Standalone MCP server that connects to a running Langflow instance via REST API.
-Requires no internal Langflow services — just a URL and credentials.
+Standalone MCP server that connects to a running HarxitFlow instance via REST API.
+Requires no internal HarxitFlow services — just a URL and credentials.
 
 Usage:
     python -m lfx.mcp

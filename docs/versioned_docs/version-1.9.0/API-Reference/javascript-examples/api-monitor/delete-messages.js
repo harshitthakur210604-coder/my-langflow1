@@ -1,11 +1,11 @@
-const url = `${process.env.LANGFLOW_URL ?? ""}/api/v1/monitor/messages`;
+const url = `${process.env.HARXITFLOW_URL ?? ""}/api/v1/monitor/messages`;
 
 const options = {
   method: 'DELETE',
   headers: {
     "accept": `*/*`,
     "Content-Type": `application/json`,
-    "x-api-key": `${process.env.LANGFLOW_API_KEY ?? ""}`,
+    "x-api-key": `${process.env.HARXITFLOW_API_KEY ?? ""}`,
   },
   body: JSON.stringify([
   "MESSAGE_ID_1",

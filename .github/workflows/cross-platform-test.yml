@@ -3,8 +3,8 @@ name: Cross-Platform Installation Test
 on:
   workflow_dispatch:
     inputs:
-      langflow-version:
-        description: "Langflow version to test from PyPI (leave empty to test from source)"
+      harxitflow-version:
+        description: "HarxitFlow version to test from PyPI (leave empty to test from source)"
         required: false
         type: string
         default: ""
@@ -23,7 +23,7 @@ on:
         required: false
         type: string
       sdk-artifact-name:
-        description: "Name of the langflow-sdk package artifact"
+        description: "Name of the harxitflow-sdk package artifact"
         required: false
         type: string
       pre_release:
@@ -36,7 +36,7 @@ jobs:
   build-if-needed:
     name: Build Packages (if no artifacts provided)
     runs-on: ubuntu-latest
-    if: inputs.langflow-version == '' && contains(github.workflow_ref, 'cross-platform-test.yml')
+    if: inputs.harxitflow-version == '' && contains(github.workflow_ref, 'cross-platform-test.yml')
     outputs:
       base-artifact-name: ${{ steps.set-names.outputs.base-artifact-name }}
       main-artifact-name: ${{ steps.set-names.outputs.main-artifact-name }}
@@ -58,12 +58,12 @@ jobs:
       - name: Build frontend
         run: make build_frontend
       - name: Build base package
-        run: make build_langflow_base args="--wheel"
+        run: make build_harxitflow_base args="--wheel"
       - name: Move base package to correct directory
         run: |
           # Base package builds to dist/ but should be in src/backend/base/dist/
           mkdir -p src/backend/base/dist
-          mv dist/langflow_base*.whl src/backend/base/dist/
+          mv dist/harxitflow_base*.whl src/backend/base/dist/
       - name: Build LFX package
         run: |
           cd src/lfx
@@ -73,7 +73,7 @@ jobs:
           cd src/sdk
           uv build --wheel --out-dir dist
       - name: Build main package
-        run: make build_langflow args="--wheel"
+        run: make build_harxitflow args="--wheel"
       - name: Upload lfx artifact
         uses: actions/upload-artifact@v6
         with:
@@ -153,7 +153,7 @@ jobs:
         id: install-method
         run: |
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            if [ -n "${{ inputs.langflow-version }}" ]; then
+            if [ -n "${{ inputs.harxitflow-version }}" ]; then
               echo "method=pypi" >> $GITHUB_OUTPUT
             else
               echo "method=wheel" >> $GITHUB_OUTPUT
@@ -187,7 +187,7 @@ jobs:
         shell: bash
 
       # Download artifacts for wheel installation
-      - name: Download langflow-sdk package artifact
+      - name: Download harxitflow-sdk package artifact
         if: steps.install-method.outputs.method == 'wheel' && (inputs.sdk-artifact-name != '' || needs.build-if-needed.outputs.sdk-artifact-name != '')
         uses: actions/download-artifact@v7
         with:
@@ -364,23 +364,23 @@ jobs:
         shell: bash
 
       # PyPI installation steps
-      - name: Install langflow from PyPI (Windows)
+      - name: Install harxitflow from PyPI (Windows)
         if: steps.install-method.outputs.method == 'pypi' && matrix.os == 'windows'
         run: |
-          if [ -n "${{ inputs.langflow-version }}" ]; then
-            uv pip install --python ./test-env/Scripts/python.exe langflow==${{ inputs.langflow-version }}
+          if [ -n "${{ inputs.harxitflow-version }}" ]; then
+            uv pip install --python ./test-env/Scripts/python.exe harxitflow==${{ inputs.harxitflow-version }}
           else
-            uv pip install --python ./test-env/Scripts/python.exe langflow
+            uv pip install --python ./test-env/Scripts/python.exe harxitflow
           fi
         shell: bash
 
-      - name: Install langflow from PyPI (Unix)
+      - name: Install harxitflow from PyPI (Unix)
         if: steps.install-method.outputs.method == 'pypi' && matrix.os != 'windows'
         run: |
-          if [ -n "${{ inputs.langflow-version }}" ]; then
-            uv pip install --python ./test-env/bin/python langflow==${{ inputs.langflow-version }}
+          if [ -n "${{ inputs.harxitflow-version }}" ]; then
+            uv pip install --python ./test-env/bin/python harxitflow==${{ inputs.harxitflow-version }}
           else
-            uv pip install --python ./test-env/bin/python langflow
+            uv pip install --python ./test-env/bin/python harxitflow
           fi
         shell: bash
 
@@ -401,13 +401,13 @@ jobs:
       - name: Test CLI help command
         if: matrix.os == 'windows'
         run: |
-          uv run --python ./test-env/Scripts/python.exe python -m langflow --help
+          uv run --python ./test-env/Scripts/python.exe python -m harxitflow --help
         shell: cmd
 
       - name: Test CLI help command (Unix)
         if: matrix.os != 'windows'
         run: |
-          uv run --python ./test-env/bin/python python -m langflow --help
+          uv run --python ./test-env/bin/python python -m harxitflow --help
         shell: bash
 
       - name: Test server startup (Windows)
@@ -415,7 +415,7 @@ jobs:
         timeout-minutes: 5
         run: |
           # Start server in background
-          $serverProcess = Start-Process -FilePath ".\test-env\Scripts\python.exe" -ArgumentList "-m", "langflow", "run", "--host", "localhost", "--port", "7860", "--backend-only" -PassThru -WindowStyle Hidden
+          $serverProcess = Start-Process -FilePath ".\test-env\Scripts\python.exe" -ArgumentList "-m", "harxitflow", "run", "--host", "localhost", "--port", "7860", "--backend-only" -PassThru -WindowStyle Hidden
 
           # Wait for server to be ready (GitHub Actions will timeout after 5 minutes)
           do {
@@ -441,7 +441,7 @@ jobs:
           OBJC_DISABLE_INITIALIZE_FORK_SAFETY: YES
         run: |
           # Start server in background
-          ./test-env/bin/python -m langflow run --host localhost --port 7860 --backend-only &
+          ./test-env/bin/python -m harxitflow run --host localhost --port 7860 --backend-only &
           SERVER_PID=$!
 
           # Wait for server to be ready (GitHub Actions will timeout after 5 minutes)
@@ -463,10 +463,10 @@ jobs:
         run: |
           test-env\Scripts\python.exe -c "
           try:
-              import langflow
-              print('✅ langflow import successful on ${{ matrix.os }}-${{ matrix.arch }}')
+              import harxitflow
+              print('✅ harxitflow import successful on ${{ matrix.os }}-${{ matrix.arch }}')
           except Exception as e:
-              print(f'❌ langflow import failed on ${{ matrix.os }}-${{ matrix.arch }}: {e}')
+              print(f'❌ harxitflow import failed on ${{ matrix.os }}-${{ matrix.arch }}: {e}')
               exit(1)
           "
         shell: cmd
@@ -476,10 +476,10 @@ jobs:
         run: |
           ./test-env/bin/python -c "
           try:
-              import langflow
-              print('✅ langflow import successful on ${{ matrix.os }}-${{ matrix.arch }}')
+              import harxitflow
+              print('✅ harxitflow import successful on ${{ matrix.os }}-${{ matrix.arch }}')
           except Exception as e:
-              print(f'❌ langflow import failed on ${{ matrix.os }}-${{ matrix.arch }}: {e}')
+              print(f'❌ harxitflow import failed on ${{ matrix.os }}-${{ matrix.arch }}: {e}')
               exit(1)
           "
         shell: bash
@@ -517,7 +517,7 @@ jobs:
         id: install-method
         run: |
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            if [ -n "${{ inputs.langflow-version }}" ]; then
+            if [ -n "${{ inputs.harxitflow-version }}" ]; then
               echo "method=pypi" >> $GITHUB_OUTPUT
             else
               echo "method=wheel" >> $GITHUB_OUTPUT
@@ -551,7 +551,7 @@ jobs:
         shell: bash
 
       # Download artifacts for wheel installation
-      - name: Download langflow-sdk package artifact
+      - name: Download harxitflow-sdk package artifact
         if: steps.install-method.outputs.method == 'wheel' && (inputs.sdk-artifact-name != '' || needs.build-if-needed.outputs.sdk-artifact-name != '')
         uses: actions/download-artifact@v7
         with:
@@ -584,8 +584,8 @@ jobs:
           uv venv test-env --seed
         shell: bash
 
-      # Wheel installation steps — install langflow-sdk before LFX (sdk is not yet on PyPI)
-      - name: Install langflow-sdk from wheel (Windows)
+      # Wheel installation steps — install harxitflow-sdk before LFX (sdk is not yet on PyPI)
+      - name: Install harxitflow-sdk from wheel (Windows)
         if: steps.install-method.outputs.method == 'wheel' && matrix.os == 'windows' && (inputs.sdk-artifact-name != '' || needs.build-if-needed.outputs.sdk-artifact-name != '')
         run: |
           WHEEL_FILE=$(find ./sdk-dist -name "*.whl" -type f | head -1)
@@ -597,7 +597,7 @@ jobs:
           fi
         shell: bash
 
-      - name: Install langflow-sdk from wheel (Unix)
+      - name: Install harxitflow-sdk from wheel (Unix)
         if: steps.install-method.outputs.method == 'wheel' && matrix.os != 'windows' && (inputs.sdk-artifact-name != '' || needs.build-if-needed.outputs.sdk-artifact-name != '')
         run: |
           WHEEL_FILE=$(find ./sdk-dist -name "*.whl" -type f | head -1)
@@ -712,7 +712,7 @@ jobs:
           # Reinstall base
           BASE_WHEEL=$(find ./base-dist -name "*.whl" -type f | head -1)
           if [ -n "$BASE_WHEEL" ]; then
-            echo "Force reinstalling langflow-base: $BASE_WHEEL"
+            echo "Force reinstalling harxitflow-base: $BASE_WHEEL"
             NO_DEPS="--no-deps"
             if [ "${{ inputs.pre_release }}" = "true" ]; then
               NO_DEPS=""
@@ -740,7 +740,7 @@ jobs:
           # Reinstall base
           BASE_WHEEL=$(find ./base-dist -name "*.whl" -type f | head -1)
           if [ -n "$BASE_WHEEL" ]; then
-            echo "Force reinstalling langflow-base: $BASE_WHEEL"
+            echo "Force reinstalling harxitflow-base: $BASE_WHEEL"
             NO_DEPS="--no-deps"
             if [ "${{ inputs.pre_release }}" = "true" ]; then
               NO_DEPS=""
@@ -750,23 +750,23 @@ jobs:
         shell: bash
 
       # PyPI installation steps
-      - name: Install langflow from PyPI (Windows)
+      - name: Install harxitflow from PyPI (Windows)
         if: steps.install-method.outputs.method == 'pypi' && matrix.os == 'windows'
         run: |
-          if [ -n "${{ inputs.langflow-version }}" ]; then
-            uv pip install --python ./test-env/Scripts/python.exe langflow==${{ inputs.langflow-version }}
+          if [ -n "${{ inputs.harxitflow-version }}" ]; then
+            uv pip install --python ./test-env/Scripts/python.exe harxitflow==${{ inputs.harxitflow-version }}
           else
-            uv pip install --python ./test-env/Scripts/python.exe langflow
+            uv pip install --python ./test-env/Scripts/python.exe harxitflow
           fi
         shell: bash
 
-      - name: Install langflow from PyPI (Unix)
+      - name: Install harxitflow from PyPI (Unix)
         if: steps.install-method.outputs.method == 'pypi' && matrix.os != 'windows'
         run: |
-          if [ -n "${{ inputs.langflow-version }}" ]; then
-            uv pip install --python ./test-env/bin/python langflow==${{ inputs.langflow-version }}
+          if [ -n "${{ inputs.harxitflow-version }}" ]; then
+            uv pip install --python ./test-env/bin/python harxitflow==${{ inputs.harxitflow-version }}
           else
-            uv pip install --python ./test-env/bin/python langflow
+            uv pip install --python ./test-env/bin/python harxitflow
           fi
         shell: bash
 
@@ -787,13 +787,13 @@ jobs:
       - name: Test CLI help command (Windows)
         if: matrix.os == 'windows'
         run: |
-          uv run --python ./test-env/Scripts/python.exe python -m langflow --help
+          uv run --python ./test-env/Scripts/python.exe python -m harxitflow --help
         shell: cmd
 
       - name: Test CLI help command (Unix)
         if: matrix.os != 'windows'
         run: |
-          uv run --python ./test-env/bin/python python -m langflow --help
+          uv run --python ./test-env/bin/python python -m harxitflow --help
         shell: bash
 
       - name: Test server startup (Windows)
@@ -801,7 +801,7 @@ jobs:
         timeout-minutes: 5
         run: |
           # Start server in background
-          $serverProcess = Start-Process -FilePath ".\test-env\Scripts\python.exe" -ArgumentList "-m", "langflow", "run", "--host", "localhost", "--port", "7860", "--backend-only" -PassThru -WindowStyle Hidden
+          $serverProcess = Start-Process -FilePath ".\test-env\Scripts\python.exe" -ArgumentList "-m", "harxitflow", "run", "--host", "localhost", "--port", "7860", "--backend-only" -PassThru -WindowStyle Hidden
 
           # Wait for server to be ready (GitHub Actions will timeout after 5 minutes)
           do {
@@ -827,7 +827,7 @@ jobs:
           OBJC_DISABLE_INITIALIZE_FORK_SAFETY: YES
         run: |
           # Start server in background
-          ./test-env/bin/python -m langflow run --host localhost --port 7860 --backend-only &
+          ./test-env/bin/python -m harxitflow run --host localhost --port 7860 --backend-only &
           SERVER_PID=$!
 
           # Wait for server to be ready (GitHub Actions will timeout after 5 minutes)
@@ -849,10 +849,10 @@ jobs:
         run: |
           test-env\Scripts\python.exe -c "
           try:
-              import langflow
-              print('✅ langflow import successful on ${{ matrix.os }}-${{ matrix.arch }}')
+              import harxitflow
+              print('✅ harxitflow import successful on ${{ matrix.os }}-${{ matrix.arch }}')
           except Exception as e:
-              print(f'❌ langflow import failed on ${{ matrix.os }}-${{ matrix.arch }}: {e}')
+              print(f'❌ harxitflow import failed on ${{ matrix.os }}-${{ matrix.arch }}: {e}')
               exit(1)
           "
         shell: cmd
@@ -862,10 +862,10 @@ jobs:
         run: |
           ./test-env/bin/python -c "
           try:
-              import langflow
-              print('✅ langflow import successful on ${{ matrix.os }}-${{ matrix.arch }}')
+              import harxitflow
+              print('✅ harxitflow import successful on ${{ matrix.os }}-${{ matrix.arch }}')
           except Exception as e:
-              print(f'❌ langflow import failed on ${{ matrix.os }}-${{ matrix.arch }}: {e}')
+              print(f'❌ harxitflow import failed on ${{ matrix.os }}-${{ matrix.arch }}: {e}')
               exit(1)
           "
         shell: bash
@@ -888,7 +888,7 @@ jobs:
           if [ "$stable_result" = "success" ]; then
             if [ "$experimental_result" = "success" ]; then
               if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-                if [ -n "${{ inputs.langflow-version }}" ]; then
+                if [ -n "${{ inputs.harxitflow-version }}" ]; then
                   echo "✅ All PyPI installation tests passed (including Python 3.13)"
                 else
                   echo "✅ All source build and installation tests passed (including Python 3.13)"
@@ -898,7 +898,7 @@ jobs:
               fi
             else
               if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-                if [ -n "${{ inputs.langflow-version }}" ]; then
+                if [ -n "${{ inputs.harxitflow-version }}" ]; then
                   echo "✅ PyPI installation tests passed (Python 3.13 experimental failures are acceptable)"
                 else
                   echo "✅ Source build and installation tests passed (Python 3.13 experimental failures are acceptable)"

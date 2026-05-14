@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import {
   IS_AUTO_LOGIN,
-  LANGFLOW_ACCESS_TOKEN_EXPIRE_SECONDS,
-  LANGFLOW_ACCESS_TOKEN_EXPIRE_SECONDS_ENV,
+  HARXITFLOW_ACCESS_TOKEN_EXPIRE_SECONDS,
+  HARXITFLOW_ACCESS_TOKEN_EXPIRE_SECONDS_ENV,
 } from "@/constants/constants";
 import { useRefreshAccessToken } from "@/controllers/API/queries/auth";
 import { CustomNavigate } from "@/customization/components/custom-navigate";
@@ -21,8 +21,8 @@ export const ProtectedRoute = ({ children }) => {
     (!autoLogin || !isAutoLoginEnv);
 
   useEffect(() => {
-    const envRefreshTime = LANGFLOW_ACCESS_TOKEN_EXPIRE_SECONDS_ENV;
-    const automaticRefreshTime = LANGFLOW_ACCESS_TOKEN_EXPIRE_SECONDS;
+    const envRefreshTime = HARXITFLOW_ACCESS_TOKEN_EXPIRE_SECONDS_ENV;
+    const automaticRefreshTime = HARXITFLOW_ACCESS_TOKEN_EXPIRE_SECONDS;
 
     const accessTokenTimer = isNaN(envRefreshTime)
       ? automaticRefreshTime

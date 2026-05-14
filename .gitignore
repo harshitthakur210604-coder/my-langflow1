@@ -241,7 +241,8 @@ venv.bak/
 *.sqlite
 *.sqlite3
 harxit_memory.db
-langflow.db
+harxitflow.db
+harxitflow-pre.db
 
 # Gemini / Agent temporary files
 reproduce_bug.py
@@ -259,8 +260,8 @@ test_password_hash.py
 .docusaurus/
 
 /tmp/*
-src/backend/langflow/frontend/
-src/backend/base/langflow/frontend/
+src/backend/harxitflow/frontend/
+src/backend/base/harxitflow/frontend/
 .docker
 scratchpad*
 chroma*/*
@@ -290,7 +291,7 @@ data/user
 sso-config.yaml
 AGENTS.md
 CLAUDE.local.md
-langflow.log.*
+harxitflow.log.*
 tmp_toolguard/
 
 #whitesource

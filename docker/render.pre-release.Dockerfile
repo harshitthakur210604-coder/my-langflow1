@@ -1,1 +1,1 @@
-FROM langflowai/langflow:1.0-alpha
+FROM harxitflowai/harxitflow:1.0-alpha

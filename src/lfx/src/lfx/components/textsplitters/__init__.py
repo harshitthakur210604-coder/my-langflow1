@@ -1,3 +1,3 @@
-"""LangFlow text splitters components."""
+"""HarxitFlow text splitters components."""
 
 __all__: list[str] = []

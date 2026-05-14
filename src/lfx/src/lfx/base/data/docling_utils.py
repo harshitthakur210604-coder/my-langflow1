@@ -300,8 +300,8 @@ def docling_worker(
 
     except ModuleNotFoundError:
         msg = (
-            "Docling is an optional dependency of Langflow. "
-            "Install with `uv pip install 'langflow[docling]'` "
+            "Docling is an optional dependency of HarxitFlow. "
+            "Install with `uv pip install 'harxitflow[docling]'` "
             "or refer to the documentation"
         )
         queue.put({"error": msg})

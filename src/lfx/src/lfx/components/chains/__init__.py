@@ -1,3 +1,3 @@
-"""LangFlow chains components."""
+"""HarxitFlow chains components."""
 
 __all__: list[str] = []

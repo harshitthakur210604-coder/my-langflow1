@@ -6,11 +6,11 @@ captured by the dynamic `/{deployment_id}` route.
 
 from uuid import uuid4
 
-import langflow.api.router as api_router_module
+import harxitflow.api.router as api_router_module
 import pytest
 from fastapi import APIRouter, FastAPI
 from fastapi.routing import APIRoute
-from langflow.api.v1.deployments import router
+from harxitflow.api.v1.deployments import router
 from starlette.routing import Match
 
 

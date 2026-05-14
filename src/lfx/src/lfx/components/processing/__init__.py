@@ -1,4 +1,4 @@
-"""Processing components for LangFlow."""
+"""Processing components for HarxitFlow."""
 
 from __future__ import annotations
 

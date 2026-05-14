@@ -13,17 +13,17 @@ import anyio
 import pytest
 from asgi_lifespan import LifespanManager
 from httpx import ASGITransport, AsyncClient
-from langflow.api.v2.files import (
+from harxitflow.api.v2.files import (
     delete_all_files,
     delete_file,
     delete_files_batch,
     is_permanent_storage_failure,
 )
-from langflow.api.v2.mcp import get_mcp_file
-from langflow.main import create_app
-from langflow.services.auth.utils import get_password_hash
-from langflow.services.database.models.api_key.model import ApiKey, UnmaskedApiKeyRead
-from langflow.services.database.models.user.model import User, UserRead
+from harxitflow.api.v2.mcp import get_mcp_file
+from harxitflow.main import create_app
+from harxitflow.services.auth.utils import get_password_hash
+from harxitflow.services.database.models.api_key.model import ApiKey, UnmaskedApiKeyRead
+from harxitflow.services.database.models.user.model import User, UserRead
 from lfx.services.deps import session_scope
 from sqlalchemy.orm import selectinload
 from sqlmodel import select
@@ -87,14 +87,14 @@ async def files_active_user(files_client):  # noqa: ARG001
 
 @pytest.fixture
 def max_file_size_upload_fixture(monkeypatch):
-    monkeypatch.setenv("LANGFLOW_MAX_FILE_SIZE_UPLOAD", "1")
+    monkeypatch.setenv("HARXITFLOW_MAX_FILE_SIZE_UPLOAD", "1")
     yield
     monkeypatch.undo()
 
 
 @pytest.fixture
 def max_file_size_upload_10mb_fixture(monkeypatch):
-    monkeypatch.setenv("LANGFLOW_MAX_FILE_SIZE_UPLOAD", "10")
+    monkeypatch.setenv("HARXITFLOW_MAX_FILE_SIZE_UPLOAD", "10")
     yield
     monkeypatch.undo()
 
@@ -112,8 +112,8 @@ async def files_client_fixture(
         def init_app():
             db_dir = tempfile.mkdtemp()
             db_path = Path(db_dir) / "test.db"
-            monkeypatch.setenv("LANGFLOW_DATABASE_URL", f"sqlite:///{db_path}")
-            monkeypatch.setenv("LANGFLOW_AUTO_LOGIN", "false")
+            monkeypatch.setenv("HARXITFLOW_DATABASE_URL", f"sqlite:///{db_path}")
+            monkeypatch.setenv("HARXITFLOW_AUTO_LOGIN", "false")
             from lfx.services.manager import get_service_manager
 
             get_service_manager().factories.clear()
@@ -710,21 +710,21 @@ async def s3_files_client_fixture(
         def init_app():
             db_dir = tempfile.mkdtemp()
             db_path = Path(db_dir) / "test_s3.db"
-            monkeypatch.setenv("LANGFLOW_DATABASE_URL", f"sqlite:///{db_path}")
-            monkeypatch.setenv("LANGFLOW_AUTO_LOGIN", "false")
+            monkeypatch.setenv("HARXITFLOW_DATABASE_URL", f"sqlite:///{db_path}")
+            monkeypatch.setenv("HARXITFLOW_AUTO_LOGIN", "false")
             # Configure S3 storage
-            monkeypatch.setenv("LANGFLOW_STORAGE_TYPE", "s3")
+            monkeypatch.setenv("HARXITFLOW_STORAGE_TYPE", "s3")
             monkeypatch.setenv(
-                "LANGFLOW_OBJECT_STORAGE_BUCKET_NAME",
-                os.environ.get("LANGFLOW_OBJECT_STORAGE_BUCKET_NAME", "langflow-ci"),
+                "HARXITFLOW_OBJECT_STORAGE_BUCKET_NAME",
+                os.environ.get("HARXITFLOW_OBJECT_STORAGE_BUCKET_NAME", "harxitflow-ci"),
             )
             # Use unique prefix per test run to avoid conflicts
             test_prefix = f"test-files-api-{uuid.uuid4().hex[:8]}"
-            monkeypatch.setenv("LANGFLOW_OBJECT_STORAGE_PREFIX", test_prefix)
+            monkeypatch.setenv("HARXITFLOW_OBJECT_STORAGE_PREFIX", test_prefix)
             tags_json = json.dumps({"env": "test-api", "type": "file-upload"})
-            monkeypatch.setenv("LANGFLOW_OBJECT_STORAGE_TAGS", tags_json)
+            monkeypatch.setenv("HARXITFLOW_OBJECT_STORAGE_TAGS", tags_json)
 
-            from langflow.services.manager import service_manager
+            from harxitflow.services.manager import service_manager
 
             service_manager.factories.clear()
             service_manager.services.clear()  # Clear the services cache
@@ -744,7 +744,7 @@ async def s3_files_client_fixture(
             import boto3
 
             s3 = boto3.client("s3")
-            bucket_name = os.environ.get("LANGFLOW_OBJECT_STORAGE_BUCKET_NAME", "langflow-ci")
+            bucket_name = os.environ.get("HARXITFLOW_OBJECT_STORAGE_BUCKET_NAME", "harxitflow-ci")
 
             # List and delete all objects with our test prefix
             with contextlib.suppress(Exception):
@@ -949,13 +949,13 @@ class TestS3FileOperations:
         import boto3
 
         s3 = boto3.client("s3")
-        bucket_name = os.environ.get("LANGFLOW_OBJECT_STORAGE_BUCKET_NAME", "langflow-ci")
+        bucket_name = os.environ.get("HARXITFLOW_OBJECT_STORAGE_BUCKET_NAME", "harxitflow-ci")
 
         # Extract file name from path
         file_name = file_path.split("/")[-1]
 
         # Build the S3 key using the correct pattern (prefix/user_id/filename)
-        test_prefix = os.environ.get("LANGFLOW_OBJECT_STORAGE_PREFIX")
+        test_prefix = os.environ.get("HARXITFLOW_OBJECT_STORAGE_PREFIX")
         s3_key = f"{test_prefix}/{user_id}/{file_name}"
 
         # Try to get the object - should raise NoSuchKey
@@ -1031,7 +1031,7 @@ class TestStorageFailureHandling:
 
     async def test_delete_file_with_permanent_failure_deletes_from_db(self):
         """Test that permanent storage failures still delete from database."""
-        from langflow.services.database.models.file.model import File as UserFile
+        from harxitflow.services.database.models.file.model import File as UserFile
 
         file_id = uuid.uuid4()
         user_id = uuid.uuid4()
@@ -1076,7 +1076,7 @@ class TestStorageFailureHandling:
     async def test_delete_file_with_transient_failure_keeps_in_db(self):
         """Test that transient storage failures keep file in database for retry."""
         from fastapi import HTTPException
-        from langflow.services.database.models.file.model import File as UserFile
+        from harxitflow.services.database.models.file.model import File as UserFile
 
         file_id = uuid.uuid4()
         user_id = uuid.uuid4()
@@ -1123,7 +1123,7 @@ class TestStorageFailureHandling:
 
     async def test_batch_delete_with_mixed_failures(self):
         """Test batch delete with mix of permanent and transient failures."""
-        from langflow.services.database.models.file.model import File as UserFile
+        from harxitflow.services.database.models.file.model import File as UserFile
 
         user_id = uuid.uuid4()
         file_ids = [uuid.uuid4() for _ in range(3)]
@@ -1185,7 +1185,7 @@ class TestStorageFailureHandling:
 
     async def test_delete_all_files_message_all_successful(self):
         """Test delete_all_files returns correct message when all files deleted successfully."""
-        from langflow.services.database.models.file.model import File as UserFile
+        from harxitflow.services.database.models.file.model import File as UserFile
 
         user_id = uuid.uuid4()
         mock_files = [
@@ -1221,7 +1221,7 @@ class TestStorageFailureHandling:
 
     async def test_delete_all_files_message_with_transient_failures(self):
         """Test delete_all_files returns correct message when some files have transient storage failures."""
-        from langflow.services.database.models.file.model import File as UserFile
+        from harxitflow.services.database.models.file.model import File as UserFile
 
         user_id = uuid.uuid4()
         mock_files = [
@@ -1266,7 +1266,7 @@ class TestStorageFailureHandling:
 
     async def test_batch_delete_message_all_successful(self):
         """Test batch delete returns correct message when all files deleted successfully."""
-        from langflow.services.database.models.file.model import File as UserFile
+        from harxitflow.services.database.models.file.model import File as UserFile
 
         user_id = uuid.uuid4()
         file_ids = [uuid.uuid4() for _ in range(2)]
@@ -1304,7 +1304,7 @@ class TestStorageFailureHandling:
 
     async def test_batch_delete_message_with_transient_failures(self):
         """Test batch delete returns correct message when some files have transient storage failures."""
-        from langflow.services.database.models.file.model import File as UserFile
+        from harxitflow.services.database.models.file.model import File as UserFile
 
         user_id = uuid.uuid4()
         file_ids = [uuid.uuid4() for _ in range(3)]

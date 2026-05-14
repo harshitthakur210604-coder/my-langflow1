@@ -3,11 +3,11 @@
 from uuid import uuid4
 
 import pytest
-from langflow.memory import aadd_messages, aget_messages, astore_message
-from langflow.schema.message import Message
-from langflow.services.database.models.message import MessageCreate, MessageRead
-from langflow.services.database.models.message.model import MessageTable
-from langflow.services.deps import session_scope
+from harxitflow.memory import aadd_messages, aget_messages, astore_message
+from harxitflow.schema.message import Message
+from harxitflow.services.database.models.message import MessageCreate, MessageRead
+from harxitflow.services.database.models.message.model import MessageTable
+from harxitflow.services.deps import session_scope
 
 
 @pytest.fixture
@@ -19,7 +19,7 @@ def sample_session_metadata():
         "region": "us-east-1",
         "retention_profile": "standard",
         "data_flags": {"pii": True, "sensitive": False},
-        "custom_fields": {"department": "engineering", "project": "langflow"},
+        "custom_fields": {"department": "engineering", "project": "harxitflow"},
     }
 
 

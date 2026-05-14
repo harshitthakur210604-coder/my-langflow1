@@ -51,7 +51,7 @@ _convert_type_to_field_type = {
 
 
 def _resolve_input_type(annotation: Any, *, required: bool) -> tuple[type[InputTypes], bool, list[Any] | None]:
-    """Resolve a Pydantic annotation into a Langflow input type."""
+    """Resolve a Pydantic annotation into a HarxitFlow input type."""
     ann = annotation
 
     if isinstance(ann, UnionType):
@@ -104,8 +104,8 @@ def _resolve_input_type(annotation: Any, *, required: bool) -> tuple[type[InputT
         raise TypeError(msg) from err
 
 
-def _get_langflow_input_default(model_field: Any, input_cls: type[InputTypes]) -> Any:
-    """Return a Langflow-safe default value for a Pydantic model field."""
+def _get_harxitflow_input_default(model_field: Any, input_cls: type[InputTypes]) -> Any:
+    """Return a HarxitFlow-safe default value for a Pydantic model field."""
     default = model_field.default
     if default is PydanticUndefined:
         return PydanticUndefined
@@ -222,7 +222,7 @@ def flatten_schema(root_schema: dict[str, Any]) -> dict[str, Any]:
     return result
 
 
-def schema_to_langflow_inputs(schema: type[BaseModel]) -> list[InputTypes]:
+def schema_to_harxitflow_inputs(schema: type[BaseModel]) -> list[InputTypes]:
     inputs: list[InputTypes] = []
 
     for field_name, model_field in schema.model_fields.items():
@@ -236,7 +236,7 @@ def schema_to_langflow_inputs(schema: type[BaseModel]) -> list[InputTypes]:
             "is_list": is_list,
         }
 
-        default = _get_langflow_input_default(model_field, lf_cls)
+        default = _get_harxitflow_input_default(model_field, lf_cls)
         if default is not PydanticUndefined:
             input_kwargs["value"] = default
 

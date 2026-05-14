@@ -1,10 +1,10 @@
-const url = `${process.env.LANGFLOW_URL ?? ""}/logs-stream`;
+const url = `${process.env.HARXITFLOW_URL ?? ""}/logs-stream`;
 
 const options = {
   method: 'GET',
   headers: {
     "accept": `text/event-stream`,
-    "x-api-key": `${process.env.LANGFLOW_API_KEY ?? ""}`,
+    "x-api-key": `${process.env.HARXITFLOW_API_KEY ?? ""}`,
   },
 };
 

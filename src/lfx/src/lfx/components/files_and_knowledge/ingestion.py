@@ -13,8 +13,8 @@ from typing import TYPE_CHECKING, Any
 import pandas as pd
 from cryptography.fernet import InvalidToken
 from langchain_chroma import Chroma
-from langflow.services.auth.utils import decrypt_api_key, encrypt_api_key
-from langflow.services.database.models.user.crud import get_user_by_id
+from harxitflow.services.auth.utils import decrypt_api_key, encrypt_api_key
+from harxitflow.services.database.models.user.crud import get_user_by_id
 
 from lfx.base.knowledge_bases.knowledge_base_utils import get_knowledge_bases
 from lfx.base.models.unified_models import get_embedding_model_options, get_embeddings
@@ -62,11 +62,11 @@ def _get_knowledge_bases_root_path() -> Path:
 
 
 class KnowledgeIngestionComponent(Component):
-    """Create or append to Langflow Knowledge from a DataFrame."""
+    """Create or append to HarxitFlow Knowledge from a DataFrame."""
 
     # ------ UI metadata ---------------------------------------------------
     display_name = "Knowledge Ingestion"
-    description = "Create or update knowledge in Langflow."
+    description = "Create or update knowledge in HarxitFlow."
     icon = "upload"
     name = "KnowledgeIngestion"
 
@@ -82,7 +82,7 @@ class KnowledgeIngestionComponent(Component):
                 "data": {
                     "node": {
                         "name": "create_knowledge_base",
-                        "description": "Create new knowledge in Langflow.",
+                        "description": "Create new knowledge in HarxitFlow.",
                         "display_name": "Create new knowledge",
                         "field_order": [
                             "01_new_kb_name",
@@ -100,7 +100,7 @@ class KnowledgeIngestionComponent(Component):
                                 display_name="Choose Embedding Model",
                                 info=(
                                     "Select the embedding model to use for this knowledge base. "
-                                    "Langflow uses the configured credentials for that model provider."
+                                    "HarxitFlow uses the configured credentials for that model provider."
                                 ),
                                 required=True,
                                 model_type="embedding",
@@ -299,7 +299,7 @@ class KnowledgeIngestionComponent(Component):
         the batched metrics counting logic.
         """
         import chromadb.errors
-        from langflow.api.utils.kb_helpers import KBAnalysisHelper, KBStorageHelper
+        from harxitflow.api.utils.kb_helpers import KBAnalysisHelper, KBStorageHelper
 
         metadata_path = kb_path / "embedding_metadata.json"
         if not metadata_path.exists():

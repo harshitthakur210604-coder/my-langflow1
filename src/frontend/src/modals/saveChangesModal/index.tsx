@@ -68,7 +68,7 @@ export function SaveChangesModal({
             <a
               target="_blank"
               className="text-accent-pink-foreground hover:underline"
-              href="https://docs.langflow.org/environment-variables#visual-editor-and-playground-behavior"
+              href="https://docs.harxitflow.org/environment-variables#visual-editor-and-playground-behavior"
               rel="noopener"
             >
               Enable auto-saving

@@ -13,9 +13,9 @@ if TYPE_CHECKING:
 
 CACHE: dict[str, Any] = {}
 
-CACHE_DIR = user_cache_dir("langflow", "langflow")
+CACHE_DIR = user_cache_dir("harxitflow", "harxitflow")
 
-PREFIX = "langflow_cache"
+PREFIX = "harxitflow_cache"
 
 
 class CacheMiss:

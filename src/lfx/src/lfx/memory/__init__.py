@@ -1,14 +1,14 @@
 """Memory management for lfx with dynamic dispatch.
 
-Routes memory operations to either the full langflow implementation (when
-langflow is installed AND a real database service is registered) or the lfx
+Routes memory operations to either the full harxitflow implementation (when
+harxitflow is installed AND a real database service is registered) or the lfx
 stub implementation (standalone / noop DB).
 
 Dispatch is evaluated at call time, not import time, because the database
 service is typically registered *after* this module is first imported (e.g.,
 from Component class definitions loaded before graph setup). An import-time
-decision can't distinguish "langflow is importable" from "a real DB is wired",
-and picking the langflow backend with a NoopDatabaseService yields silent
+decision can't distinguish "harxitflow is importable" from "a real DB is wired",
+and picking the harxitflow backend with a NoopDatabaseService yields silent
 no-op inserts followed by spurious "Message with id X not found" errors on
 update.
 """
@@ -17,12 +17,12 @@ from __future__ import annotations
 
 from typing import Any
 
-from lfx.utils.langflow_utils import has_langflow_db_backend
+from lfx.utils.harxitflow_utils import has_harxitflow_db_backend
 
 
 def _impl():
-    if has_langflow_db_backend():
-        from langflow import memory as impl
+    if has_harxitflow_db_backend():
+        from harxitflow import memory as impl
     else:
         from lfx.memory import stubs as impl
     return impl

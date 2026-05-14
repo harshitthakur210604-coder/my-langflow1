@@ -65,7 +65,7 @@ WORKDIR /tmp/src/frontend
 # Force esbuild to use JS implementation on emulated architectures to avoid native binary crashes
 RUN npm install \
     && ESBUILD_BINARY_PATH="" NODE_OPTIONS="--max-old-space-size=4096" JOBS=1 npm run build \
-    && cp -r build /app/src/backend/base/langflow/frontend \
+    && cp -r build /app/src/backend/base/harxitflow/frontend \
     && rm -rf /tmp/src/frontend
 
 WORKDIR /app/src/backend/base
@@ -102,16 +102,16 @@ RUN useradd user -u 1000 -g 0 --no-create-home --home-dir /app/data
 COPY --from=builder --chown=1000 /app/.venv /app/.venv
 ENV PATH="/app/.venv/bin:$PATH"
 
-LABEL org.opencontainers.image.title=langflow
-LABEL org.opencontainers.image.authors=['Langflow']
+LABEL org.opencontainers.image.title=harxitflow
+LABEL org.opencontainers.image.authors=['HarxitFlow']
 LABEL org.opencontainers.image.licenses=MIT
-LABEL org.opencontainers.image.url=https://github.com/langflow-ai/langflow
-LABEL org.opencontainers.image.source=https://github.com/langflow-ai/langflow
+LABEL org.opencontainers.image.url=https://github.com/harxitflow-ai/harxitflow
+LABEL org.opencontainers.image.source=https://github.com/harxitflow-ai/harxitflow
 
 USER user
 WORKDIR /app
 
-ENV LANGFLOW_HOST=0.0.0.0
-ENV LANGFLOW_PORT=7860
+ENV HARXITFLOW_HOST=0.0.0.0
+ENV HARXITFLOW_PORT=7860
 
-CMD ["langflow-base", "run"]
+CMD ["harxitflow-base", "run"]

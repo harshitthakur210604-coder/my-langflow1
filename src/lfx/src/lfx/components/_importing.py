@@ -1,4 +1,4 @@
-"""Import utilities for LangFlow components."""
+"""Import utilities for HarxitFlow components."""
 
 from __future__ import annotations
 

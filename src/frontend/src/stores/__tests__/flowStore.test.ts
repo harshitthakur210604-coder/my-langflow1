@@ -21,7 +21,7 @@ jest.mock("../../i18n", () => ({
 }));
 
 jest.mock("@/customization/feature-flags", () => ({
-  ENABLE_DATASTAX_LANGFLOW: false,
+  ENABLE_DATASTAX_HARXITFLOW: false,
 }));
 
 jest.mock("@/customization/utils/analytics", () => ({

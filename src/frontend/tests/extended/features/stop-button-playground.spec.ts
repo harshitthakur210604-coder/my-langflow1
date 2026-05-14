@@ -54,17 +54,17 @@ test(
     await page.getByTestId("code-button-modal").nth(0).click();
 
     const waitTimeoutCode = `
-# from langflow.field_typing import Data
-from langflow.custom import Component
-from langflow.io import MessageTextInput, Output
-from langflow.schema import Data
+# from harxitflow.field_typing import Data
+from harxitflow.custom import Component
+from harxitflow.io import MessageTextInput, Output
+from harxitflow.schema import Data
 from time import sleep
-from langflow.schema.message import Message
+from harxitflow.schema.message import Message
 
 class CustomComponent(Component):
     display_name = "Custom Component"
     description = "Use as a template to create your own component."
-    documentation: str = "https://docs.langflow.org/components-custom-components"
+    documentation: str = "https://docs.harxitflow.org/components-custom-components"
     icon = "custom_components"
     name = "CustomComponent"
 

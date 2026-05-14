@@ -3,13 +3,13 @@ from copy import deepcopy
 from uuid import uuid4
 
 import pytest
-from langflow.initial_setup.setup import (
+from harxitflow.initial_setup.setup import (
     get_or_create_default_folder,
     session_scope,
     update_projects_components_with_latest_component_versions,
 )
-from langflow.services.database.models.folder.constants import DEFAULT_FOLDER_NAME
-from langflow.services.database.models.folder.model import FolderRead
+from harxitflow.services.database.models.folder.constants import DEFAULT_FOLDER_NAME
+from harxitflow.services.database.models.folder.model import FolderRead
 
 
 @pytest.mark.usefixtures("client")

@@ -1,16 +1,16 @@
 import type { AssistantSuggestion } from "./assistant-panel.types";
 
-export const ASSISTANT_TITLE = "Langflow Assistant";
+export const ASSISTANT_TITLE = "HarxitFlow Assistant";
 
 export const ASSISTANT_SESSION_STORAGE_KEY_PREFIX =
-  "langflow-assistant-session-";
+  "harxitflow-assistant-session-";
 
 export const ASSISTANT_PLACEHOLDERS = [
   "Create an agent component...",
   "Build a RAG pipeline...",
   "Create a web scraper component...",
   "Build a document parser...",
-  "Ask me anything about Langflow...",
+  "Ask me anything about HarxitFlow...",
 ];
 
 export function getAssistantPlaceholder(): string {
@@ -19,7 +19,7 @@ export function getAssistantPlaceholder(): string {
   ];
 }
 
-export const ASSISTANT_SESSIONS_STORAGE_KEY = "langflow-assistant-sessions";
+export const ASSISTANT_SESSIONS_STORAGE_KEY = "harxitflow-assistant-sessions";
 export const ASSISTANT_MAX_SESSIONS = 10;
 export const ASSISTANT_SESSION_PREVIEW_LENGTH = 80;
 
@@ -34,6 +34,6 @@ export const ASSISTANT_SUGGESTIONS: AssistantSuggestion[] = [
   {
     id: "answer-questions",
     icon: "Sparkles",
-    text: "Answer questions about Langflow",
+    text: "Answer questions about HarxitFlow",
   },
 ];

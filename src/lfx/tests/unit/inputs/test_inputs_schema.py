@@ -4,7 +4,7 @@ from typing import Union
 
 import pytest
 from lfx.inputs.inputs import BoolInput, DictInput, FloatInput, InputTypes, IntInput, MessageTextInput, NestedDictInput
-from lfx.io.schema import schema_to_langflow_inputs
+from lfx.io.schema import schema_to_harxitflow_inputs
 from lfx.schema.data import Data
 from lfx.schema.json_schema import create_input_schema_from_json_schema
 from lfx.template import Input, Output
@@ -179,7 +179,7 @@ class TestPostProcessType:
         assert set(post_process_type(Union[CustomType, int])) == {CustomType, int}  # noqa: UP007
 
 
-def test_schema_to_langflow_inputs():
+def test_schema_to_harxitflow_inputs():
     # Define a test Pydantic model with various field types
     class TestSchema(BaseModel):
         text_field: str = Field(title="Custom Text Title", description="A text field")
@@ -188,8 +188,8 @@ def test_schema_to_langflow_inputs():
         dict_field: dict = Field(description="A dictionary field")
         list_field: list[str] = Field(description="A list of strings")
 
-    # Convert schema to Langflow inputs
-    inputs = schema_to_langflow_inputs(TestSchema)
+    # Convert schema to HarxitFlow inputs
+    inputs = schema_to_harxitflow_inputs(TestSchema)
 
     # Verify the number of inputs matches the schema fields
     expected_len = 5
@@ -228,7 +228,7 @@ def test_schema_to_langflow_inputs():
     assert isinstance(list_input, MessageTextInput)
 
 
-def test_schema_to_langflow_inputs_preserves_optional_defaults_and_nullable_objects():
+def test_schema_to_harxitflow_inputs_preserves_optional_defaults_and_nullable_objects():
     schema = {
         "type": "object",
         "properties": {
@@ -254,7 +254,7 @@ def test_schema_to_langflow_inputs_preserves_optional_defaults_and_nullable_obje
     }
     model = create_input_schema_from_json_schema(schema)
 
-    inputs = {input_.name: input_ for input_ in schema_to_langflow_inputs(model)}
+    inputs = {input_.name: input_ for input_ in schema_to_harxitflow_inputs(model)}
 
     assert isinstance(inputs["task"], MessageTextInput)
     assert inputs["task"].required is True
@@ -274,7 +274,7 @@ def test_schema_to_langflow_inputs_preserves_optional_defaults_and_nullable_obje
     assert inputs["proxy_country"].value == "us"
 
 
-def test_schema_to_langflow_inputs_invalid_type():
+def test_schema_to_harxitflow_inputs_invalid_type():
     # Define a schema with an unsupported type
     class CustomType:
         pass
@@ -285,4 +285,4 @@ def test_schema_to_langflow_inputs_invalid_type():
 
     # Test that attempting to convert an unsupported type raises TypeError
     with pytest.raises(TypeError, match="Unsupported field type:"):
-        schema_to_langflow_inputs(InvalidSchema)
+        schema_to_harxitflow_inputs(InvalidSchema)

@@ -1,6 +1,6 @@
-# Langflow E2E Selector Catalog
+# HarxitFlow E2E Selector Catalog
 
-This is the canonical reference for `data-testid` selectors used in Langflow E2E tests. When adding new interactive elements, follow these naming conventions and add the element to this catalog.
+This is the canonical reference for `data-testid` selectors used in HarxitFlow E2E tests. When adding new interactive elements, follow these naming conventions and add the element to this catalog.
 
 ## Naming Convention
 

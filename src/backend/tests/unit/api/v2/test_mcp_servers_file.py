@@ -7,11 +7,11 @@ import pytest
 from fastapi import UploadFile
 
 # Module under test
-from langflow.api.v2.files import upload_user_file
-from langflow.api.v2.mcp import get_mcp_file
+from harxitflow.api.v2.files import upload_user_file
+from harxitflow.api.v2.mcp import get_mcp_file
 
 if TYPE_CHECKING:
-    from langflow.services.database.models.file.model import File as UserFile
+    from harxitflow.services.database.models.file.model import File as UserFile
 
 
 class FakeStorageService:  # Minimal stub for storage interactions
@@ -190,7 +190,7 @@ async def test_concurrent_update_server_should_not_lose_servers(
     import copy
     from unittest.mock import MagicMock, patch
 
-    from langflow.api.v2.mcp import update_server
+    from harxitflow.api.v2.mcp import update_server
 
     # Shared mutable state simulating the MCP config file on disk
     config_state = {"mcpServers": {"server_a": {"command": "echo", "args": ["a"]}}}
@@ -209,7 +209,7 @@ async def test_concurrent_update_server_should_not_lose_servers(
         return server_list.get("mcpServers", {}).get(name)
 
     with patch.multiple(
-        "langflow.api.v2.mcp",
+        "harxitflow.api.v2.mcp",
         get_server_list=mock_get_server_list,
         upload_server_config=mock_upload_server_config,
         get_server=mock_get_server,

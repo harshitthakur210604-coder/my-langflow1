@@ -165,8 +165,8 @@ def _validate_and_get_enabled_providers(
     skip_validation: bool = True,
 ) -> set[str]:
     """Return set of enabled providers based on credential existence."""
-    from langflow.services.auth import utils as auth_utils
-    from langflow.services.deps import get_settings_service
+    from harxitflow.services.auth import utils as auth_utils
+    from harxitflow.services.deps import get_settings_service
 
     settings_service = get_settings_service()
     enabled = set()
@@ -254,7 +254,7 @@ async def _get_model_status(user_id: UUID | str) -> tuple[set[str], set[str]]:
         variable_service = get_variable_service()
         if variable_service is None:
             return set(), set()
-        from langflow.services.variable.service import DatabaseVariableService
+        from harxitflow.services.variable.service import DatabaseVariableService
 
         if not isinstance(variable_service, DatabaseVariableService):
             return set(), set()
@@ -281,7 +281,7 @@ async def _fetch_enabled_providers_for_user(user_id: UUID | str) -> set[str]:
         if variable_service is None:
             return set()
 
-        from langflow.services.variable.service import DatabaseVariableService
+        from harxitflow.services.variable.service import DatabaseVariableService
 
         if not isinstance(variable_service, DatabaseVariableService):
             return set()

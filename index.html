@@ -93,8 +93,8 @@
     </div>
 
     <script>
-        // CONFIGURATION: Replace with your Langflow URL
-        const LANGFLOW_API_URL = "http://localhost:7860/api/v1/run/YOUR_FLOW_ID"; 
+        // CONFIGURATION: Replace with your HarxitFlow URL
+        const HARXITFLOW_API_URL = "http://localhost:7860/api/v1/run/YOUR_FLOW_ID"; 
         
         let questions = [];
         let currentIdx = 0;
@@ -114,7 +114,7 @@
             btn.innerHTML = `<span class="inline-block animate-spin mr-2">⏳</span> Generating Test...`;
 
             try {
-                const response = await fetch(LANGFLOW_API_URL, {
+                const response = await fetch(HARXITFLOW_API_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -134,7 +134,7 @@
                 document.getElementById('quiz-screen').classList.remove('hidden');
                 showQuestion();
             } catch (err) {
-                alert("Could not connect to Langflow. Please ensure your local server is running.");
+                alert("Could not connect to HarxitFlow. Please ensure your local server is running.");
                 btn.disabled = false;
                 btn.innerText = "Start Admission Test";
             }
@@ -192,7 +192,7 @@
             document.getElementById('score-display').innerText = `${score}/${questions.length}`;
 
             try {
-                const response = await fetch(LANGFLOW_API_URL, {
+                const response = await fetch(HARXITFLOW_API_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({

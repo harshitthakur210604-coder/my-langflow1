@@ -7,11 +7,11 @@ import packaging.version
 import requests
 from packaging.version import Version
 
-PYPI_LANGFLOW_URL = "https://pypi.org/pypi/langflow/json"
-PYPI_LANGFLOW_NIGHTLY_URL = "https://pypi.org/pypi/langflow-nightly/json"
+PYPI_HARXITFLOW_URL = "https://pypi.org/pypi/harxitflow/json"
+PYPI_HARXITFLOW_NIGHTLY_URL = "https://pypi.org/pypi/harxitflow-nightly/json"
 
-PYPI_LANGFLOW_BASE_URL = "https://pypi.org/pypi/langflow-base/json"
-PYPI_LANGFLOW_BASE_NIGHTLY_URL = "https://pypi.org/pypi/langflow-base-nightly/json"
+PYPI_HARXITFLOW_BASE_URL = "https://pypi.org/pypi/harxitflow-base/json"
+PYPI_HARXITFLOW_BASE_NIGHTLY_URL = "https://pypi.org/pypi/harxitflow-base-nightly/json"
 
 ARGUMENT_NUMBER = 2
 
@@ -19,9 +19,9 @@ ARGUMENT_NUMBER = 2
 def get_latest_published_version(build_type: str, *, is_nightly: bool) -> Version:
     url = ""
     if build_type == "base":
-        url = PYPI_LANGFLOW_BASE_NIGHTLY_URL if is_nightly else PYPI_LANGFLOW_BASE_URL
+        url = PYPI_HARXITFLOW_BASE_NIGHTLY_URL if is_nightly else PYPI_HARXITFLOW_BASE_URL
     elif build_type == "main":
-        url = PYPI_LANGFLOW_NIGHTLY_URL if is_nightly else PYPI_LANGFLOW_URL
+        url = PYPI_HARXITFLOW_NIGHTLY_URL if is_nightly else PYPI_HARXITFLOW_URL
     else:
         msg = f"Invalid build type: {build_type}"
         raise ValueError(msg)

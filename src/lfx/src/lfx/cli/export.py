@@ -7,8 +7,8 @@ Local (default)
     result back to disk (or stdout).  No network connection required.
 
 Remote (--env / --flow-id / --project-id)
-    Pull flows directly from a running Langflow instance using the
-    ``langflow-sdk`` HTTP client, normalize them, and write to disk.
+    Pull flows directly from a running HarxitFlow instance using the
+    ``harxitflow-sdk`` HTTP client, normalize them, and write to disk.
 
 Examples:
 --------
@@ -101,7 +101,7 @@ def export_command(
     }
 
     # ------------------------------------------------------------------
-    # Remote mode: pull from a live Langflow instance
+    # Remote mode: pull from a live HarxitFlow instance
     # ------------------------------------------------------------------
     if flow_id or project_id:
         if not env and not target:

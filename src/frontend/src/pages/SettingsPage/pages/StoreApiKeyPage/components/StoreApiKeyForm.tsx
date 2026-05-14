@@ -71,11 +71,11 @@ const StoreApiKeyFormComponent = ({
                 {t("store.createApiKey")}{" "}
                 <a
                   className="text-high-indigo underline"
-                  href="https://langflow.store/"
+                  href="https://harxitflow.store/"
                   target="_blank"
                   rel="noopener"
                 >
-                  langflow.store
+                  harxitflow.store
                 </a>
               </span>
             </div>

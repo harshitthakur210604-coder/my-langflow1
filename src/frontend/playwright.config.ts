@@ -113,13 +113,13 @@ export default defineConfig({
   webServer: [
     {
       command:
-        "uv run uvicorn --factory langflow.main:create_app --host localhost --port 7860 --loop asyncio --log-level error --no-access-log",
+        "uv run uvicorn --factory harxitflow.main:create_app --host localhost --port 7860 --loop asyncio --log-level error --no-access-log",
       port: 7860,
       env: {
-        LANGFLOW_DATABASE_URL: "sqlite:///./temp",
-        LANGFLOW_AUTO_LOGIN: "true",
-        LANGFLOW_DEACTIVATE_TRACING: "true",
-        LANGFLOW_LOG_LEVEL: "ERROR",
+        HARXITFLOW_DATABASE_URL: "sqlite:///./temp",
+        HARXITFLOW_AUTO_LOGIN: "true",
+        HARXITFLOW_DEACTIVATE_TRACING: "true",
+        HARXITFLOW_LOG_LEVEL: "ERROR",
         DO_NOT_TRACK: "true",
       },
       stdout: "ignore",

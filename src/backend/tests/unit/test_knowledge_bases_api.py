@@ -6,7 +6,7 @@ from unittest.mock import AsyncMock, MagicMock, patch
 import pandas as pd
 import pytest
 from httpx import AsyncClient
-from langflow.api.utils.kb_helpers import (
+from harxitflow.api.utils.kb_helpers import (
     KBAnalysisHelper,
     KBIngestionHelper,
     KBStorageHelper,
@@ -110,8 +110,8 @@ class TestGetKBMetaData:
         assert result["chunks"] == 10
         assert result["embedding_provider"] == "OpenAI"
 
-    @patch("langflow.api.utils.kb_helpers.KBStorageHelper.get_directory_size")
-    @patch("langflow.api.utils.kb_helpers.KBAnalysisHelper.update_text_metrics")
+    @patch("harxitflow.api.utils.kb_helpers.KBStorageHelper.get_directory_size")
+    @patch("harxitflow.api.utils.kb_helpers.KBAnalysisHelper.update_text_metrics")
     def test_get_metadata_fast_recounts_stale_zero_chunk_metadata(
         self, mock_update_metrics, mock_get_directory_size, mock_kb_path
     ):
@@ -152,9 +152,9 @@ class TestGetKBMetaData:
         mock_update_metrics.assert_called_once()
         mock_get_directory_size.assert_called_once_with(mock_kb_path)
 
-    @patch("langflow.api.utils.kb_helpers.KBAnalysisHelper._detect_embedding_provider")
-    @patch("langflow.api.utils.kb_helpers.KBAnalysisHelper._detect_embedding_model")
-    @patch("langflow.api.utils.kb_helpers.KBStorageHelper.get_directory_size")
+    @patch("harxitflow.api.utils.kb_helpers.KBAnalysisHelper._detect_embedding_provider")
+    @patch("harxitflow.api.utils.kb_helpers.KBAnalysisHelper._detect_embedding_model")
+    @patch("harxitflow.api.utils.kb_helpers.KBStorageHelper.get_directory_size")
     def test_get_metadata_slow_path(self, mock_size, mock_model, mock_provider, mock_kb_path):
         mock_size.return_value = 2048
         mock_provider.return_value = "Anthropic"
@@ -191,8 +191,8 @@ class TestPreviewChunks:
 class TestKnowledgeBaseAPI:
     """Tests for KR CRUD endpoints."""
 
-    @patch("langflow.api.v1.knowledge_bases.KBStorageHelper.get_fresh_chroma_client")
-    @patch("langflow.api.v1.knowledge_bases.KBStorageHelper.get_root_path")
+    @patch("harxitflow.api.v1.knowledge_bases.KBStorageHelper.get_fresh_chroma_client")
+    @patch("harxitflow.api.v1.knowledge_bases.KBStorageHelper.get_root_path")
     async def test_create_knowledge_base(
         self, mock_root, mock_fresh_client, client: AsyncClient, logged_in_headers, tmp_path
     ):
@@ -212,7 +212,7 @@ class TestKnowledgeBaseAPI:
         data = response.json()
         assert data["name"] == "New KB"
 
-    @patch("langflow.api.v1.knowledge_bases.KBStorageHelper.get_root_path")
+    @patch("harxitflow.api.v1.knowledge_bases.KBStorageHelper.get_root_path")
     async def test_create_kb_path_traversal_single_level(
         self, mock_root, client: AsyncClient, logged_in_headers, tmp_path
     ):
@@ -242,7 +242,7 @@ class TestKnowledgeBaseAPI:
             "VULNERABILITY CONFIRMED: path traversal created a directory outside the user's KB root"
         )
 
-    @patch("langflow.api.v1.knowledge_bases.KBStorageHelper.get_root_path")
+    @patch("harxitflow.api.v1.knowledge_bases.KBStorageHelper.get_root_path")
     async def test_create_kb_path_traversal_absolute_path(
         self, mock_root, client: AsyncClient, logged_in_headers, tmp_path
     ):
@@ -273,7 +273,7 @@ class TestKnowledgeBaseAPI:
             "VULNERABILITY CONFIRMED: absolute path in kb_name created a directory outside the KB root"
         )
 
-    @patch("langflow.api.v1.knowledge_bases.KBStorageHelper.get_root_path")
+    @patch("harxitflow.api.v1.knowledge_bases.KBStorageHelper.get_root_path")
     async def test_create_kb_path_traversal_prefix_ambiguity(
         self, mock_root, client: AsyncClient, logged_in_headers, tmp_path
     ):
@@ -307,8 +307,8 @@ class TestKnowledgeBaseAPI:
             "VULNERABILITY CONFIRMED: prefix-ambiguity attack created a directory outside the user's KB root"
         )
 
-    @patch("langflow.api.v1.knowledge_bases.logger.warning")
-    @patch("langflow.api.v1.knowledge_bases.KBStorageHelper.get_root_path")
+    @patch("harxitflow.api.v1.knowledge_bases.logger.warning")
+    @patch("harxitflow.api.v1.knowledge_bases.KBStorageHelper.get_root_path")
     async def test_create_kb_path_traversal_logs_warning(
         self, mock_root, mock_warning, client: AsyncClient, logged_in_headers, tmp_path
     ):
@@ -347,7 +347,7 @@ class TestKnowledgeBaseAPI:
         assert response.status_code == 400
         assert "at least 3 characters" in response.json()["detail"]
 
-    @patch("langflow.api.v1.knowledge_bases.KBStorageHelper.get_root_path")
+    @patch("harxitflow.api.v1.knowledge_bases.KBStorageHelper.get_root_path")
     async def test_create_duplicate_kb(self, mock_root, client: AsyncClient, logged_in_headers, tmp_path):
         mock_root.return_value = tmp_path
         kb_user_path = tmp_path / "activeuser"
@@ -366,9 +366,9 @@ class TestKnowledgeBaseAPI:
         assert response.status_code == 409
         assert "already exists" in response.json()["detail"]
 
-    @patch("langflow.api.v1.knowledge_bases.KBStorageHelper.get_root_path")
-    @patch("langflow.api.v1.knowledge_bases.KBAnalysisHelper.get_metadata")
-    @patch("langflow.api.v1.knowledge_bases.get_job_service")
+    @patch("harxitflow.api.v1.knowledge_bases.KBStorageHelper.get_root_path")
+    @patch("harxitflow.api.v1.knowledge_bases.KBAnalysisHelper.get_metadata")
+    @patch("harxitflow.api.v1.knowledge_bases.get_job_service")
     async def test_list_knowledge_bases(
         self, mock_job_service, mock_meta, mock_root, client: AsyncClient, logged_in_headers, tmp_path
     ):
@@ -399,7 +399,7 @@ class TestKnowledgeBaseAPI:
         data = response.json()
         assert len(data) >= 1
 
-    @patch("langflow.api.v1.knowledge_bases.KBStorageHelper.get_root_path")
+    @patch("harxitflow.api.v1.knowledge_bases.KBStorageHelper.get_root_path")
     async def test_get_knowledge_base_detail(self, mock_root, client: AsyncClient, logged_in_headers, tmp_path):
         mock_root.return_value = tmp_path
         kb_path = tmp_path / "activeuser" / "Detail_KB"
@@ -423,8 +423,8 @@ class TestKnowledgeBaseAPI:
         assert data["chunks"] == 5
         assert data["name"] == "Detail KB"
 
-    @patch("langflow.api.utils.kb_helpers.KBStorageHelper.delete_storage", return_value=True)
-    @patch("langflow.api.v1.knowledge_bases.KBStorageHelper.get_root_path")
+    @patch("harxitflow.api.utils.kb_helpers.KBStorageHelper.delete_storage", return_value=True)
+    @patch("harxitflow.api.v1.knowledge_bases.KBStorageHelper.get_root_path")
     async def test_delete_knowledge_base(
         self, mock_root, mock_delete, client: AsyncClient, logged_in_headers, tmp_path
     ):
@@ -435,8 +435,8 @@ class TestKnowledgeBaseAPI:
         assert response.status_code == 200
         mock_delete.assert_called_once()
 
-    @patch("langflow.api.utils.kb_helpers.KBStorageHelper.delete_storage", return_value=True)
-    @patch("langflow.api.v1.knowledge_bases.KBStorageHelper.get_root_path")
+    @patch("harxitflow.api.utils.kb_helpers.KBStorageHelper.delete_storage", return_value=True)
+    @patch("harxitflow.api.v1.knowledge_bases.KBStorageHelper.get_root_path")
     async def test_bulk_delete_knowledge_bases(
         self, mock_root, mock_delete, client: AsyncClient, logged_in_headers, tmp_path
     ):
@@ -458,7 +458,7 @@ class TestKnowledgeBaseAPI:
         assert "NonExistent" in data["not_found"]
         assert mock_delete.called
 
-    @patch("langflow.api.v1.knowledge_bases.KBStorageHelper.get_root_path")
+    @patch("harxitflow.api.v1.knowledge_bases.KBStorageHelper.get_root_path")
     async def test_bulk_delete_path_traversal_single_level(
         self, mock_root, client: AsyncClient, logged_in_headers, tmp_path
     ):
@@ -481,7 +481,7 @@ class TestKnowledgeBaseAPI:
         )
         assert victim_kb.exists(), "VULNERABILITY CONFIRMED: path traversal deleted another user's KB"
 
-    @patch("langflow.api.v1.knowledge_bases.KBStorageHelper.get_root_path")
+    @patch("harxitflow.api.v1.knowledge_bases.KBStorageHelper.get_root_path")
     async def test_bulk_delete_path_traversal_multi_level(
         self, mock_root, client: AsyncClient, logged_in_headers, tmp_path
     ):
@@ -502,7 +502,7 @@ class TestKnowledgeBaseAPI:
         assert response.status_code == 403
         assert victim_kb.exists(), "VULNERABILITY CONFIRMED: multi-level traversal deleted data outside user dir"
 
-    @patch("langflow.api.v1.knowledge_bases.KBStorageHelper.get_root_path")
+    @patch("harxitflow.api.v1.knowledge_bases.KBStorageHelper.get_root_path")
     async def test_bulk_delete_path_traversal_prefix_ambiguity(
         self, mock_root, client: AsyncClient, logged_in_headers, tmp_path
     ):
@@ -530,7 +530,7 @@ class TestKnowledgeBaseAPI:
         )
         assert victim_kb.exists(), "VULNERABILITY CONFIRMED: prefix-ambiguity attack deleted another user's KB"
 
-    @patch("langflow.api.v1.knowledge_bases.KBStorageHelper.get_root_path")
+    @patch("harxitflow.api.v1.knowledge_bases.KBStorageHelper.get_root_path")
     async def test_bulk_delete_path_traversal_encoded_sequences(
         self, mock_root, client: AsyncClient, logged_in_headers, tmp_path
     ):
@@ -557,8 +557,8 @@ class TestKnowledgeBaseAPI:
         assert response.status_code == 404
         assert victim_kb.exists(), "VULNERABILITY CONFIRMED: encoded traversal deleted another user's KB"
 
-    @patch("langflow.api.v1.knowledge_bases.logger")
-    @patch("langflow.api.v1.knowledge_bases.KBStorageHelper.get_root_path")
+    @patch("harxitflow.api.v1.knowledge_bases.logger")
+    @patch("harxitflow.api.v1.knowledge_bases.KBStorageHelper.get_root_path")
     async def test_bulk_delete_path_traversal_logs_warning(
         self, mock_root, mock_logger, client: AsyncClient, logged_in_headers, tmp_path
     ):
@@ -579,10 +579,10 @@ class TestKnowledgeBaseAPI:
         warning_args = mock_logger.warning.call_args[0]
         assert "activeuser" in str(warning_args), "Warning log must include the requesting user"
 
-    @patch("langflow.api.v1.knowledge_bases.KBStorageHelper.get_root_path")
-    @patch("langflow.api.v1.knowledge_bases.KBAnalysisHelper.get_metadata")
-    @patch("langflow.api.v1.knowledge_bases.get_job_service")
-    @patch("langflow.api.v1.knowledge_bases.get_task_service")
+    @patch("harxitflow.api.v1.knowledge_bases.KBStorageHelper.get_root_path")
+    @patch("harxitflow.api.v1.knowledge_bases.KBAnalysisHelper.get_metadata")
+    @patch("harxitflow.api.v1.knowledge_bases.get_job_service")
+    @patch("harxitflow.api.v1.knowledge_bases.get_task_service")
     async def test_ingest_files(
         self,
         mock_task,
@@ -626,7 +626,7 @@ class TestKnowledgeBaseAPI:
         data = response.json()
         assert "id" in data
 
-    @patch("langflow.api.v1.knowledge_bases.KBStorageHelper.get_root_path")
+    @patch("harxitflow.api.v1.knowledge_bases.KBStorageHelper.get_root_path")
     async def test_ingest_non_existent_kb(self, mock_root, client: AsyncClient, logged_in_headers, tmp_path):
         mock_root.return_value = tmp_path
         response = await client.post(
@@ -636,8 +636,8 @@ class TestKnowledgeBaseAPI:
         )
         assert response.status_code == 404
 
-    @patch("langflow.api.v1.knowledge_bases.KBStorageHelper.get_root_path")
-    @patch("langflow.api.v1.knowledge_bases.KBAnalysisHelper.get_metadata")
+    @patch("harxitflow.api.v1.knowledge_bases.KBStorageHelper.get_root_path")
+    @patch("harxitflow.api.v1.knowledge_bases.KBAnalysisHelper.get_metadata")
     async def test_ingest_invalid_config(self, mock_meta, mock_root, client: AsyncClient, logged_in_headers, tmp_path):
         mock_root.return_value = tmp_path
         (tmp_path / "activeuser" / "Invalid-KB").mkdir(parents=True)
@@ -651,9 +651,9 @@ class TestKnowledgeBaseAPI:
         assert response.status_code == 400
         assert "Invalid embedding configuration" in response.json()["detail"]
 
-    @patch("langflow.api.v1.knowledge_bases.KBStorageHelper.get_fresh_chroma_client")
-    @patch("langflow.api.v1.knowledge_bases.KBStorageHelper.get_root_path")
-    @patch("langflow.api.v1.knowledge_bases.Chroma")
+    @patch("harxitflow.api.v1.knowledge_bases.KBStorageHelper.get_fresh_chroma_client")
+    @patch("harxitflow.api.v1.knowledge_bases.KBStorageHelper.get_root_path")
+    @patch("harxitflow.api.v1.knowledge_bases.Chroma")
     async def test_get_chunks_pagination_and_search(
         self, mock_chroma, mock_root, mock_fresh_client, client: AsyncClient, logged_in_headers, tmp_path
     ):
@@ -694,7 +694,7 @@ class TestKnowledgeBaseAPI:
         assert data["page"] == 2
         mock_collection.get.assert_called_with(include=["documents", "metadatas"], limit=10, offset=10)
 
-    @patch("langflow.api.v1.knowledge_bases.KBStorageHelper.get_root_path")
+    @patch("harxitflow.api.v1.knowledge_bases.KBStorageHelper.get_root_path")
     async def test_get_chunks_non_existent_kb_returns_404(
         self,
         mock_root,
@@ -712,12 +712,12 @@ class TestKnowledgeBaseAPI:
 class TestPerformIngestionTask:
     """Tests for the internal KBIngestionHelper.perform_ingestion background task."""
 
-    @patch("langflow.api.utils.kb_helpers.KBStorageHelper.get_fresh_chroma_client")
-    @patch("langflow.api.utils.kb_helpers.Chroma")
-    @patch("langflow.api.utils.kb_helpers.KBIngestionHelper._build_embeddings", new_callable=AsyncMock)
-    @patch("langflow.api.utils.kb_helpers.KBAnalysisHelper.get_metadata")
-    @patch("langflow.api.utils.kb_helpers.KBStorageHelper.get_directory_size")
-    @patch("langflow.api.utils.kb_helpers.KBAnalysisHelper.update_text_metrics")
+    @patch("harxitflow.api.utils.kb_helpers.KBStorageHelper.get_fresh_chroma_client")
+    @patch("harxitflow.api.utils.kb_helpers.Chroma")
+    @patch("harxitflow.api.utils.kb_helpers.KBIngestionHelper._build_embeddings", new_callable=AsyncMock)
+    @patch("harxitflow.api.utils.kb_helpers.KBAnalysisHelper.get_metadata")
+    @patch("harxitflow.api.utils.kb_helpers.KBStorageHelper.get_directory_size")
+    @patch("harxitflow.api.utils.kb_helpers.KBAnalysisHelper.update_text_metrics")
     async def test_perform_ingestion_success(
         self,
         mock_update,
@@ -762,10 +762,10 @@ class TestPerformIngestionTask:
         assert result["files_processed"] == 1
         mock_chroma_inst.aadd_documents.assert_called()
 
-    @patch("langflow.api.utils.kb_helpers.KBStorageHelper.get_fresh_chroma_client")
-    @patch("langflow.api.utils.kb_helpers.Chroma")
-    @patch("langflow.api.utils.kb_helpers.KBIngestionHelper._build_embeddings", new_callable=AsyncMock)
-    @patch("langflow.api.utils.kb_helpers.KBIngestionHelper.cleanup_chroma_chunks_by_job", new_callable=AsyncMock)
+    @patch("harxitflow.api.utils.kb_helpers.KBStorageHelper.get_fresh_chroma_client")
+    @patch("harxitflow.api.utils.kb_helpers.Chroma")
+    @patch("harxitflow.api.utils.kb_helpers.KBIngestionHelper._build_embeddings", new_callable=AsyncMock)
+    @patch("harxitflow.api.utils.kb_helpers.KBIngestionHelper.cleanup_chroma_chunks_by_job", new_callable=AsyncMock)
     async def test_perform_ingestion_rollback(
         self, mock_cleanup, mock_build, mock_chroma, mock_fresh_client, mock_kb_path
     ):
@@ -801,16 +801,16 @@ class TestPerformIngestionTask:
 class TestCancelIngestion:
     """Tests for the cancel_ingestion endpoint."""
 
-    @patch("langflow.api.v1.knowledge_bases.KBIngestionHelper.cleanup_chroma_chunks_by_job")
-    @patch("langflow.api.v1.knowledge_bases.KBStorageHelper.get_root_path")
-    @patch("langflow.api.v1.knowledge_bases.KBAnalysisHelper.get_metadata")
+    @patch("harxitflow.api.v1.knowledge_bases.KBIngestionHelper.cleanup_chroma_chunks_by_job")
+    @patch("harxitflow.api.v1.knowledge_bases.KBStorageHelper.get_root_path")
+    @patch("harxitflow.api.v1.knowledge_bases.KBAnalysisHelper.get_metadata")
     async def test_cancel_ingestion_success(
         self, mock_meta, mock_root, mock_cleanup, client: AsyncClient, logged_in_headers, tmp_path
     ):
         from unittest.mock import patch as mock_patch
 
-        from langflow.services.deps import get_service
-        from langflow.services.schema import ServiceType
+        from harxitflow.services.deps import get_service
+        from harxitflow.services.schema import ServiceType
 
         mock_root.return_value = tmp_path
         kb_path = tmp_path / "activeuser" / "Test_KB"
@@ -844,7 +844,7 @@ class TestCancelIngestion:
                 return mock_task_service_inst
             return original_get_service(service_type, default)
 
-        with mock_patch("langflow.services.deps.get_service", side_effect=get_service_side_effect):
+        with mock_patch("harxitflow.services.deps.get_service", side_effect=get_service_side_effect):
             response = await client.post(
                 "api/v1/knowledge_bases/Test_KB/cancel",
                 headers=logged_in_headers,
@@ -856,8 +856,8 @@ class TestCancelIngestion:
             mock_task_service_inst.revoke_task.assert_called_once_with(job_id)
             mock_job_service_inst.update_job_status.assert_called_once()
 
-    @patch("langflow.api.v1.knowledge_bases.KBStorageHelper.get_root_path")
-    @patch("langflow.api.v1.knowledge_bases.get_job_service")
+    @patch("harxitflow.api.v1.knowledge_bases.KBStorageHelper.get_root_path")
+    @patch("harxitflow.api.v1.knowledge_bases.get_job_service")
     async def test_cancel_ingestion_not_found(
         self, mock_job_service, mock_root, client: AsyncClient, logged_in_headers, tmp_path
     ):
@@ -879,7 +879,7 @@ class TestCancelIngestion:
         assert response.status_code == 404
         assert "no ingestion job found" in response.json()["detail"].lower()
 
-    @patch("langflow.api.v1.knowledge_bases.KBStorageHelper.get_root_path")
+    @patch("harxitflow.api.v1.knowledge_bases.KBStorageHelper.get_root_path")
     async def test_cancel_ingestion_kb_not_found(self, mock_root, client: AsyncClient, logged_in_headers, tmp_path):
         mock_root.return_value = tmp_path
 

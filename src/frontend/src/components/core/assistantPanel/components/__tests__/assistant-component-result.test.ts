@@ -142,9 +142,9 @@ class EmptyComponent(Component):
 
   it("should parse a realistic full component", () => {
     const code = `
-from langflow.custom import Component
-from langflow.io import MessageTextInput, Output
-from langflow.schema.message import Message
+from harxitflow.custom import Component
+from harxitflow.io import MessageTextInput, Output
+from harxitflow.schema.message import Message
 
 class TextUppercaseComponent(Component):
     description = "Converts text to uppercase"

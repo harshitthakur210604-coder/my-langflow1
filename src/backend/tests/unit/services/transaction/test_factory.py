@@ -3,10 +3,10 @@
 from unittest.mock import MagicMock
 
 import pytest
-from langflow.services.factory import ServiceFactory
-from langflow.services.schema import ServiceType
-from langflow.services.transaction.factory import TransactionServiceFactory
-from langflow.services.transaction.service import TransactionService
+from harxitflow.services.factory import ServiceFactory
+from harxitflow.services.schema import ServiceType
+from harxitflow.services.transaction.factory import TransactionServiceFactory
+from harxitflow.services.transaction.service import TransactionService
 
 
 class TestTransactionServiceFactory:

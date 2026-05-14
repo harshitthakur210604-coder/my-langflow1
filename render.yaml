@@ -1,17 +1,18 @@
 services:
   - type: web
-    name: harxit-ai-agent
-    env: python
-    buildCommand: pip install -r requirements.txt
-    startCommand: uvicorn app:app --host 0.0.0.0 --port $PORT
+    name: harxitflow
+    env: docker
+    dockerContext: .
+    dockerfilePath: Dockerfile
+    plan: standard
     envVars:
-      - key: GROQ_API_KEY
+      - key: HARXITFLOW_DATABASE_URL
         sync: false
-      - key: TELEGRAM_BOT_TOKEN
-        sync: false
-      - key: WHATSAPP_TOKEN
-        sync: false
-      - key: WHATSAPP_PHONE_NUMBER_ID
-        sync: false
-      - key: WEBHOOK_VERIFY_TOKEN
-        value: harxit_tech_secret
+      - key: HARXITFLOW_DATABASE_ECHO
+        value: "false"
+      - key: HARXITFLOW_DEV
+        value: "false"
+      - key: PORT
+        value: "7860"
+    healthCheckPath: /health
+    restartPolicy: on-failure

@@ -100,9 +100,9 @@ function ApiInterceptor() {
 
     const isAuthorizedURL = (url) => {
       const authorizedDomains = [
-        "https://raw.githubusercontent.com/langflow-ai/langflow_examples/main/examples",
-        "https://api.github.com/repos/langflow-ai/langflow_examples/contents/examples",
-        "https://api.github.com/repos/langflow-ai/langflow",
+        "https://raw.githubusercontent.com/harxitflow-ai/harxitflow_examples/main/examples",
+        "https://api.github.com/repos/harxitflow-ai/harxitflow_examples/contents/examples",
+        "https://api.github.com/repos/harxitflow-ai/harxitflow",
         "auto_login",
       ];
 

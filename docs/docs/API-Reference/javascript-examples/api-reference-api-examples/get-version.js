@@ -1,4 +1,4 @@
-const url = `${process.env.LANGFLOW_SERVER_URL ?? ""}/api/v1/version`;
+const url = `${process.env.HARXITFLOW_SERVER_URL ?? ""}/api/v1/version`;
 
 const options = {
   method: 'GET',

@@ -1,8 +1,8 @@
 from pathlib import Path
 from urllib.parse import urlparse
 
-from langflow.custom.custom_component.component import Component
-from langflow.io import (
+from harxitflow.custom.custom_component.component import Component
+from harxitflow.io import (
     DropdownInput,
     FileInput,
     IntInput,
@@ -10,7 +10,7 @@ from langflow.io import (
     Output,
     SecretStrInput,
 )
-from langflow.schema.data import Data
+from harxitflow.schema.data import Data
 from loguru import logger
 
 

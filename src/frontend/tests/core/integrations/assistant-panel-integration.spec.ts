@@ -33,13 +33,13 @@ test.describe("Assistant Panel Integration", { tag: ["@release"] }, () => {
     test.setTimeout(120_000);
 
     const textarea = page.getByTestId("assistant-input-textarea");
-    await textarea.fill("What is Langflow? Answer in one sentence.");
+    await textarea.fill("What is HarxitFlow? Answer in one sentence.");
     await page.getByTestId("assistant-send-button").click();
 
     // User message should appear
     await expect(
       page.getByTestId("assistant-message-user").first(),
-    ).toContainText("What is Langflow");
+    ).toContainText("What is HarxitFlow");
 
     // Wait for assistant response with substantial content
     await page.waitForFunction(

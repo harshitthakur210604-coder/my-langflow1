@@ -140,8 +140,8 @@ for file in "${SH_FILES[@]}"; do
   fi
 
   if [[ "$MODE" == "execute" ]]; then
-    if [[ -z "${LANGFLOW_API_KEY:-}" || ( -z "${LANGFLOW_URL:-}" && -z "${LANGFLOW_SERVER_URL:-}" ) ]]; then
-      echo "SKIP  $rel (set LANGFLOW_API_KEY and LANGFLOW_URL or LANGFLOW_SERVER_URL to execute)"
+    if [[ -z "${HARXITFLOW_API_KEY:-}" || ( -z "${HARXITFLOW_URL:-}" && -z "${HARXITFLOW_SERVER_URL:-}" ) ]]; then
+      echo "SKIP  $rel (set HARXITFLOW_API_KEY and HARXITFLOW_URL or HARXITFLOW_SERVER_URL to execute)"
       ((SKIP+=1))
       continue
     fi
@@ -153,9 +153,9 @@ for file in "${SH_FILES[@]}"; do
       continue
     fi
 
-    if ! bash "$file" >/tmp/langflow-curl-example.out 2>/tmp/langflow-curl-example.err; then
+    if ! bash "$file" >/tmp/harxitflow-curl-example.out 2>/tmp/harxitflow-curl-example.err; then
       echo "FAIL  $rel (execution)"
-      print_failure_logs "/tmp/langflow-curl-example.out" "/tmp/langflow-curl-example.err"
+      print_failure_logs "/tmp/harxitflow-curl-example.out" "/tmp/harxitflow-curl-example.err"
       ((FAIL+=1))
       continue
     fi

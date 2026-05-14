@@ -1,23 +1,23 @@
 networks:
-  dev-langflow:
+  dev-harxitflow:
 
 services:
-  langflow:
+  harxitflow:
     build:
       context: ..
       dockerfile: docker/dev.Dockerfile
-    image: dev-langflow
-    container_name: dev-langflow
+    image: dev-harxitflow
+    container_name: dev-harxitflow
     restart: always
     ports:
       - "7860:7860"
       - "3000:3000"
     environment:
       - PYTHONDONTWRITEBYTECODE=1
-      - LANGFLOW_DATABASE_URL=postgresql://langflow:langflow@postgres:5432/langflow
-      - LANGFLOW_SUPERUSER=langflow
-      - LANGFLOW_SUPERUSER_PASSWORD=langflow
-      - LANGFLOW_CONFIG_DIR=/var/lib/langflow
+      - HARXITFLOW_DATABASE_URL=postgresql://harxitflow:harxitflow@postgres:5432/harxitflow
+      - HARXITFLOW_SUPERUSER=harxitflow
+      - HARXITFLOW_SUPERUSER_PASSWORD=harxitflow
+      - HARXITFLOW_CONFIG_DIR=/var/lib/harxitflow
     env_file:
       - ../.env
     volumes:
@@ -25,18 +25,18 @@ services:
     depends_on:
       - postgres
     networks:
-      -  dev-langflow
+      -  dev-harxitflow
 
 
   postgres:
     container_name: postgres
     image: pgvector/pgvector:pg16
     environment:
-      POSTGRES_USER: langflow
-      POSTGRES_PASSWORD: langflow
-      POSTGRES_DB: langflow
+      POSTGRES_USER: harxitflow
+      POSTGRES_PASSWORD: harxitflow
+      POSTGRES_DB: harxitflow
     ports:
       - "5432:5432"
     networks:
-      -  dev-langflow
+      -  dev-harxitflow
 

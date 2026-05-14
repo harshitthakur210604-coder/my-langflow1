@@ -18,7 +18,7 @@ from lfx.base.mcp.util import (
 from lfx.custom.custom_component.component_with_cache import ComponentWithCache
 from lfx.inputs.inputs import InputTypes  # noqa: TC001
 from lfx.io import BoolInput, DictInput, DropdownInput, McpInput, MessageTextInput, Output
-from lfx.io.schema import schema_to_langflow_inputs
+from lfx.io.schema import schema_to_harxitflow_inputs
 from lfx.log.logger import logger
 from lfx.schema.dataframe import DataFrame
 from lfx.schema.message import Message
@@ -94,7 +94,7 @@ class MCPToolsComponent(ComponentWithCache):
 
     display_name = "MCP Tools"
     description = "Connect to an MCP server to use its tools."
-    documentation: str = "https://docs.langflow.org/mcp-tools"
+    documentation: str = "https://docs.harxitflow.org/mcp-tools"
     icon = "Mcp"
     name = "MCPTools"
 
@@ -173,7 +173,7 @@ class MCPToolsComponent(ComponentWithCache):
                 msg = f"Empty input schema for tool '{tool_obj.name}'"
                 raise ValueError(msg)
 
-            schema_inputs = schema_to_langflow_inputs(input_schema)
+            schema_inputs = schema_to_harxitflow_inputs(input_schema)
             if not schema_inputs:
                 msg = f"No input parameters defined for tool '{tool_obj.name}'"
                 await logger.awarning(msg)
@@ -231,14 +231,14 @@ class MCPToolsComponent(ComponentWithCache):
             # Try to fetch from database first to ensure we have the latest config
             # This ensures database updates (like editing a server) take effect
             try:
-                from langflow.api.v2.mcp import get_server
-                from langflow.services.database.models.user.crud import get_user_by_id
+                from harxitflow.api.v2.mcp import get_server
+                from harxitflow.services.database.models.user.crud import get_user_by_id
 
                 from lfx.services.deps import get_settings_service
             except ImportError as e:
                 msg = (
-                    "Langflow MCP server functionality is not available. "
-                    "This feature requires the full Langflow installation."
+                    "HarxitFlow MCP server functionality is not available. "
+                    "This feature requires the full HarxitFlow installation."
                 )
                 raise ImportError(msg) from e
 
@@ -633,8 +633,8 @@ class MCPToolsComponent(ComponentWithCache):
             if not tool or not hasattr(tool, "name"):
                 continue
             try:
-                langflow_inputs = schema_to_langflow_inputs(tool.args_schema)
-                inputs[tool.name] = langflow_inputs
+                harxitflow_inputs = schema_to_harxitflow_inputs(tool.args_schema)
+                inputs[tool.name] = harxitflow_inputs
             except (AttributeError, ValueError, TypeError, KeyError) as e:
                 msg = f"Error getting inputs for tool {getattr(tool, 'name', 'unknown')}: {e!s}"
                 logger.exception(msg)
@@ -718,7 +718,7 @@ class MCPToolsComponent(ComponentWithCache):
         try:
             self.tools, _ = await self.update_tool_list()
             if self.tool != "":
-                # Set session context for persistent MCP sessions using Langflow session ID
+                # Set session context for persistent MCP sessions using HarxitFlow session ID
                 session_context = self._get_session_context()
                 if session_context:
                     self.stdio_client.set_session_context(session_context)
@@ -759,7 +759,7 @@ class MCPToolsComponent(ComponentWithCache):
         return item_dict
 
     def _get_session_context(self) -> str | None:
-        """Get the Langflow session ID for MCP session caching."""
+        """Get the HarxitFlow session ID for MCP session caching."""
         # Try to get session ID from the component's execution context
         if hasattr(self, "graph") and hasattr(self.graph, "session_id"):
             session_id = self.graph.session_id

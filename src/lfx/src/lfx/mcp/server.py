@@ -1,6 +1,6 @@
-"""FastMCP server exposing Langflow operations as MCP tools.
+"""FastMCP server exposing HarxitFlow operations as MCP tools.
 
-Connects to a running Langflow server via REST API. Flow data is never
+Connects to a running HarxitFlow server via REST API. Flow data is never
 cached — every mutating tool does GET -> modify -> PATCH. The component
 registry is cached on first access.
 
@@ -58,7 +58,7 @@ from lfx.graph.flow_builder import (
 )
 from lfx.graph.flow_builder.spec import validate_spec_references
 from lfx.log.logger import logger
-from lfx.mcp.client import LangflowClient
+from lfx.mcp.client import HarxitFlowClient
 from lfx.mcp.registry import (
     describe_component as reg_describe,
 )
@@ -70,9 +70,9 @@ from lfx.services.telemetry import MCPToolPayload, TelemetryService
 
 # Session state. Module-level singletons for stdio (single agent), with
 # contextvars overlay for SSE (multiple concurrent agents).
-_client_var: contextvars.ContextVar[LangflowClient | None] = contextvars.ContextVar("_client", default=None)
+_client_var: contextvars.ContextVar[HarxitFlowClient | None] = contextvars.ContextVar("_client", default=None)
 _registry_var: contextvars.ContextVar[dict[str, dict] | None] = contextvars.ContextVar("_registry", default=None)
-_shared_client: LangflowClient | None = None
+_shared_client: HarxitFlowClient | None = None
 _shared_registry: dict[str, dict] | None = None
 _telemetry: TelemetryService | None = None
 
@@ -92,12 +92,12 @@ async def _telemetry_lifespan(_server: FastMCP) -> AsyncIterator[dict]:
 
 
 mcp = FastMCP(
-    "langflow-mcp",
+    "harxitflow-mcp",
     instructions=(
-        "Langflow MCP server -- build and run AI flows on a Langflow instance.\n"
+        "HarxitFlow MCP server -- build and run AI flows on a HarxitFlow instance.\n"
         "\n"
         "Typical workflow:\n"
-        "  1. login (or set LANGFLOW_API_KEY env var)\n"
+        "  1. login (or set HARXITFLOW_API_KEY env var)\n"
         "  2. search_component_types / describe_component_type to discover components\n"
         "  3. create_flow_from_spec to define nodes, edges, and config in one text spec\n"
         "     (or step-by-step: create_flow, add_component, configure_component, connect_components)\n"
@@ -114,18 +114,18 @@ mcp = FastMCP(
 )
 
 
-def _get_client() -> LangflowClient:
+def _get_client() -> HarxitFlowClient:
     # Try contextvar first (SSE sessions), fall back to shared (stdio)
     client = _client_var.get()
     if client is not None:
         return client
     global _shared_client  # noqa: PLW0603
     if _shared_client is None:
-        _shared_client = LangflowClient()
+        _shared_client = HarxitFlowClient()
     return _shared_client
 
 
-def _set_client(client: LangflowClient) -> None:
+def _set_client(client: HarxitFlowClient) -> None:
     global _shared_client  # noqa: PLW0603
     _client_var.set(client)
     _shared_client = client
@@ -219,19 +219,19 @@ def _extract_vertex_error(build_data: dict[str, Any]) -> str:
 @mcp.tool()
 @_tracked
 async def login(username: str, password: str, server_url: str | None = None) -> dict[str, str]:
-    """Authenticate with a Langflow server. Call this first.
+    """Authenticate with a HarxitFlow server. Call this first.
 
     Credentials are stored and reused for all subsequent calls.
 
     Args:
-        username: Langflow username.
-        password: Langflow password.
-        server_url: Server URL (defaults to LANGFLOW_SERVER_URL env var or http://localhost:7860).
+        username: HarxitFlow username.
+        password: HarxitFlow password.
+        server_url: Server URL (defaults to HARXITFLOW_SERVER_URL env var or http://localhost:7860).
     """
     old_client = _client_var.get() or _shared_client
     if old_client is not None:
         await old_client.close()
-    client = LangflowClient(server_url=server_url)
+    client = HarxitFlowClient(server_url=server_url)
     _set_client(client)
     _registry_var.set(None)
     global _shared_registry  # noqa: PLW0603

@@ -11,13 +11,13 @@ let isDataAttributeTrackingInitialized = false;
  *
  * Example - UI Interaction:
  * {
- *   href: "https://github.com/langflow-ai/langflow",
+ *   href: "https://github.com/harxitflow-ai/harxitflow",
  *   'data-event': 'UI Interaction',
  *   'data-action': 'clicked',
  *   'data-channel': 'docs',
  *   'data-element-id': 'social-github',
  *   'data-namespace': 'header',
- *   'data-platform-title': 'Langflow'
+ *   'data-platform-title': 'HarxitFlow'
  * }
  *
  * Example - CTA Clicked:

@@ -18,7 +18,7 @@ def _version_callback(value: bool) -> None:
 
 app = typer.Typer(
     name="lfx",
-    help="lfx - Langflow Executor",
+    help="lfx - HarxitFlow Executor",
     add_completion=False,
 )
 
@@ -34,7 +34,7 @@ def _app_callback(
         callback=_version_callback,
     ),
 ) -> None:
-    """Lfx - Langflow Executor."""
+    """Lfx - HarxitFlow Executor."""
 
 
 # Register command groups (order determines help-panel ordering)

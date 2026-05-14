@@ -63,19 +63,19 @@ class TestSecurityFunctions:
 
     def test_verify_api_key_with_query_param(self):
         """Test API key verification with query parameter."""
-        with patch.dict(os.environ, {"LANGFLOW_API_KEY": "test-key-123"}):  # pragma: allowlist secret
+        with patch.dict(os.environ, {"HARXITFLOW_API_KEY": "test-key-123"}):  # pragma: allowlist secret
             result = verify_api_key("test-key-123", None)
             assert result == "test-key-123"
 
     def test_verify_api_key_with_header_param(self):
         """Test API key verification with header parameter."""
-        with patch.dict(os.environ, {"LANGFLOW_API_KEY": "test-key-123"}):  # pragma: allowlist secret
+        with patch.dict(os.environ, {"HARXITFLOW_API_KEY": "test-key-123"}):  # pragma: allowlist secret
             result = verify_api_key(None, "test-key-123")
             assert result == "test-key-123"
 
     def test_verify_api_key_header_takes_precedence(self):
         """Test that query parameter is used when both are provided."""
-        with patch.dict(os.environ, {"LANGFLOW_API_KEY": "test-key-123"}):  # pragma: allowlist secret
+        with patch.dict(os.environ, {"HARXITFLOW_API_KEY": "test-key-123"}):  # pragma: allowlist secret
             result = verify_api_key("test-key-123", "wrong-key")
             assert result == "test-key-123"
 
@@ -88,7 +88,7 @@ class TestSecurityFunctions:
 
     def test_verify_api_key_invalid(self):
         """Test error when API key is invalid."""
-        with patch.dict(os.environ, {"LANGFLOW_API_KEY": "correct-key"}):  # pragma: allowlist secret
+        with patch.dict(os.environ, {"HARXITFLOW_API_KEY": "correct-key"}):  # pragma: allowlist secret
             with pytest.raises(HTTPException) as exc_info:
                 verify_api_key("wrong-key", None)
             assert exc_info.value.status_code == 401
@@ -100,7 +100,7 @@ class TestSecurityFunctions:
             with pytest.raises(HTTPException) as exc_info:
                 verify_api_key("any-key", None)
             assert exc_info.value.status_code == 500
-            assert "LANGFLOW_API_KEY environment variable is not set" in exc_info.value.detail
+            assert "HARXITFLOW_API_KEY environment variable is not set" in exc_info.value.detail
 
 
 class TestCreateServeApp:
@@ -271,7 +271,7 @@ class TestServeAppEndpoints:
         monkeypatch.setattr(get_settings_service().settings, "allow_custom_components", True)
 
         # Set up test API key
-        with patch.dict(os.environ, {"LANGFLOW_API_KEY": "test-api-key"}):  # pragma: allowlist secret
+        with patch.dict(os.environ, {"HARXITFLOW_API_KEY": "test-api-key"}):  # pragma: allowlist secret
             return TestClient(app)
 
     @pytest.fixture
@@ -314,7 +314,7 @@ class TestServeAppEndpoints:
 
         monkeypatch.setattr(get_settings_service().settings, "allow_custom_components", True)
 
-        with patch.dict(os.environ, {"LANGFLOW_API_KEY": "test-api-key"}):  # pragma: allowlist secret
+        with patch.dict(os.environ, {"HARXITFLOW_API_KEY": "test-api-key"}):  # pragma: allowlist secret
             return TestClient(app)
 
     def test_health_endpoint(self, app_client):
@@ -331,7 +331,7 @@ class TestServeAppEndpoints:
         headers = {"x-api-key": "test-api-key"}
 
         with (
-            patch.dict(os.environ, {"LANGFLOW_API_KEY": "test-api-key"}),  # pragma: allowlist secret
+            patch.dict(os.environ, {"HARXITFLOW_API_KEY": "test-api-key"}),  # pragma: allowlist secret
             patch("lfx.cli.common.extract_structured_result") as mock_extract,
         ):
             mock_extract.return_value = {
@@ -352,7 +352,7 @@ class TestServeAppEndpoints:
         """Test flow execution without authentication."""
         request_data = {"input_value": "Test input"}
 
-        with patch.dict(os.environ, {"LANGFLOW_API_KEY": "test-api-key"}):  # pragma: allowlist secret
+        with patch.dict(os.environ, {"HARXITFLOW_API_KEY": "test-api-key"}):  # pragma: allowlist secret
             response = app_client.post("/flows/test-flow-id/run", json=request_data)
 
         assert response.status_code == 401
@@ -363,7 +363,7 @@ class TestServeAppEndpoints:
         request_data = {"input_value": "Test input"}
         headers = {"x-api-key": "wrong-key"}
 
-        with patch.dict(os.environ, {"LANGFLOW_API_KEY": "test-api-key"}):  # pragma: allowlist secret
+        with patch.dict(os.environ, {"HARXITFLOW_API_KEY": "test-api-key"}):  # pragma: allowlist secret
             response = app_client.post("/flows/test-flow-id/run", json=request_data, headers=headers)
 
         assert response.status_code == 401
@@ -390,7 +390,7 @@ class TestServeAppEndpoints:
         headers = {"x-api-key": "test-api-key"}
 
         with (
-            patch.dict(os.environ, {"LANGFLOW_API_KEY": "test-api-key"}),  # pragma: allowlist secret
+            patch.dict(os.environ, {"HARXITFLOW_API_KEY": "test-api-key"}),  # pragma: allowlist secret
             patch(
                 "lfx.services.deps.get_settings_service",
                 return_value=_make_settings_service(allow_custom_components=False),
@@ -426,7 +426,7 @@ class TestServeAppEndpoints:
         request_data = {"input_value": "Test input"}
 
         with (
-            patch.dict(os.environ, {"LANGFLOW_API_KEY": "test-api-key"}),  # pragma: allowlist secret
+            patch.dict(os.environ, {"HARXITFLOW_API_KEY": "test-api-key"}),  # pragma: allowlist secret
             patch("lfx.cli.common.extract_structured_result") as mock_extract,
         ):
             mock_extract.return_value = {
@@ -451,7 +451,7 @@ class TestServeAppEndpoints:
             raise RuntimeError(msg)
 
         with (
-            patch.dict(os.environ, {"LANGFLOW_API_KEY": "test-api-key"}),  # pragma: allowlist secret
+            patch.dict(os.environ, {"HARXITFLOW_API_KEY": "test-api-key"}),  # pragma: allowlist secret
             patch("lfx.cli.serve_app.execute_graph_with_capture", mock_execute_error),
         ):
             response = app_client.post("/flows/test-flow-id/run", json=request_data, headers=headers)
@@ -475,7 +475,7 @@ class TestServeAppEndpoints:
             return [], ""  # Empty results and logs
 
         with (
-            patch.dict(os.environ, {"LANGFLOW_API_KEY": "test-api-key"}),  # pragma: allowlist secret
+            patch.dict(os.environ, {"HARXITFLOW_API_KEY": "test-api-key"}),  # pragma: allowlist secret
             patch("lfx.cli.serve_app.execute_graph_with_capture", mock_execute_empty),
         ):
             response = app_client.post("/flows/test-flow-id/run", json=request_data, headers=headers)
@@ -500,7 +500,7 @@ class TestServeAppEndpoints:
         """Test getting flow info in multi-flow mode."""
         headers = {"x-api-key": "test-api-key"}
 
-        with patch.dict(os.environ, {"LANGFLOW_API_KEY": "test-api-key"}):  # pragma: allowlist secret
+        with patch.dict(os.environ, {"HARXITFLOW_API_KEY": "test-api-key"}):  # pragma: allowlist secret
             response = multi_flow_client.get("/flows/test-flow-id/info", headers=headers)
 
         assert response.status_code == 200
@@ -515,7 +515,7 @@ class TestServeAppEndpoints:
         headers = {"x-api-key": "test-api-key"}
 
         with (
-            patch.dict(os.environ, {"LANGFLOW_API_KEY": "test-api-key"}),  # pragma: allowlist secret
+            patch.dict(os.environ, {"HARXITFLOW_API_KEY": "test-api-key"}),  # pragma: allowlist secret
             patch("lfx.cli.common.extract_structured_result") as mock_extract,
         ):
             mock_extract.return_value = {
@@ -535,7 +535,7 @@ class TestServeAppEndpoints:
         """Test with invalid request body."""
         headers = {"x-api-key": "test-api-key"}
 
-        with patch.dict(os.environ, {"LANGFLOW_API_KEY": "test-api-key"}):  # pragma: allowlist secret
+        with patch.dict(os.environ, {"HARXITFLOW_API_KEY": "test-api-key"}):  # pragma: allowlist secret
             response = app_client.post("/flows/test-flow-id/run", json={}, headers=headers)
 
         assert response.status_code == 422  # Validation error
@@ -567,7 +567,7 @@ class TestServeAppEndpoints:
         headers = {"x-api-key": "test-api-key"}
 
         with (
-            patch.dict(os.environ, {"LANGFLOW_API_KEY": "test-api-key"}),  # pragma: allowlist secret
+            patch.dict(os.environ, {"HARXITFLOW_API_KEY": "test-api-key"}),  # pragma: allowlist secret
             patch("lfx.cli.common.extract_structured_result") as mock_extract,
         ):
             mock_extract.return_value = {

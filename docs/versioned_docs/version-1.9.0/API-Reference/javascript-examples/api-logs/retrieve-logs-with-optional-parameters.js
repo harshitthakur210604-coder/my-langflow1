@@ -1,10 +1,10 @@
-const url = `${process.env.LANGFLOW_URL ?? ""}/logs?lines_before=0&lines_after=0&timestamp=0`;
+const url = `${process.env.HARXITFLOW_URL ?? ""}/logs?lines_before=0&lines_after=0&timestamp=0`;
 
 const options = {
   method: 'GET',
   headers: {
     "accept": `application/json`,
-    "x-api-key": `${process.env.LANGFLOW_API_KEY ?? ""}`,
+    "x-api-key": `${process.env.HARXITFLOW_API_KEY ?? ""}`,
   },
 };
 

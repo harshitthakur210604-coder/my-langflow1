@@ -1,8 +1,8 @@
 import pytest
-from langflow.services.auth.utils import verify_password
-from langflow.services.database.models.user.model import User
-from langflow.services.deps import get_settings_service, session_scope
-from langflow.services.utils import setup_superuser, teardown_superuser
+from harxitflow.services.auth.utils import verify_password
+from harxitflow.services.database.models.user.model import User
+from harxitflow.services.deps import get_settings_service, session_scope
+from harxitflow.services.utils import setup_superuser, teardown_superuser
 from lfx.services.settings.constants import DEFAULT_SUPERUSER, DEFAULT_SUPERUSER_PASSWORD
 from sqlmodel import select
 
@@ -15,12 +15,12 @@ async def initialized_services(monkeypatch, tmp_path):
     LifespanManager. This avoids the heavy lifespan startup/shutdown (MCP servers,
     background tasks, streamable HTTP) that causes hangs on CI Linux.
     """
-    from langflow.services.utils import initialize_services, teardown_services
+    from harxitflow.services.utils import initialize_services, teardown_services
     from lfx.services.manager import get_service_manager
 
     db_path = tmp_path / "test.db"
-    monkeypatch.setenv("LANGFLOW_DATABASE_URL", f"sqlite:///{db_path}")
-    monkeypatch.setenv("LANGFLOW_AUTO_LOGIN", "false")
+    monkeypatch.setenv("HARXITFLOW_DATABASE_URL", f"sqlite:///{db_path}")
+    monkeypatch.setenv("HARXITFLOW_AUTO_LOGIN", "false")
 
     get_service_manager().factories.clear()
     get_service_manager().services.clear()

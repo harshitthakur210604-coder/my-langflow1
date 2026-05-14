@@ -11,7 +11,7 @@ import { create } from "zustand";
 import { checkCodeValidity } from "@/CustomNodes/helpers/check-code-validity";
 import i18n from "../i18n";
 import {
-  ENABLE_DATASTAX_LANGFLOW,
+  ENABLE_DATASTAX_HARXITFLOW,
   ENABLE_INSPECTION_PANEL,
 } from "@/customization/feature-flags";
 import {
@@ -985,7 +985,7 @@ const useFlowStore = create<FlowStoreType>((set, get) => ({
           ...next_vertices_ids,
         ];
         if (
-          ENABLE_DATASTAX_LANGFLOW &&
+          ENABLE_DATASTAX_HARXITFLOW &&
           vertexBuildData?.id?.includes("AstraDB")
         ) {
           const search_results: LogsLogType[] = Object.values(

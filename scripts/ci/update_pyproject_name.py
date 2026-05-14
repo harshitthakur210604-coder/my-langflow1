@@ -24,30 +24,30 @@ def update_pyproject_name(pyproject_path: str, new_project_name: str) -> None:
     content = pattern.sub(rf"\1\g<2>{new_project_name}\3", content)
 
     # Update extra references in [complete] and [all] extras for nightly builds
-    if new_project_name == "langflow-base-nightly":
-        # Replace langflow-base[extra] with langflow-base-nightly[extra] in optional dependencies
-        content = re.sub(r'"langflow-base\[([^\]]+)\]"', r'"langflow-base-nightly[\1]"', content)
-    elif new_project_name == "langflow-nightly":
-        # Replace langflow[extra] with langflow-nightly[extra] in optional dependencies
-        content = re.sub(r'"langflow\[([^\]]+)\]"', r'"langflow-nightly[\1]"', content)
+    if new_project_name == "harxitflow-base-nightly":
+        # Replace harxitflow-base[extra] with harxitflow-base-nightly[extra] in optional dependencies
+        content = re.sub(r'"harxitflow-base\[([^\]]+)\]"', r'"harxitflow-base-nightly[\1]"', content)
+    elif new_project_name == "harxitflow-nightly":
+        # Replace harxitflow[extra] with harxitflow-nightly[extra] in optional dependencies
+        content = re.sub(r'"harxitflow\[([^\]]+)\]"', r'"harxitflow-nightly[\1]"', content)
 
     filepath.write_text(content, encoding="utf-8")
 
 
 def update_uv_dep(pyproject_path: str, new_project_name: str) -> None:
-    """Update the langflow-base dependency in pyproject.toml."""
+    """Update the harxitflow-base dependency in pyproject.toml."""
     filepath = BASE_DIR / pyproject_path
     content = filepath.read_text(encoding="utf-8")
 
-    if new_project_name == "langflow-nightly":
-        pattern = re.compile(r"langflow = \{ workspace = true \}")
-        replacement = "langflow-nightly = { workspace = true }"
-    elif new_project_name == "langflow-base-nightly":
-        pattern = re.compile(r"langflow-base = \{ workspace = true \}")
-        replacement = "langflow-base-nightly = { workspace = true }"
-    elif new_project_name == "langflow-sdk-nightly":
-        pattern = re.compile(r"langflow-sdk = \{ workspace = true \}")
-        replacement = "langflow-sdk-nightly = { workspace = true }"
+    if new_project_name == "harxitflow-nightly":
+        pattern = re.compile(r"harxitflow = \{ workspace = true \}")
+        replacement = "harxitflow-nightly = { workspace = true }"
+    elif new_project_name == "harxitflow-base-nightly":
+        pattern = re.compile(r"harxitflow-base = \{ workspace = true \}")
+        replacement = "harxitflow-base-nightly = { workspace = true }"
+    elif new_project_name == "harxitflow-sdk-nightly":
+        pattern = re.compile(r"harxitflow-sdk = \{ workspace = true \}")
+        replacement = "harxitflow-sdk-nightly = { workspace = true }"
     else:
         msg = f"Invalid project name: {new_project_name}"
         raise ValueError(msg)
@@ -62,7 +62,7 @@ def update_uv_dep(pyproject_path: str, new_project_name: str) -> None:
 
 def main() -> None:
     if len(sys.argv) != ARGUMENT_NUMBER:
-        msg = "Must specify project name and build type, e.g. langflow-nightly base"
+        msg = "Must specify project name and build type, e.g. harxitflow-nightly base"
         raise ValueError(msg)
     new_project_name = sys.argv[1]
     build_type = sys.argv[2]

@@ -78,16 +78,16 @@ jobs:
       - name: Determine version
         id: version
         run: |
-          version=$(uv tree 2>/dev/null | grep '^langflow-base' | cut -d' ' -f2 | sed 's/^v//')
+          version=$(uv tree 2>/dev/null | grep '^harxitflow-base' | cut -d' ' -f2 | sed 's/^v//')
           echo "Base version from pyproject.toml: $version"
 
           if [ ${{inputs.pre_release}} == "true" ]; then
-            last_released_version=$(curl -s "https://registry.hub.docker.com/v2/repositories/langflowai/langflow/tags?page_size=100" | jq -r '.results[].name' | grep -E '^base-.*\.rc[0-9]+' | grep -vE '\-(amd64|arm64)$' | sed 's/^base-//' | sort -V | tail -n 1)
-            version="$(uv run ./scripts/ci/langflow_pre_release_tag.py "$version" "$last_released_version")"
+            last_released_version=$(curl -s "https://registry.hub.docker.com/v2/repositories/harxitflowai/harxitflow/tags?page_size=100" | jq -r '.results[].name' | grep -E '^base-.*\.rc[0-9]+' | grep -vE '\-(amd64|arm64)$' | sed 's/^base-//' | sort -V | tail -n 1)
+            version="$(uv run ./scripts/ci/harxitflow_pre_release_tag.py "$version" "$last_released_version")"
             echo "Latest base pre-release version: $last_released_version"
             echo "Base pre-release version to be released: $version"
           else
-            last_released_version=$(curl -s "https://registry.hub.docker.com/v2/repositories/langflowai/langflow/tags?page_size=100" | jq -r '.results[].name' | grep -E '^base-' | grep -vE '\-(amd64|arm64)$' | grep -v 'latest' | sed 's/^base-//' | sort -V | tail -n 1)
+            last_released_version=$(curl -s "https://registry.hub.docker.com/v2/repositories/harxitflowai/harxitflow/tags?page_size=100" | jq -r '.results[].name' | grep -E '^base-' | grep -vE '\-(amd64|arm64)$' | grep -v 'latest' | sed 's/^base-//' | sort -V | tail -n 1)
             echo "Latest base release version: $last_released_version"
           fi
 
@@ -124,16 +124,16 @@ jobs:
       - name: Determine version
         id: version
         run: |
-          version=$(uv tree 2>/dev/null | grep '^langflow' | grep -v '^langflow-base' | grep -v '^langflow-sdk' | cut -d' ' -f2 | sed 's/^v//')
+          version=$(uv tree 2>/dev/null | grep '^harxitflow' | grep -v '^harxitflow-base' | grep -v '^harxitflow-sdk' | cut -d' ' -f2 | sed 's/^v//')
           echo "Main version from pyproject.toml: $version"
 
           if [ ${{inputs.pre_release}} == "true" ]; then
-            last_released_version=$(curl -s "https://registry.hub.docker.com/v2/repositories/langflowai/langflow/tags?page_size=100" | jq -r '.results[].name' | grep -E '\.rc[0-9]+' | grep -v '^base-' | grep -vE '\-(amd64|arm64)$' | sort -V | tail -n 1)
-            version="$(uv run ./scripts/ci/langflow_pre_release_tag.py "$version" "$last_released_version")"
+            last_released_version=$(curl -s "https://registry.hub.docker.com/v2/repositories/harxitflowai/harxitflow/tags?page_size=100" | jq -r '.results[].name' | grep -E '\.rc[0-9]+' | grep -v '^base-' | grep -vE '\-(amd64|arm64)$' | sort -V | tail -n 1)
+            version="$(uv run ./scripts/ci/harxitflow_pre_release_tag.py "$version" "$last_released_version")"
             echo "Latest main pre-release version: $last_released_version"
             echo "Main pre-release version to be released: $version"
           else
-            last_released_version=$(curl -s "https://registry.hub.docker.com/v2/repositories/langflowai/langflow/tags?page_size=100" | jq -r '.results[].name' | grep -v '^base-' | grep -vE '\-(amd64|arm64)$' | grep -v 'latest' | sort -V | tail -n 1)
+            last_released_version=$(curl -s "https://registry.hub.docker.com/v2/repositories/harxitflowai/harxitflow/tags?page_size=100" | jq -r '.results[].name' | grep -v '^base-' | grep -vE '\-(amd64|arm64)$' | grep -v 'latest' | sort -V | tail -n 1)
             echo "Latest main release version: $last_released_version"
           fi
 
@@ -155,10 +155,10 @@ jobs:
       matrix:
         include:
           - arch: amd64
-            runner: [Langflow-runner]
+            runner: [HarxitFlow-runner]
           - arch: arm64
             runner:
-              [self-hosted, linux, ARM64, langflow-ai-arm64-40gb-ephemeral]
+              [self-hosted, linux, ARM64, harxitflow-ai-arm64-40gb-ephemeral]
     runs-on: ${{ matrix.runner }}
     steps:
       - name: Check out the code
@@ -170,8 +170,8 @@ jobs:
         id: tags
         run: |
           version="${{ needs.determine-base-version.outputs.version }}"
-          echo "docker_tags=langflowai/langflow:base-${version}-${{ matrix.arch }}" >> $GITHUB_OUTPUT
-          echo "ghcr_tags=ghcr.io/langflow-ai/langflow:base-${version}-${{ matrix.arch }}" >> $GITHUB_OUTPUT
+          echo "docker_tags=harxitflowai/harxitflow:base-${version}-${{ matrix.arch }}" >> $GITHUB_OUTPUT
+          echo "ghcr_tags=ghcr.io/harxitflow-ai/harxitflow:base-${version}-${{ matrix.arch }}" >> $GITHUB_OUTPUT
 
       - name: Docker cleanup
         run: |
@@ -226,10 +226,10 @@ jobs:
       matrix:
         include:
           - arch: amd64
-            runner: [Langflow-runner]
+            runner: [HarxitFlow-runner]
           - arch: arm64
             runner:
-              [self-hosted, linux, ARM64, langflow-ai-arm64-40gb-ephemeral]
+              [self-hosted, linux, ARM64, harxitflow-ai-arm64-40gb-ephemeral]
     runs-on: ${{ matrix.runner }}
     steps:
       - name: Check out the code
@@ -241,8 +241,8 @@ jobs:
         id: tags
         run: |
           version="${{ needs.determine-main-version.outputs.version }}"
-          echo "docker_tags=langflowai/langflow:${version}-${{ matrix.arch }}" >> $GITHUB_OUTPUT
-          echo "ghcr_tags=ghcr.io/langflow-ai/langflow:${version}-${{ matrix.arch }}" >> $GITHUB_OUTPUT
+          echo "docker_tags=harxitflowai/harxitflow:${version}-${{ matrix.arch }}" >> $GITHUB_OUTPUT
+          echo "ghcr_tags=ghcr.io/harxitflow-ai/harxitflow:${version}-${{ matrix.arch }}" >> $GITHUB_OUTPUT
 
       - name: Docker cleanup
         run: |
@@ -297,10 +297,10 @@ jobs:
       matrix:
         include:
           - arch: amd64
-            runner: [Langflow-runner]
+            runner: [HarxitFlow-runner]
           - arch: arm64
             runner:
-              [self-hosted, linux, ARM64, langflow-ai-arm64-40gb-ephemeral]
+              [self-hosted, linux, ARM64, harxitflow-ai-arm64-40gb-ephemeral]
     runs-on: ${{ matrix.runner }}
     steps:
       - name: Check out the code
@@ -312,8 +312,8 @@ jobs:
         id: tags
         run: |
           version="${{ needs.determine-main-version.outputs.version }}"
-          echo "docker_tags=langflowai/langflow-backend:${version}-${{ matrix.arch }}" >> $GITHUB_OUTPUT
-          echo "ghcr_tags=ghcr.io/langflow-ai/langflow-backend:${version}-${{ matrix.arch }}" >> $GITHUB_OUTPUT
+          echo "docker_tags=harxitflowai/harxitflow-backend:${version}-${{ matrix.arch }}" >> $GITHUB_OUTPUT
+          echo "ghcr_tags=ghcr.io/harxitflow-ai/harxitflow-backend:${version}-${{ matrix.arch }}" >> $GITHUB_OUTPUT
 
       - name: Docker cleanup
         run: |
@@ -335,7 +335,7 @@ jobs:
           context: .
           push: ${{ inputs.push_to_registry }}
           build-args: |
-            LANGFLOW_IMAGE=langflowai/langflow:${{ steps.version.outputs.version }}-${{ matrix.arch }}
+            HARXITFLOW_IMAGE=harxitflowai/harxitflow:${{ steps.version.outputs.version }}-${{ matrix.arch }}
           file: ./docker/build_and_push_backend.Dockerfile
           tags: ${{ steps.tags.outputs.docker_tags }}
           platforms: linux/${{ matrix.arch }}
@@ -356,7 +356,7 @@ jobs:
           context: .
           push: ${{ inputs.push_to_registry }}
           build-args: |
-            LANGFLOW_IMAGE=ghcr.io/langflow-ai/langflow:${{ steps.version.outputs.version }}-${{ matrix.arch }}
+            HARXITFLOW_IMAGE=ghcr.io/harxitflow-ai/harxitflow:${{ steps.version.outputs.version }}-${{ matrix.arch }}
           file: ./docker/build_and_push_backend.Dockerfile
           tags: ${{ steps.tags.outputs.ghcr_tags }}
           platforms: linux/${{ matrix.arch }}
@@ -372,10 +372,10 @@ jobs:
       matrix:
         include:
           - arch: amd64
-            runner: [Langflow-runner]
+            runner: [HarxitFlow-runner]
           - arch: arm64
             runner:
-              [self-hosted, linux, ARM64, langflow-ai-arm64-40gb-ephemeral]
+              [self-hosted, linux, ARM64, harxitflow-ai-arm64-40gb-ephemeral]
     runs-on: ${{ matrix.runner }}
     steps:
       - name: Check out the code
@@ -387,8 +387,8 @@ jobs:
         id: tags
         run: |
           version="${{ needs.determine-main-version.outputs.version }}"
-          echo "docker_tags=langflowai/langflow-frontend:${version}-${{ matrix.arch }}" >> $GITHUB_OUTPUT
-          echo "ghcr_tags=ghcr.io/langflow-ai/langflow-frontend:${version}-${{ matrix.arch }}" >> $GITHUB_OUTPUT
+          echo "docker_tags=harxitflowai/harxitflow-frontend:${version}-${{ matrix.arch }}" >> $GITHUB_OUTPUT
+          echo "ghcr_tags=ghcr.io/harxitflow-ai/harxitflow-frontend:${version}-${{ matrix.arch }}" >> $GITHUB_OUTPUT
 
       - name: Docker cleanup
         run: |
@@ -443,10 +443,10 @@ jobs:
       matrix:
         include:
           - arch: amd64
-            runner: [Langflow-runner]
+            runner: [HarxitFlow-runner]
           - arch: arm64
             runner:
-              [self-hosted, linux, ARM64, langflow-ai-arm64-40gb-ephemeral]
+              [self-hosted, linux, ARM64, harxitflow-ai-arm64-40gb-ephemeral]
     runs-on: ${{ matrix.runner }}
     steps:
       - name: Check out the code
@@ -458,8 +458,8 @@ jobs:
         id: tags
         run: |
           version="${{ needs.determine-main-version.outputs.version }}"
-          echo "docker_tags=langflowai/langflow-ep:${version}-${{ matrix.arch }}" >> $GITHUB_OUTPUT
-          echo "ghcr_tags=ghcr.io/langflow-ai/langflow-ep:${version}-${{ matrix.arch }}" >> $GITHUB_OUTPUT
+          echo "docker_tags=harxitflowai/harxitflow-ep:${version}-${{ matrix.arch }}" >> $GITHUB_OUTPUT
+          echo "ghcr_tags=ghcr.io/harxitflow-ai/harxitflow-ep:${version}-${{ matrix.arch }}" >> $GITHUB_OUTPUT
 
       - name: Docker cleanup
         run: |
@@ -514,10 +514,10 @@ jobs:
       matrix:
         include:
           - arch: amd64
-            runner: [Langflow-runner]
+            runner: [HarxitFlow-runner]
           - arch: arm64
             runner:
-              [self-hosted, linux, ARM64, langflow-ai-arm64-40gb-ephemeral]
+              [self-hosted, linux, ARM64, harxitflow-ai-arm64-40gb-ephemeral]
     runs-on: ${{ matrix.runner }}
     steps:
       - name: Check out the code
@@ -529,8 +529,8 @@ jobs:
         id: tags
         run: |
           version="${{ needs.determine-main-version.outputs.version }}"
-          echo "docker_tags=langflowai/langflow-all:${version}-${{ matrix.arch }}" >> $GITHUB_OUTPUT
-          echo "ghcr_tags=ghcr.io/langflow-ai/langflow-all:${version}-${{ matrix.arch }}" >> $GITHUB_OUTPUT
+          echo "docker_tags=harxitflowai/harxitflow-all:${version}-${{ matrix.arch }}" >> $GITHUB_OUTPUT
+          echo "ghcr_tags=ghcr.io/harxitflow-ai/harxitflow-all:${version}-${{ matrix.arch }}" >> $GITHUB_OUTPUT
 
       - name: Docker cleanup
         run: |
@@ -602,9 +602,9 @@ jobs:
         id: version
         run: |
           if [[ "${{ inputs.release_type }}" == "base" ]]; then
-            version=$(uv tree 2>/dev/null | grep 'langflow-base' | awk '{print $3}' | sed 's/^v//' | head -n 1)
+            version=$(uv tree 2>/dev/null | grep 'harxitflow-base' | awk '{print $3}' | sed 's/^v//' | head -n 1)
           else
-            version=$(uv tree 2>/dev/null | grep '^langflow' | grep -v '^langflow-base' | grep -v '^langflow-sdk' | cut -d' ' -f2 | sed 's/^v//')
+            version=$(uv tree 2>/dev/null | grep '^harxitflow' | grep -v '^harxitflow-base' | grep -v '^harxitflow-sdk' | cut -d' ' -f2 | sed 's/^v//')
           fi
           echo "Using version: $version"
           echo version=$version >> $GITHUB_OUTPUT
@@ -617,57 +617,57 @@ jobs:
             "base")
               version="${{ needs.determine-base-version.outputs.version }}"
               if [[ "${{ inputs.pre_release }}" == "true" ]]; then
-                echo "final_tags=langflowai/langflow:base-${version},ghcr.io/langflow-ai/langflow:base-${version}" >> $GITHUB_OUTPUT
+                echo "final_tags=harxitflowai/harxitflow:base-${version},ghcr.io/harxitflow-ai/harxitflow:base-${version}" >> $GITHUB_OUTPUT
               else
-                echo "final_tags=langflowai/langflow:base-${version},langflowai/langflow:base-latest,ghcr.io/langflow-ai/langflow:base-${version},ghcr.io/langflow-ai/langflow:base-latest" >> $GITHUB_OUTPUT
+                echo "final_tags=harxitflowai/harxitflow:base-${version},harxitflowai/harxitflow:base-latest,ghcr.io/harxitflow-ai/harxitflow:base-${version},ghcr.io/harxitflow-ai/harxitflow:base-latest" >> $GITHUB_OUTPUT
               fi
-              echo "arch_base=langflowai/langflow:base-${version}" >> $GITHUB_OUTPUT
-              echo "ghcr_arch_base=ghcr.io/langflow-ai/langflow:base-${version}" >> $GITHUB_OUTPUT
+              echo "arch_base=harxitflowai/harxitflow:base-${version}" >> $GITHUB_OUTPUT
+              echo "ghcr_arch_base=ghcr.io/harxitflow-ai/harxitflow:base-${version}" >> $GITHUB_OUTPUT
               ;;
             "main")
               if [[ "${{ inputs.pre_release }}" == "true" ]]; then
-                echo "final_tags=langflowai/langflow:${version},ghcr.io/langflow-ai/langflow:${version}" >> $GITHUB_OUTPUT
+                echo "final_tags=harxitflowai/harxitflow:${version},ghcr.io/harxitflow-ai/harxitflow:${version}" >> $GITHUB_OUTPUT
               else
-                echo "final_tags=langflowai/langflow:${version},langflowai/langflow:latest,ghcr.io/langflow-ai/langflow:${version},ghcr.io/langflow-ai/langflow:latest" >> $GITHUB_OUTPUT
+                echo "final_tags=harxitflowai/harxitflow:${version},harxitflowai/harxitflow:latest,ghcr.io/harxitflow-ai/harxitflow:${version},ghcr.io/harxitflow-ai/harxitflow:latest" >> $GITHUB_OUTPUT
               fi
-              echo "arch_base=langflowai/langflow:${version}" >> $GITHUB_OUTPUT
-              echo "ghcr_arch_base=ghcr.io/langflow-ai/langflow:${version}" >> $GITHUB_OUTPUT
+              echo "arch_base=harxitflowai/harxitflow:${version}" >> $GITHUB_OUTPUT
+              echo "ghcr_arch_base=ghcr.io/harxitflow-ai/harxitflow:${version}" >> $GITHUB_OUTPUT
               ;;
             "main-backend")
               if [[ "${{ inputs.pre_release }}" == "true" ]]; then
-                echo "final_tags=langflowai/langflow-backend:${version},ghcr.io/langflow-ai/langflow-backend:${version}" >> $GITHUB_OUTPUT
+                echo "final_tags=harxitflowai/harxitflow-backend:${version},ghcr.io/harxitflow-ai/harxitflow-backend:${version}" >> $GITHUB_OUTPUT
               else
-                echo "final_tags=langflowai/langflow-backend:${version},langflowai/langflow-backend:latest,ghcr.io/langflow-ai/langflow-backend:${version},ghcr.io/langflow-ai/langflow-backend:latest" >> $GITHUB_OUTPUT
+                echo "final_tags=harxitflowai/harxitflow-backend:${version},harxitflowai/harxitflow-backend:latest,ghcr.io/harxitflow-ai/harxitflow-backend:${version},ghcr.io/harxitflow-ai/harxitflow-backend:latest" >> $GITHUB_OUTPUT
               fi
-              echo "arch_base=langflowai/langflow-backend:${version}" >> $GITHUB_OUTPUT
-              echo "ghcr_arch_base=ghcr.io/langflow-ai/langflow-backend:${version}" >> $GITHUB_OUTPUT
+              echo "arch_base=harxitflowai/harxitflow-backend:${version}" >> $GITHUB_OUTPUT
+              echo "ghcr_arch_base=ghcr.io/harxitflow-ai/harxitflow-backend:${version}" >> $GITHUB_OUTPUT
               ;;
             "main-frontend")
               if [[ "${{ inputs.pre_release }}" == "true" ]]; then
-                echo "final_tags=langflowai/langflow-frontend:${version},ghcr.io/langflow-ai/langflow-frontend:${version}" >> $GITHUB_OUTPUT
+                echo "final_tags=harxitflowai/harxitflow-frontend:${version},ghcr.io/harxitflow-ai/harxitflow-frontend:${version}" >> $GITHUB_OUTPUT
               else
-                echo "final_tags=langflowai/langflow-frontend:${version},langflowai/langflow-frontend:latest,ghcr.io/langflow-ai/langflow-frontend:${version},ghcr.io/langflow-ai/langflow-frontend:latest" >> $GITHUB_OUTPUT
+                echo "final_tags=harxitflowai/harxitflow-frontend:${version},harxitflowai/harxitflow-frontend:latest,ghcr.io/harxitflow-ai/harxitflow-frontend:${version},ghcr.io/harxitflow-ai/harxitflow-frontend:latest" >> $GITHUB_OUTPUT
               fi
-              echo "arch_base=langflowai/langflow-frontend:${version}" >> $GITHUB_OUTPUT
-              echo "ghcr_arch_base=ghcr.io/langflow-ai/langflow-frontend:${version}" >> $GITHUB_OUTPUT
+              echo "arch_base=harxitflowai/harxitflow-frontend:${version}" >> $GITHUB_OUTPUT
+              echo "ghcr_arch_base=ghcr.io/harxitflow-ai/harxitflow-frontend:${version}" >> $GITHUB_OUTPUT
               ;;
             "main-ep")
               if [[ "${{ inputs.pre_release }}" == "true" ]]; then
-                echo "final_tags=langflowai/langflow-ep:${version},ghcr.io/langflow-ai/langflow-ep:${version}" >> $GITHUB_OUTPUT
+                echo "final_tags=harxitflowai/harxitflow-ep:${version},ghcr.io/harxitflow-ai/harxitflow-ep:${version}" >> $GITHUB_OUTPUT
               else
-                echo "final_tags=langflowai/langflow-ep:${version},langflowai/langflow-ep:latest,ghcr.io/langflow-ai/langflow-ep:${version},ghcr.io/langflow-ai/langflow-ep:latest" >> $GITHUB_OUTPUT
+                echo "final_tags=harxitflowai/harxitflow-ep:${version},harxitflowai/harxitflow-ep:latest,ghcr.io/harxitflow-ai/harxitflow-ep:${version},ghcr.io/harxitflow-ai/harxitflow-ep:latest" >> $GITHUB_OUTPUT
               fi
-              echo "arch_base=langflowai/langflow-ep:${version}" >> $GITHUB_OUTPUT
-              echo "ghcr_arch_base=ghcr.io/langflow-ai/langflow-ep:${version}" >> $GITHUB_OUTPUT
+              echo "arch_base=harxitflowai/harxitflow-ep:${version}" >> $GITHUB_OUTPUT
+              echo "ghcr_arch_base=ghcr.io/harxitflow-ai/harxitflow-ep:${version}" >> $GITHUB_OUTPUT
               ;;
             "main-all")
               if [[ "${{ inputs.pre_release }}" == "true" ]]; then
-                echo "final_tags=langflowai/langflow-all:${version},ghcr.io/langflow-ai/langflow-all:${version}" >> $GITHUB_OUTPUT
+                echo "final_tags=harxitflowai/harxitflow-all:${version},ghcr.io/harxitflow-ai/harxitflow-all:${version}" >> $GITHUB_OUTPUT
               else
-                echo "final_tags=langflowai/langflow-all:${version},langflowai/langflow-all:latest,ghcr.io/langflow-ai/langflow-all:${version},ghcr.io/langflow-ai/langflow-all:latest" >> $GITHUB_OUTPUT
+                echo "final_tags=harxitflowai/harxitflow-all:${version},harxitflowai/harxitflow-all:latest,ghcr.io/harxitflow-ai/harxitflow-all:${version},ghcr.io/harxitflow-ai/harxitflow-all:latest" >> $GITHUB_OUTPUT
               fi
-              echo "arch_base=langflowai/langflow-all:${version}" >> $GITHUB_OUTPUT
-              echo "ghcr_arch_base=ghcr.io/langflow-ai/langflow-all:${version}" >> $GITHUB_OUTPUT
+              echo "arch_base=harxitflowai/harxitflow-all:${version}" >> $GITHUB_OUTPUT
+              echo "ghcr_arch_base=ghcr.io/harxitflow-ai/harxitflow-all:${version}" >> $GITHUB_OUTPUT
               ;;
             *)
               echo "Error: Invalid release_type: ${{ inputs.release_type }}" >&2
@@ -696,7 +696,7 @@ jobs:
             echo "Creating manifest for $tag"
 
             # Determine architecture-specific tags
-            if [[ "$tag" == *"langflowai"* ]]; then
+            if [[ "$tag" == *"harxitflowai"* ]]; then
               amd64_tag="${{ steps.tags.outputs.arch_base }}-amd64"
               arm64_tag="${{ steps.tags.outputs.arch_base }}-arm64"
             else

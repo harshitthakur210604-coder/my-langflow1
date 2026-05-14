@@ -79,7 +79,7 @@ def _save_working_flow() -> None:
         from lfx.services.deps import session_scope
 
         async def _save():
-            from langflow.services.database.models.flow import Flow
+            from harxitflow.services.database.models.flow import Flow
 
             async with session_scope() as session:
                 flow = await session.get(Flow, UUID(_current_flow_id))
@@ -126,7 +126,7 @@ def _find_node(flow: dict, component_id: str) -> dict | None:
 
 class SearchComponentTypes(Component):
     display_name = "Search Components"
-    description = "Search available Langflow component types by name, category, or output type."
+    description = "Search available HarxitFlow component types by name, category, or output type."
     icon = "Search"
     name = "SearchComponentTypes"
 

@@ -47,7 +47,7 @@ except ModuleNotFoundError:
 MAX_PORT_NUMBER = 65535
 
 # Fixed namespace constant for deterministic UUID5 generation across runs
-_LANGFLOW_NAMESPACE_UUID = uuid.UUID("3c091057-e799-4e32-8ebc-27bc31e1108c")
+_HARXITFLOW_NAMESPACE_UUID = uuid.UUID("3c091057-e799-4e32-8ebc-27bc31e1108c")
 
 # Environment variable for GitHub token
 _GITHUB_TOKEN_ENV = "GITHUB_TOKEN"
@@ -113,9 +113,9 @@ def get_api_key() -> str:
     is resolved via :func:`lfx.config.resolve_environment` and the
     ``api_key_env`` field in ``.lfx/environments.yaml``.
     """
-    api_key = os.getenv("LANGFLOW_API_KEY") or os.getenv("LFX_API_KEY")
+    api_key = os.getenv("HARXITFLOW_API_KEY") or os.getenv("LFX_API_KEY")
     if not api_key:
-        msg = "LANGFLOW_API_KEY environment variable is not set"
+        msg = "HARXITFLOW_API_KEY environment variable is not set"
         raise ValueError(msg)
     return api_key
 
@@ -523,7 +523,7 @@ def flow_id_from_path(file_path: Path, root_dir: Path) -> str:
         Canonical UUID string (36 chars, including hyphens).
     """
     relative = file_path.relative_to(root_dir).as_posix()
-    return str(uuid.uuid5(_LANGFLOW_NAMESPACE_UUID, relative))
+    return str(uuid.uuid5(_HARXITFLOW_NAMESPACE_UUID, relative))
 
 
 # ---------------------------------------------------------------------------
@@ -620,7 +620,7 @@ def download_and_extract_repo(url: str, verbose_print, *, timeout: float = 60.0)
 
 
 def load_sdk(command_name: str) -> Any:
-    """Lazily import ``langflow_sdk`` to keep CLI startup fast.
+    """Lazily import ``harxitflow_sdk`` to keep CLI startup fast.
 
     Raises :class:`typer.BadParameter` with install guidance when the package
     is not available.
@@ -630,12 +630,12 @@ def load_sdk(command_name: str) -> Any:
             the error message).
     """
     try:
-        import langflow_sdk  # type: ignore[import-untyped]
+        import harxitflow_sdk  # type: ignore[import-untyped]
     except ImportError as exc:
-        msg = f"langflow-sdk is required for lfx {command_name}. Install it with: pip install langflow-sdk"
+        msg = f"harxitflow-sdk is required for lfx {command_name}. Install it with: pip install harxitflow-sdk"
         raise typer.BadParameter(msg) from exc
     else:
-        return langflow_sdk
+        return harxitflow_sdk
 
 
 def safe_filename(name: str) -> str:

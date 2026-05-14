@@ -83,8 +83,8 @@ export const HelpDropdownView = ({
         <Separator />
         <DropdownControlButton
           iconName="download"
-          testId="canvas_controls_dropdown_get_langflow_desktop"
-          label={t("help.getLangflowDesktop")}
+          testId="canvas_controls_dropdown_get_harxitflow_desktop"
+          label={t("help.getHarxitFlowDesktop")}
           externalLink
           onClick={() => openLink(urls.desktop)}
         />

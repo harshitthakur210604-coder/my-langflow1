@@ -39,8 +39,8 @@ def update_sdk_dependency_in_lfx(pyproject_path: str, sdk_version: str) -> None:
     filepath = BASE_DIR / pyproject_path
     content = filepath.read_text(encoding="utf-8")
 
-    pattern = re.compile(r'"langflow-sdk(?:-nightly)?(?:==|~=|>=)[\d.]+(?:\.(?:post|dev|a|b|rc)\d+)*"')
-    replacement = f'"langflow-sdk-nightly=={sdk_version}"'
+    pattern = re.compile(r'"harxitflow-sdk(?:-nightly)?(?:==|~=|>=)[\d.]+(?:\.(?:post|dev|a|b|rc)\d+)*"')
+    replacement = f'"harxitflow-sdk-nightly=={sdk_version}"'
 
     if not pattern.search(content):
         msg = f"SDK dependency not found in {filepath}"

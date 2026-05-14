@@ -15,11 +15,11 @@ import {
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
 
-  const envLangflowResult = dotenv.config({
+  const envHarxitFlowResult = dotenv.config({
     path: path.resolve(__dirname, "../../.env"),
   });
 
-  const envLangflow = envLangflowResult.parsed || {};
+  const envHarxitFlow = envHarxitFlowResult.parsed || {};
 
   const apiRoutes = API_ROUTES || ["^/api/v1/", "^/api/v2/", "/health"];
 
@@ -45,17 +45,17 @@ export default defineConfig(({ mode }) => {
     },
     define: {
       "import.meta.env.BACKEND_URL": JSON.stringify(
-        envLangflow.BACKEND_URL ?? "http://localhost:7860",
+        envHarxitFlow.BACKEND_URL ?? "http://localhost:7860",
       ),
       "import.meta.env.ACCESS_TOKEN_EXPIRE_SECONDS": JSON.stringify(
-        envLangflow.ACCESS_TOKEN_EXPIRE_SECONDS ?? 60,
+        envHarxitFlow.ACCESS_TOKEN_EXPIRE_SECONDS ?? 60,
       ),
-      "import.meta.env.CI": JSON.stringify(envLangflow.CI ?? false),
-      "import.meta.env.LANGFLOW_AUTO_LOGIN": JSON.stringify(
-        envLangflow.LANGFLOW_AUTO_LOGIN ?? true,
+      "import.meta.env.CI": JSON.stringify(envHarxitFlow.CI ?? false),
+      "import.meta.env.HARXITFLOW_AUTO_LOGIN": JSON.stringify(
+        envHarxitFlow.HARXITFLOW_AUTO_LOGIN ?? true,
       ),
-      "import.meta.env.LANGFLOW_MCP_COMPOSER_ENABLED": JSON.stringify(
-        envLangflow.LANGFLOW_MCP_COMPOSER_ENABLED ?? "true",
+      "import.meta.env.HARXITFLOW_MCP_COMPOSER_ENABLED": JSON.stringify(
+        envHarxitFlow.HARXITFLOW_MCP_COMPOSER_ENABLED ?? "true",
       ),
     },
     plugins: [

@@ -38,7 +38,7 @@ def _is_default_storage(storage_name: str) -> bool:
 class SaveToFileComponent(Component):
     display_name = "Write File"
     description = "Save data to local file, AWS S3, or Google Drive in the selected format."
-    documentation: str = "https://docs.langflow.org/write-file"
+    documentation: str = "https://docs.harxitflow.org/write-file"
     icon = "file-text"
     name = "SaveToFile"
 
@@ -331,8 +331,8 @@ class SaveToFileComponent(Component):
 
     async def _upload_file(self, file_path: Path) -> None:
         """Upload the saved file using the upload_user_file service."""
-        from langflow.api.v2.files import upload_user_file
-        from langflow.services.database.models.user.crud import get_user_by_id
+        from harxitflow.api.v2.files import upload_user_file
+        from harxitflow.services.database.models.user.crud import get_user_by_id
 
         # Ensure the file exists
         if not file_path.exists():
@@ -615,7 +615,7 @@ class SaveToFileComponent(Component):
         if not bucket_name:
             msg = (
                 "S3 Bucket Name is required for S3 storage. Provide it as a component input "
-                "or set LANGFLOW_OBJECT_STORAGE_BUCKET_NAME environment variable."
+                "or set HARXITFLOW_OBJECT_STORAGE_BUCKET_NAME environment variable."
             )
             raise ValueError(msg)
 

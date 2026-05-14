@@ -1,4 +1,4 @@
-const url = `${process.env.LANGFLOW_SERVER_URL ?? ""}/health_check`;
+const url = `${process.env.HARXITFLOW_SERVER_URL ?? ""}/health_check`;
 
 const options = {
   method: 'GET',

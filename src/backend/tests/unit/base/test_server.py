@@ -1,11 +1,11 @@
-from langflow.server import LangflowApplication
+from harxitflow.server import HarxitFlowApplication
 
 
 def _make_app(options=None, env_args=None, monkeypatch=None):
-    """Create a LangflowApplication with a dummy WSGI app.
+    """Create a HarxitFlowApplication with a dummy WSGI app.
 
     Args:
-        options: Programmatic options passed to LangflowApplication.
+        options: Programmatic options passed to HarxitFlowApplication.
         env_args: If provided, set GUNICORN_CMD_ARGS env var before construction.
         monkeypatch: pytest monkeypatch fixture for env manipulation.
     """
@@ -15,7 +15,7 @@ def _make_app(options=None, env_args=None, monkeypatch=None):
     def dummy_app(environ, start_response):
         pass
 
-    return LangflowApplication(dummy_app, options=options)
+    return HarxitFlowApplication(dummy_app, options=options)
 
 
 class TestGunicornEnvArgs:
@@ -50,4 +50,4 @@ class TestGunicornEnvArgs:
             monkeypatch=monkeypatch,
         )
 
-        assert app.cfg.settings["worker_class"].get() == "langflow.server.LangflowUvicornWorker"
+        assert app.cfg.settings["worker_class"].get() == "harxitflow.server.HarxitFlowUvicornWorker"
